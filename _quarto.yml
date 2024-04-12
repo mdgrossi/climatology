@@ -10,7 +10,7 @@ website:
   favicon: /images/logo.png
   navbar:
     left:
-      - href: /content/index.qmd
+      - href: index.qmd
         text: Home
       - /content/about.qmd
     right:
