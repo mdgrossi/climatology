@@ -1,7 +1,0 @@
----
-title: Page Not Found
----
-
-Well, that's unfortunate. The page you requested cannot be found. Perhaps it was moved or renamed.
-
-You may try searching to find the page's new location. Or [open an issue](https://www.github.com/climatology/issues) to let us know what happened.

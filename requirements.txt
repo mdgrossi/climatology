@@ -1,8 +1,0 @@
-matplotlib==3.8.0
-pandas==1.5.3
-plotly==5.17.0
-scipy==1.11.3
-deepdiff==6.6.0
-noaa_coops
-markdown
-jupyter

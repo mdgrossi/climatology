@@ -1,0 +1,49 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n\n\n Back to top",
+    "crumbs": [
+      "Home",
+      "About"
+    ]
+  },
+  {
+    "objectID": "howto.html",
+    "href": "howto.html",
+    "title": "Climatology",
+    "section": "",
+    "text": "Create local directory\nIn VS Code, install\n\nGit\nQuarto\nRemote - SSH (should also install “Remote - SSH: Editing Configuration Files” and “Remote Explorer”)\n\nCreate Containerfile (or Dockerfile)\nCreate requirements.txt\nIn VS Code:\n\nOpen the project directory: File &gt; Open Folder…\nView &gt; Command Palette… &gt; Dev Containers: Open Folder in Container &gt; select project folder &gt; select Dockerfile\n\nTHe Docker image will now be built. This may take awhile the first time.",
+    "crumbs": [
+      "Home",
+      "Set up environment"
+    ]
+  },
+  {
+    "objectID": "howto.html#set-up-environment",
+    "href": "howto.html#set-up-environment",
+    "title": "Climatology",
+    "section": "",
+    "text": "Create local directory\nIn VS Code, install\n\nGit\nQuarto\nRemote - SSH (should also install “Remote - SSH: Editing Configuration Files” and “Remote Explorer”)\n\nCreate Containerfile (or Dockerfile)\nCreate requirements.txt\nIn VS Code:\n\nOpen the project directory: File &gt; Open Folder…\nView &gt; Command Palette… &gt; Dev Containers: Open Folder in Container &gt; select project folder &gt; select Dockerfile\n\nTHe Docker image will now be built. This may take awhile the first time.",
+    "crumbs": [
+      "Home",
+      "Set up environment"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Local Climatologies",
+    "section": "",
+    "text": "This site presents daily and monthly averages and records of NOAA CO-OPS weather and tide observations at different locations along the U.S. East Coast. Current sites are updated daily; archived sites are updated less frequently. This project is inspired by Brian McNoldy at the University of Miami, whose long-standing “Climatology of Virginia Key, FL” site never ceased to provide insightful weather perspectives during my time at the Rosenstiel School of Marine, Atmospheric, and Earth Science."
+  },
+  {
+    "objectID": "index.html#oceanic-and-atmospheric-averages-and-records",
+    "href": "index.html#oceanic-and-atmospheric-averages-and-records",
+    "title": "Local Climatologies",
+    "section": "",
+    "text": "This site presents daily and monthly averages and records of NOAA CO-OPS weather and tide observations at different locations along the U.S. East Coast. Current sites are updated daily; archived sites are updated less frequently. This project is inspired by Brian McNoldy at the University of Miami, whose long-standing “Climatology of Virginia Key, FL” site never ceased to provide insightful weather perspectives during my time at the Rosenstiel School of Marine, Atmospheric, and Earth Science."
+  }
+]
