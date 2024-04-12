@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://mdgrossi.github.io/climatology/about.html</loc>
-    <lastmod>2024-04-12T03:07:09.283Z</lastmod>
+    <loc>https://mdgrossi.github.io/climatology/content/about.html</loc>
+    <lastmod>2024-04-12T03:19:27.597Z</lastmod>
   </url>
   <url>
-    <loc>https://mdgrossi.github.io/climatology/howto.html</loc>
-    <lastmod>2024-04-12T03:07:09.283Z</lastmod>
+    <loc>https://mdgrossi.github.io/climatology/content/howto.html</loc>
+    <lastmod>2024-04-12T03:19:27.597Z</lastmod>
   </url>
   <url>
-    <loc>https://mdgrossi.github.io/climatology/index.html</loc>
-    <lastmod>2024-04-12T03:07:09.283Z</lastmod>
+    <loc>https://mdgrossi.github.io/climatology/content/index.html</loc>
+    <lastmod>2024-04-12T03:19:27.597Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mdgrossi.github.io/climatology/content/404.html</loc>
+    <lastmod>2024-04-12T03:19:27.597Z</lastmod>
   </url>
 </urlset>
