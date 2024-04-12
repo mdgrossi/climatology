@@ -10,9 +10,9 @@ website:
   favicon: /images/logo.png
   navbar:
     left:
-      - href: index.qmd
+      - href: /content/index.qmd
         text: Home
-      - about.qmd
+      - /content/about.qmd
     right:
       - text: "More"
         menu:
@@ -48,8 +48,6 @@ website:
       - href: https://www.youtube.com/@seaswellsnippets
         icon: youtube
     background: light
-
-
 
 format:
   html:
