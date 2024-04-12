@@ -7,12 +7,12 @@ theme:
 
 website:
   title: "Climatology"
-  favicon: /images/logo.png
+  favicon: images/logo.png
   navbar:
     left:
       - href: index.qmd
         text: Home
-      - /content/about.qmd
+      - content/about.qmd
     right:
       - text: "More"
         menu:
