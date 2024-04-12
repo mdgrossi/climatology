@@ -1,0 +1,25 @@
+
+
+
+## Set up environment
+
+1. Create local directory
+
+2. In VS Code, install
+
+    - Git
+    - Quarto
+    - Remote - SSH (should also install "Remote - SSH: Editing Configuration Files" and "Remote Explorer")
+
+3. Create Containerfile (or Dockerfile)
+
+4. Create requirements.txt
+
+5. In VS Code:
+
+   a. Open the project directory: File > Open Folder...
+   b. View > Command Palette... > Dev Containers: Open Folder in Container > select project folder > select Dockerfile
+
+   THe Docker image will now be built. This may take awhile the first time.
+
+6. 

@@ -1,0 +1,62 @@
+project:
+  type: website
+  output-dir: docs
+
+theme:
+  light: flatly
+  dark: darkly
+
+website:
+  title: "Climatology"
+  favicon: /images/logo.png
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+    right:
+      - text: "More"
+        menu:
+          - href: https://www.github.com/mdgrossi
+            text: GitHub
+            icon: github
+          - href: https://www.linkedin.com/in/matthewgrossi
+            text: LinkedIn
+            icon: linkedin
+          - href: https://www.youtube.com/@seaswellsnippets
+            text: YouTube
+            icon: youtube
+    tools:
+      - icon: github
+        menu:
+          - text: Source Code
+            url: https://www.github.com/mdgrossi/climatology
+          - text: Report a Bug
+            url: https://github.com/mdgrossi/climatology/issues
+  sidebar:
+    style: "docked"
+    subtitle: Available Sites
+    contents: auto
+  page-navigation: true
+  back-to-top-navigation: true
+  page-footer:
+    left: "Copyright 2024, Matthew D. Grossi"
+    right:
+      - href: https://www.github.com/mdgrossi
+        icon: github
+      - href: https://www.linkedin.com/in/matthewgrossi
+        icon: linkedin
+      - href: https://www.youtube.com/@seaswellsnippets
+        icon: youtube
+    background: light
+
+
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+
+
