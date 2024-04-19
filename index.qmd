@@ -1,8 +1,43 @@
 ---
 title: "Local Climatologies"
-toc: false
+
+about:
+  id: hero-heading
+  image: images/logo.png
+  image-width: 200px
+  template: jolla
+
+listing:
+  - id: active-sites
+    contents: content/stations
+    type: grid
+    fields: [image, title]
+    grid-item-border: false
+    grid-item-align: center
+  - id: archived-sites
+    contents: content/archived
+    type: grid
+    fields: [image, title]
+    grid-item-border: false
+    grid-item-align: center
 ---
 
-## Oceanic and atmospheric averages and records
+::: {#hero-heading style="text-align: center"}
+Daily and monthly averages and records of NOAA CO-OPS weather and \
+tide observations at different locations along the U.S. East Coast
+:::
 
-This site presents daily and monthly averages and records of NOAA CO-OPS weather and tide observations at different locations along the U.S. East Coast. Current sites are updated daily; archived sites are updated less frequently. This project is inspired by Brian McNoldy at the [University of Miami](https://welcome.miami.edu/), whose long-standing “Climatology of Virginia Key, FL” site never ceased to provide insightful weather perspectives during my time at the [Rosenstiel School of Marine, Atmospheric, and Earth Science](https://www.earth.miami.edu/).
+
+## Active Sites (updated daily)
+
+:::{#active-sites}
+:::
+
+## Archived Sites (updated less frequently)
+
+:::{#archived-sites}
+:::
+
+
+## Shout Out
+This project is inspired by Brian McNoldy at the [University of Miami](https://welcome.miami.edu/), whose long-standing “Climatology of Virginia Key, FL” site never ceased to provide insightful weather perspectives during my time at the [Rosenstiel School of Marine, Atmospheric, and Earth Science](https://www.earth.miami.edu/).
