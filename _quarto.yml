@@ -1,5 +1,8 @@
 project:
   type: website
+  preview:
+    port: 4000
+  
 
 theme:
   light: flatly
@@ -32,14 +35,14 @@ website:
             url: https://www.github.com/mdgrossi/climatology
           - text: Report a Bug
             url: https://github.com/mdgrossi/climatology/issues
-  sidebar:
-    style: "docked"
-    subtitle: Available Sites
-    contents: auto
+  # sidebar:
+  #   style: "docked"
+  #   subtitle: Available Sites
+  #   contents: auto
   page-navigation: true
   back-to-top-navigation: true
   page-footer:
-    left: "Copyright 2024, Matthew D. Grossi"
+    left: "Copyright 2024, M.D. Grossi"
     right:
       - href: https://www.github.com/mdgrossi
         icon: github
@@ -52,8 +55,9 @@ website:
 format:
   html:
     theme: cosmo
+    # theme: default
     css: styles.css
-    toc: true
+    toc: false
 
 
 
