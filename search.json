@@ -4,61 +4,83 @@
     "href": "index.html",
     "title": "Local Climatologies",
     "section": "",
-    "text": "This site presents daily and monthly averages and records of NOAA CO-OPS weather and tide observations at different locations along the U.S. East Coast. Current sites are updated daily; archived sites are updated less frequently. This project is inspired by Brian McNoldy at the University of Miami, whose long-standing “Climatology of Virginia Key, FL” site never ceased to provide insightful weather perspectives during my time at the Rosenstiel School of Marine, Atmospheric, and Earth Science."
+    "text": "Daily and monthly averages and records of NOAA CO-OPS weather and\ntide observations at different locations along the U.S. East Coast"
   },
   {
-    "objectID": "index.html#oceanic-and-atmospheric-averages-and-records",
-    "href": "index.html#oceanic-and-atmospheric-averages-and-records",
+    "objectID": "index.html#active-sites-updated-daily",
+    "href": "index.html#active-sites-updated-daily",
     "title": "Local Climatologies",
-    "section": "",
-    "text": "This site presents daily and monthly averages and records of NOAA CO-OPS weather and tide observations at different locations along the U.S. East Coast. Current sites are updated daily; archived sites are updated less frequently. This project is inspired by Brian McNoldy at the University of Miami, whose long-standing “Climatology of Virginia Key, FL” site never ceased to provide insightful weather perspectives during my time at the Rosenstiel School of Marine, Atmospheric, and Earth Science."
+    "section": "Active Sites (updated daily)",
+    "text": "Active Sites (updated daily)\n\n\n\n\n\n\n\n\nBeaufort, NC\n\n\n\n\n\n\n\n\n\n\n\n\n\nVirginia Key, FL\n\n\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "content/404.html",
-    "href": "content/404.html",
-    "title": "Page Not Found",
-    "section": "",
-    "text": "Well, that’s unfortunate. The page you requested cannot be found. Perhaps it was moved or renamed.\nYou may try searching to find the page’s new location. Or open an issue to let us know what happened.\n\n\n\n Back to top",
-    "crumbs": [
-      "Home",
-      "Content",
-      "Page Not Found"
-    ]
+    "objectID": "index.html#archived-sites-updated-less-frequently",
+    "href": "index.html#archived-sites-updated-less-frequently",
+    "title": "Local Climatologies",
+    "section": "Archived Sites (updated less frequently)",
+    "text": "Archived Sites (updated less frequently)\n\n\n\n\n\n\n\n\nLewes, DE\n\n\n\n\n\n\n\n\n\n\n\nPass Christian, MS\n\n\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "content/howto.html",
-    "href": "content/howto.html",
-    "title": "Climatology",
-    "section": "",
-    "text": "Create local directory\nIn VS Code, install\n\nGit\nQuarto\nRemote - SSH (should also install “Remote - SSH: Editing Configuration Files” and “Remote Explorer”)\n\nCreate Containerfile (or Dockerfile)\nCreate requirements.txt\nIn VS Code:\n\nOpen the project directory: File &gt; Open Folder…\nView &gt; Command Palette… &gt; Dev Containers: Open Folder in Container &gt; select project folder &gt; select Dockerfile\n\nTHe Docker image will now be built. This may take awhile the first time.",
-    "crumbs": [
-      "Home",
-      "Content",
-      "Set up environment"
-    ]
-  },
-  {
-    "objectID": "content/howto.html#set-up-environment",
-    "href": "content/howto.html#set-up-environment",
-    "title": "Climatology",
-    "section": "",
-    "text": "Create local directory\nIn VS Code, install\n\nGit\nQuarto\nRemote - SSH (should also install “Remote - SSH: Editing Configuration Files” and “Remote Explorer”)\n\nCreate Containerfile (or Dockerfile)\nCreate requirements.txt\nIn VS Code:\n\nOpen the project directory: File &gt; Open Folder…\nView &gt; Command Palette… &gt; Dev Containers: Open Folder in Container &gt; select project folder &gt; select Dockerfile\n\nTHe Docker image will now be built. This may take awhile the first time.",
-    "crumbs": [
-      "Home",
-      "Content",
-      "Set up environment"
-    ]
+    "objectID": "index.html#shout-out",
+    "href": "index.html#shout-out",
+    "title": "Local Climatologies",
+    "section": "Shout Out",
+    "text": "Shout Out\nThis project is inspired by Brian McNoldy at the University of Miami, whose long-standing “Climatology of Virginia Key, FL” site never ceased to provide insightful weather perspectives during my time at the Rosenstiel School of Marine, Atmospheric, and Earth Science."
   },
   {
     "objectID": "content/about.html",
     "href": "content/about.html",
     "title": "About",
     "section": "",
-    "text": "About this site\n\n\n\n Back to top",
-    "crumbs": [
-      "Home",
-      "Content",
-      "About"
-    ]
+    "text": "About this site\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "content/archived/lewes/index.html",
+    "href": "content/archived/lewes/index.html",
+    "title": "Lewes, DE",
+    "section": "",
+    "text": "Back to top"
+  },
+  {
+    "objectID": "content/stations/beaufort/index.html",
+    "href": "content/stations/beaufort/index.html",
+    "title": "Beaufort, NC",
+    "section": "",
+    "text": "Back to top"
+  },
+  {
+    "objectID": "content/stations/virginiakey/index.html",
+    "href": "content/stations/virginiakey/index.html",
+    "title": "Virginia Key, FL",
+    "section": "",
+    "text": "About\n\n\nVirginia Key is a small barrier island in southeast Florida with a tropical monsoon climate characterized by hot, humid summers and warm, dry winters. It is located east of Miami, south of Miami Beach, and north of Key Biscayne in Biscayne Bay. The NOAA weather station has been installed on a pier at the University of Miami Rosenstiel School of Marine, Atmospheric, and Earth Science since February 1994.\n\n\nDaily Air Temperature\n\n\n\nMonthly Air Temperature\nPlot of monthly air temperature climatology\n\n\nDaily Water Temperature\nPlot of daily water temperature climatology\n\n\nMonthly Water Temperature\nPlot of monthly water temperature climatology\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "content/archived/passchristian/index.html",
+    "href": "content/archived/passchristian/index.html",
+    "title": "Pass Christian, MS",
+    "section": "",
+    "text": "Back to top"
+  },
+  {
+    "objectID": "content/404.html",
+    "href": "content/404.html",
+    "title": "Page Not Found",
+    "section": "",
+    "text": "Well, that’s unfortunate. The page you requested cannot be found. Perhaps it was moved or renamed.\nYou may try searching to find the page’s new location. Or open an issue to let us know what happened.\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "content/howto.html",
+    "href": "content/howto.html",
+    "title": "Climatology",
+    "section": "",
+    "text": "Create local directory\nIn VS Code, install\n\nGit\nQuarto\nRemote - SSH (should also install “Remote - SSH: Editing Configuration Files” and “Remote Explorer”)\n\nCreate Containerfile (or Dockerfile)\nCreate requirements.txt\nIn VS Code:\n\nOpen the project directory: File &gt; Open Folder…\nView &gt; Command Palette… &gt; Dev Containers: Open Folder in Container &gt; select project folder &gt; select Dockerfile\n\nTHe Docker image will now be built. This may take awhile the first time."
+  },
+  {
+    "objectID": "content/howto.html#set-up-environment",
+    "href": "content/howto.html#set-up-environment",
+    "title": "Climatology",
+    "section": "",
+    "text": "Create local directory\nIn VS Code, install\n\nGit\nQuarto\nRemote - SSH (should also install “Remote - SSH: Editing Configuration Files” and “Remote Explorer”)\n\nCreate Containerfile (or Dockerfile)\nCreate requirements.txt\nIn VS Code:\n\nOpen the project directory: File &gt; Open Folder…\nView &gt; Command Palette… &gt; Dev Containers: Open Folder in Container &gt; select project folder &gt; select Dockerfile\n\nTHe Docker image will now be built. This may take awhile the first time."
   }
 ]
