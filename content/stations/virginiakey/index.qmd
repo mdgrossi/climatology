@@ -1,42 +1,151 @@
 ---
 title: "Virginia Key, FL"
-image: ../../../images/vkfl.JPG
-page-layout: full
-toc: true
-include-in-header:
-    - text: |
-        <style type="text/css">
-        h1.hide {
-        display: none;
-        }
-        </style>
+logo: ../../../images/vkfl.JPG
+format: dashboard
 ---
-:::{.content-visible when-format="html"}
-# About {.hide}
+
+# About
+
+## Row {.flow}
+
+### Column
+
+:::{.card}
+![](../../../images/vkfl.JPG)
 :::
 
-<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d42461.70157812699!2d-80.17255246551831!3d25.73753395804339!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1704939462365!5m2!1sen!2sus" align="right" width="300" height="225" style="border:0; padding-left: 30px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+### Column
+
+:::{.card}
+<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d42461.70157812699!2d-80.17255246551831!3d25.73753395804339!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1704939462365!5m2!1sen!2sus" align="right" width="460" height="350" style="border:0; padding-left: 20px; padding-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+:::
+
+## Row
 
 [Virginia Key](https://en.wikipedia.org/wiki/Virginia_Key){target="_blank"} is a small barrier island in southeast Florida with a **tropical monsoon climate** characterized by hot, humid summers and warm, dry winters. It is located east of Miami, south of Miami Beach, and north of Key Biscayne in Biscayne Bay. The [NOAA](https://www.noaa.gov){target="_blank"} [weather station](https://tidesandcurrents.noaa.gov/stationhome.html?id=8723214){target="_blank"} has been installed on a pier at the [University of Miami](https://welcome.miami.edu){target="_blank"} [Rosenstiel School of Marine, Atmospheric, and Earth Science](https://earth.miami.edu){target="_blank"} since February 1994.
 
 
+# Plots
 
-:::{.content-visible when-format="html"}
-# Daily Air Temperature {.hide}
-:::
-![](figure-virginiakeyfl-airtemperature-daily.html){width="100%" height="600"}
 
-:::{.content-visible when-format="html"}
-# Monthly Air Temperature {.hide}
-:::
-Plot of monthly air temperature climatology
 
-:::{.content-visible when-format="html"}
-# Daily Water Temperature {.hide}
-:::
-Plot of daily water temperature climatology
 
-:::{.content-visible when-format="html"}
-# Monthly Water Temperature {.hide}
+# Data
+
+
+## Row
+::: {.card title="<b>Air Temperature</b>"}
 :::
-Plot of monthly water temperature climatology
+
+
+## Row {.tabset}
+```{python}
+#| title: Daily Data
+
+import plotly.graph_objects as go
+import pandas as pd
+import json
+
+def stats_table(stats_dict):
+    """Convert statistics dictionary to DataFrame for easier viewing"""
+    _tables = {k:None for k in stats_dict.keys()}
+    for var in stats_dict.keys():
+        out = pd.DataFrame.from_dict(stats_dict[var])
+        for col in out.columns:
+            new = pd.json_normalize(out[col])
+            if len(new.columns) == 2:
+                new.columns = [col, col+' Year']
+            else:
+                new.columns = [col]
+            new.index = out.index
+            out.drop(col, axis=1, inplace=True)
+            out = pd.concat((out, new), axis=1)
+        _tables[var] = out
+    return _tables
+
+with open('statistics-daily.json') as file:
+    monStats = json.load(file)
+
+stats = stats_table(monStats)['Air Temperature']
+stats.index.name = 'Month'
+
+# Colors:
+# https://www.tutorialrepublic.com/css-reference/css-color-names.php
+fig = go.Figure(data=[go.Table(
+    header=dict( #values=list(stats.reset_index().columns),
+                values=[f'<b>{i}</b>' for i in stats.reset_index().columns],
+                fill_color='grey',
+                font_color='white',
+                font_size=12,
+                align='left'),
+    cells=dict(values=stats.reset_index().T,
+               fill_color=['white', 'whitesmoke',
+                           '#ff8080', '#ff8080',
+                           '#c1d5f8', '#c1d5f8',
+                           '#dc8d8d', '#e6aeae', '#e6aeae',
+                           '#d26c6c', '#d26c6c',
+                           '#a2bff4', '#d1dffa', '#d1dffa',
+                           '#74a0ef', '#74a0ef', 'white'],
+               font_size=12,
+               align='center')
+    )
+])
+fig.show()
+
+```
+
+```{python}
+#| title: Monthly Data
+import plotly.graph_objects as go
+import pandas as pd
+import json
+
+def stats_table(stats_dict):
+    """Convert statistics dictionary to DataFrame for easier viewing"""
+    _tables = {k:None for k in stats_dict.keys()}
+    for var in stats_dict.keys():
+        out = pd.DataFrame.from_dict(stats_dict[var])
+        for col in out.columns:
+            new = pd.json_normalize(out[col])
+            if len(new.columns) == 2:
+                new.columns = [col, col+' Year']
+            else:
+                new.columns = [col]
+            new.index = out.index
+            out.drop(col, axis=1, inplace=True)
+            out = pd.concat((out, new), axis=1)
+        _tables[var] = out
+    return _tables
+
+with open('statistics-monthly.json') as file:
+    monStats = json.load(file)
+
+stats = stats_table(monStats)['Air Temperature']
+stats.index.name = 'Month'
+
+# Colors:
+# https://www.tutorialrepublic.com/css-reference/css-color-names.php
+fig = go.Figure(data=[go.Table(
+    header=dict( #values=list(stats.reset_index().columns),
+                values=[f'<b>{i}</b>' for i in stats.reset_index().columns],
+                fill_color='grey',
+                font_color='white',
+                font_size=12,
+                align='left'),
+    cells=dict(values=stats.reset_index().T,
+               fill_color=['white', 'whitesmoke',
+                           '#ff8080', '#ff8080',
+                           '#c1d5f8', '#c1d5f8',
+                           '#dc8d8d', '#e6aeae', '#e6aeae',
+                           '#d26c6c', '#d26c6c',
+                           '#a2bff4', '#d1dffa', '#d1dffa',
+                           '#74a0ef', '#74a0ef', 'white'],
+               font_size=12,
+               align='center')
+    )
+])
+fig.show()
+
+```
+
+## Row
