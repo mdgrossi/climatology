@@ -1,12 +1,294 @@
+
 ---
 title: "Virginia Key, FL"
 logo: ../../../images/vkfl.JPG
-format: dashboard
+format:
+  dashboard:
+    # orientation: columns
+    scrolling: true
 ---
+
+<!-- Known issue displaying plotly plots in Chrome, Brave:
+https://github.com/quarto-dev/quarto-cli/issues/8612
+-->
+
+```{python}
+#| title: Records
+from IPython.display import Markdown
+from scipy.optimize import curve_fit
+import plotly.graph_objects as go
+from datetime import datetime
+import pandas as pd
+import xarray as xr
+import numpy as np
+import os
+
+dirName = 'virginiaKeyFl'
+
+daily_stats = xr.load_dataset(f'../../../{dirName}/statistics-daily.nc')
+monthly_stats = xr.load_dataset(f'../../../{dirName}/statistics-monthly.nc')
+
+colsdict = {
+    'RecordHigh': '#d26c6c',
+    'AvgHigh': '#dc8d8d',
+    'LowestHigh': '#e6aeae',
+    'RecordHighAvg': '#ff8080',
+    'DailyAvg': '#F5F5F5',
+    'RecordLowAvg': '#c1d5f8',
+    'HighestLow': '#d1dffa',
+    'AvgLow': '#a2bff4',
+    'RecordLow': '#74a0ef'
+}
+
+# colsdict = {
+#     'RecordHigh': '#b31529',
+#     'AvgHigh': '#d75f4c',
+#     'LowestHigh': '#f6a482',
+#     'RecordHighAvg': '#fedbc7',
+#     'DailyAvg': '#f9f9f9',
+#     'RecordLowAvg': '#d1e5f0',
+#     'HighestLow': '#8ec4de',
+#     'AvgLow': '#3a93c3',    
+#     'RecordLow': '#1065ab'
+# }
+
+deg = u'\N{DEGREE SIGN}'
+
+def getval(var, record, type):
+    """Retrieve 'var' 'record' from stats table"""
+    if type.lower() == 'daily':
+        val = daily_stats[record].sel(variable=var, Date=today).values
+    elif type.lower() == 'monthly':
+        val = monthly_stats[record].sel(variable=var, Date=today).values
+    else:
+        raise ValueError("'type' must be either 'daily' or 'monthly'")
+    return str(val)+f' {deg}F'
+
+def colortable(stats):
+    """Create a colored table"""
+    # Colors:
+    # https://www.tutorialrepublic.com/css-reference/css-color-names.php
+    fig = go.Figure(data=[go.Table(
+        header=dict( #values=list(stats.reset_index().columns),
+                    values=[f'<b>{i}</b>' for i in stats.reset_index().columns],
+                    fill_color='grey',
+                    font_color='white',
+                    font_size=12,
+                    align='left'),
+        cells=dict(values=stats.reset_index().T,
+                fill_color=['white', colsdict['DailyAvg'],
+                            colsdict['RecordHighAvg'],
+                            colsdict['RecordHighAvg'],
+                            colsdict['RecordLowAvg'],
+                            colsdict['RecordLowAvg'],
+                            colsdict['AvgHigh'],
+                            colsdict['LowestHigh'],
+                            colsdict['LowestHigh'],
+                            colsdict['RecordHigh'],
+                            colsdict['RecordHigh'],
+                            colsdict['AvgLow'],
+                            colsdict['HighestLow'],
+                            colsdict['HighestLow'],
+                            colsdict['RecordLow'],
+                            colsdict['RecordLow'], 'white'],
+                font_size=12,
+                align='center')
+        )
+    ])
+    fig.show()
+
+def cos_fit(data, plot=False):
+    """Fit cosine curve to data"""
+    X = np.arange(0, len(data))/len(data)
+
+    # Initial parameter values
+    guess_freq = 1
+    guess_amplitude = 3*np.std(data)/(2**0.5)
+    guess_phase = 0
+    guess_offset = np.mean(data)
+    p0 = [guess_freq, guess_amplitude,
+          guess_phase, guess_offset]
+
+    # Function to fit
+    def my_cos(x, freq, amplitude, phase, offset):
+        return np.cos(x * freq + phase) * amplitude + offset
+
+    # Fit curve to data
+    fit = curve_fit(my_cos, X, data, p0=p0)
+
+    if plot:
+        fig, ax = plt.subplots(1, 1, figsize=(12,5))
+
+        ax.plot(data, label=data.name)
+        ax.plot(fit, color='red', label=f'Cosine fit')
+
+        ax.legend(loc='best')
+        plt.show()
+    else:
+        return my_cos(np.array(X), *fit[0])
+
+def daily_climo(data, var, scheme='mg'):
+    """Create a daily climatology plot for environmental variable 'var'
+    from 'data'.
+    
+    Inputs:
+        data: xarray containing climatological stats
+        var: str, one of the available environmental variables in 'data'
+        scheme: str, either 'mg' or 'bm' specifying whether to use M. Grossi's
+            color scheme or B. McNoldy's
+        show: Bool, display the plot to screen instead of saving to file
+    """
+
+    # Dates for x axis
+    xdates = pd.date_range(start='2020-01-01',end='2020-12-31', freq='1D')
+    df = data.sel(variable=var)
+    
+    # Color dictionary
+    colors = dict(
+        mg=dict({
+            'Record High Year': 'white',
+            'Record High': '#d26c6c',
+            'Average High': '#dc8d8d',
+            'Daily Average': '#F5F5F5',
+            'Average Low': '#a2bff4',
+            'Record Low': '#74a0ef',
+            'Record Low Year': 'white'}),
+        bm=dict({
+            'Record High Year': 'white',
+            'Record High': 'orange',
+            'Average High': 'red',
+            'Daily Average': 'grey',
+            'Average Low': 'purple',
+            'Record Low': 'white'}),
+        cb=dict({
+            'Record High Year': 'white',
+            'Record High': colsdict['RecordHigh'],
+            'Average High': colsdict['AvgHigh'],
+            'Daily Average': colsdict['DailyAvg'],
+            'Average Low': colsdict['AvgLow'],
+            'Record Low': colsdict['RecordLow']})
+        )
+    
+    # Create figure
+    fig = go.Figure()
+
+    # Record highs
+    # High records this year
+    thisYear = pd.to_datetime('today').year
+    thisYearRecords = (data.sel(variable='Air Temperature')==thisYear)\
+                       .to_dataframe().drop('variable', axis=1).sum().sum()
+    lastYearRecords = (data.sel(variable='Air Temperature')==thisYear-1)\
+                       .to_dataframe().drop('variable', axis=1).sum().sum()
+    highRecords = df['Record High'].where(df['Record High Year'] == thisYear).to_dataframe()['Record High']
+    highRecords.index = pd.to_datetime(highRecords.index+'-2020')
+    lowRecords = df['Record Low'].where(df['Record Low Year'] == thisYear).to_dataframe()['Record Low']
+    lowRecords.index = pd.to_datetime(lowRecords.index+'-2020')
+    
+    first_time = datetime.strptime(df.attrs[f'{var} data range'][0], '%Y-%m-%d').strftime('%-m/%-d/%Y')
+    last_time = datetime.strptime(df.attrs[f'{var} data range'][1], '%Y-%m-%d').strftime('%-m/%-d/%Y')
+    fig.add_trace(
+    go.Scatter(
+        x=highRecords.index, y=highRecords.values,
+        name=f'{pd.to_datetime("today").year} Record'.upper(),
+        mode='markers',
+        marker=dict(size=6, color='white'),
+        hoverinfo='none'
+    ))
+    fig.add_trace(
+    go.Scatter(
+        x=lowRecords.index, y=lowRecords.values,
+        name='Low Record',
+        mode='markers',
+        marker=dict(size=6, color='white'),
+        hoverinfo='none',
+        showlegend=False
+    ))
+    fig.add_trace(
+    go.Scatter(
+        x=xdates, y=df['Record High'],
+        name='Record High'.upper(),
+        mode='markers',
+        marker=dict(size=3, color=colors[scheme]['Record High'])
+    ))
+    # Average highs
+    fig.add_trace(
+    go.Scatter(
+        x=xdates, y=cos_fit(df['Average High']).round(1),
+        name='Average High'.upper(),
+        marker=dict(size=3, color=colors[scheme]['Average High'])
+    ))
+    # Daily average
+    fig.add_trace(
+    go.Scatter(
+        x=xdates, y=cos_fit(df['Daily Average']).round(1),
+        name='Daily Average'.upper(),
+        marker=dict(size=3, color=colors[scheme]['Daily Average'])
+    ))
+    # Average lows
+    fig.add_trace(
+    go.Scatter(
+        x=xdates,
+        y=cos_fit(df['Average Low']).round(1),
+        name='Average Low'.upper(),
+        marker=dict(size=3, color=colors[scheme]['Average Low'])
+    ))
+    # Record lows
+    fig.add_trace(
+    go.Scatter(
+        x=xdates, y=df['Record Low'],
+        name='Record Low'.upper(),
+        mode='markers',
+        marker=dict(size=3, color=colors[scheme]['Record Low'])
+    ))
+    # Hover box
+    fig.update_traces(
+        hoverlabel = dict(bordercolor='white')
+    )
+    # Plot settings
+    fig.update_layout(
+        template='plotly_dark',
+        paper_bgcolor='#404040',
+        plot_bgcolor='#404040',
+        margin=dict(l=50, r=50,
+                    t=70, b=50,
+                    pad=4),
+        title=dict(text='Daily {} records'.format(var.lower())+
+                        '<br><sup>{}-{}</sup>'.format(first_time, last_time)+
+                        '<br><sup>As of today, <b>{}</b> {} records have been set. Last year, {} records were set.</sup>'.format(
+                            thisYearRecords, var.lower(), lastYearRecords
+                        ),
+                  font=dict(size=22)),
+        yaxis = dict(title=f'{var} ({data.attrs[f"{var} units"]})',
+                     showgrid=True, gridcolor='grey'),
+        xaxis = dict(showgrid=False, showspikes=True,
+                     dtick='M1', tickformat='%b %d',
+                     ),
+        hovermode='x unified',
+        legend=dict(itemsizing='constant',
+                    yanchor='top',
+                    y=0.7,
+                    xanchor='left',
+                    x=1),
+        # hoverlabel=dict(font_size=12),
+        font=dict(size=14)
+    )
+    fig.show()
+
+def display_table(stats, var):
+    """Display the table if the variable 'var' exists in 'stats'. Otherwise, display a message that the data do not exist.
+    """
+    freq = 'Monthly' if 'Month' in stats.sizes.keys() else 'Daily'
+    try:
+        stats = stats.sel(variable=var.title()).to_dataframe().drop('variable', axis=1)
+        colortable(stats)
+    except KeyError:
+        print(f'{freq} {var.lower()} data are not available for this station.')
+```
+
 
 # About
 
-## Row {.flow}
+## Row {.fill}
 
 ### Column
 
@@ -17,7 +299,9 @@ format: dashboard
 ### Column
 
 :::{.card}
+
 <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d42461.70157812699!2d-80.17255246551831!3d25.73753395804339!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1704939462365!5m2!1sen!2sus" align="right" width="460" height="350" style="border:0; padding-left: 20px; padding-top: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
 :::
 
 ## Row
@@ -27,125 +311,143 @@ format: dashboard
 
 # Plots
 
+## Row {.fill}
 
+```{python}
+today = datetime.today().strftime('%d-%b')
+Markdown("**Welcome!** Today is {}."
+    .format(datetime.today().strftime("%A, %B %d, %Y")))
+```
 
+## Row {height=80%}
+
+### Column {width=20%}
+
+#### Row
+
+```{python}
+#| content: valuebox
+#| title: "Today's Record High"
+var = 'Air Temperature'
+dict(
+  icon = "thermometer-sun",
+  color = colsdict['RecordHigh'],
+  value = getval(var, 'Record High', 'daily')
+)
+```
+
+#### Row
+
+```{python}
+#| content: valuebox
+#| title: "Today's Average High"
+dict(
+  icon = "thermometer-high",
+  color = colsdict['AvgHigh'],
+  value = getval(var, 'Average High', 'daily')
+)
+```
+
+#### Row
+
+```{python}
+#| content: valuebox
+#| title: "Today's Lowest High"
+dict(
+  icon = "thermometer-half",
+  color = colsdict['LowestHigh'],
+  value = getval(var, 'Lowest High', 'daily')
+)
+```
+
+#### Row
+
+```{python}
+#| content: valuebox
+#| title: "Today's Highest Low"
+dict(
+  icon = "thermometer-half",
+  color = colsdict['HighestLow'],
+  value = getval(var, 'Highest Low', 'daily')
+)
+```
+
+#### Row
+
+```{python}
+#| content: valuebox
+#| title: "Today's Record Low"
+dict(
+  icon = "thermometer-snow",
+  color = colsdict['RecordLow'],
+  value = getval(var, 'Record Low', 'daily')
+)
+```
+
+### Column {.tabset}
+
+```{python}
+#| output: asis
+#| title: Daily Stats
+
+display(Markdown('::: {.panel-tabset}'))
+
+for var in daily_stats.variable.values:
+    display(Markdown(f'\n## {var}\n\n'))
+    daily_climo(data=daily_stats, var=var, scheme='cb')
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
+
+```{python}
+#| output: asis
+#| title: Monthly Stats
+
+display(Markdown('::: {.panel-tabset}'))
+
+for var in daily_stats.variable.values:
+    display(Markdown(f'\n## {var}\n\n'))
+    display(Markdown('Plot'))
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
 
 # Data
 
-
-## Row
-::: {.card title="<b>Air Temperature</b>"}
-:::
-
-
 ## Row {.tabset}
+
 ```{python}
-#| title: Daily Data
+#| output: asis
+#| title: Daily Stats
 
-import plotly.graph_objects as go
-import pandas as pd
-import json
+display(Markdown('::: {..column-screen}'))
+display(Markdown('::: {.panel-tabset}'))
 
-def stats_table(stats_dict):
-    """Convert statistics dictionary to DataFrame for easier viewing"""
-    _tables = {k:None for k in stats_dict.keys()}
-    for var in stats_dict.keys():
-        out = pd.DataFrame.from_dict(stats_dict[var])
-        for col in out.columns:
-            new = pd.json_normalize(out[col])
-            if len(new.columns) == 2:
-                new.columns = [col, col+' Year']
-            else:
-                new.columns = [col]
-            new.index = out.index
-            out.drop(col, axis=1, inplace=True)
-            out = pd.concat((out, new), axis=1)
-        _tables[var] = out
-    return _tables
+for var in daily_stats.variable.values:
+    display(Markdown(f'\n## {var}\n\n'))
+    display_table(daily_stats, var)
+    display(Markdown(' '))
 
-with open('statistics-daily.json') as file:
-    monStats = json.load(file)
-
-stats = stats_table(monStats)['Air Temperature']
-stats.index.name = 'Month'
-
-# Colors:
-# https://www.tutorialrepublic.com/css-reference/css-color-names.php
-fig = go.Figure(data=[go.Table(
-    header=dict( #values=list(stats.reset_index().columns),
-                values=[f'<b>{i}</b>' for i in stats.reset_index().columns],
-                fill_color='grey',
-                font_color='white',
-                font_size=12,
-                align='left'),
-    cells=dict(values=stats.reset_index().T,
-               fill_color=['white', 'whitesmoke',
-                           '#ff8080', '#ff8080',
-                           '#c1d5f8', '#c1d5f8',
-                           '#dc8d8d', '#e6aeae', '#e6aeae',
-                           '#d26c6c', '#d26c6c',
-                           '#a2bff4', '#d1dffa', '#d1dffa',
-                           '#74a0ef', '#74a0ef', 'white'],
-               font_size=12,
-               align='center')
-    )
-])
-fig.show()
+display(Markdown(':::'))
+display(Markdown(':::'))
 
 ```
 
 ```{python}
-#| title: Monthly Data
-import plotly.graph_objects as go
-import pandas as pd
-import json
+#| output: asis
+#| title: Monthly Stats
 
-def stats_table(stats_dict):
-    """Convert statistics dictionary to DataFrame for easier viewing"""
-    _tables = {k:None for k in stats_dict.keys()}
-    for var in stats_dict.keys():
-        out = pd.DataFrame.from_dict(stats_dict[var])
-        for col in out.columns:
-            new = pd.json_normalize(out[col])
-            if len(new.columns) == 2:
-                new.columns = [col, col+' Year']
-            else:
-                new.columns = [col]
-            new.index = out.index
-            out.drop(col, axis=1, inplace=True)
-            out = pd.concat((out, new), axis=1)
-        _tables[var] = out
-    return _tables
+display(Markdown('::: {.panel-tabset}'))
 
-with open('statistics-monthly.json') as file:
-    monStats = json.load(file)
+for var in daily_stats.variable.values:
+    display(Markdown(f'\n## {var}\n\n'))
+    display_table(monthly_stats, var)
+    display(Markdown(' '))
 
-stats = stats_table(monStats)['Air Temperature']
-stats.index.name = 'Month'
-
-# Colors:
-# https://www.tutorialrepublic.com/css-reference/css-color-names.php
-fig = go.Figure(data=[go.Table(
-    header=dict( #values=list(stats.reset_index().columns),
-                values=[f'<b>{i}</b>' for i in stats.reset_index().columns],
-                fill_color='grey',
-                font_color='white',
-                font_size=12,
-                align='left'),
-    cells=dict(values=stats.reset_index().T,
-               fill_color=['white', 'whitesmoke',
-                           '#ff8080', '#ff8080',
-                           '#c1d5f8', '#c1d5f8',
-                           '#dc8d8d', '#e6aeae', '#e6aeae',
-                           '#d26c6c', '#d26c6c',
-                           '#a2bff4', '#d1dffa', '#d1dffa',
-                           '#74a0ef', '#74a0ef', 'white'],
-               font_size=12,
-               align='center')
-    )
-])
-fig.show()
+display(Markdown(':::'))
 
 ```
-
-## Row
