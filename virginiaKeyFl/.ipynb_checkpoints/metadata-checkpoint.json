@@ -1,0 +1,1 @@
+{"stationname": "Virginia Key", "stationid": "8723214", "outdir": "/home/climatology/virginiaKeyFl", "unit_system": "metric", "tz": "gmt", "datum": "MHHW", "hr_threshold": 3, "day_threshold": 2, "variables": ["Air Temperature", "Water Temperature"], "units": {"Air Temperature": "C", "Water Temperature": "C"}}
