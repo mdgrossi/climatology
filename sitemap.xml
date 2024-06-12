@@ -1,23 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://mdgrossi.github.io/climatology/NOAA-CO-OPS-records.html</loc>
+    <lastmod>2024-06-12T02:34:55.956Z</lastmod>
+  </url>
+  <url>
     <loc>https://mdgrossi.github.io/climatology/index.html</loc>
-    <lastmod>2024-06-12T02:23:59.371Z</lastmod>
+    <lastmod>2024-06-12T02:34:55.992Z</lastmod>
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/content/about.html</loc>
-    <lastmod>2024-06-12T02:23:59.367Z</lastmod>
+    <lastmod>2024-06-12T02:34:55.988Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mdgrossi.github.io/climatology/NOAA-CO-OPS-plots.html</loc>
+    <lastmod>2024-06-12T02:34:55.956Z</lastmod>
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/content/404.html</loc>
-    <lastmod>2024-06-12T02:23:59.367Z</lastmod>
+    <lastmod>2024-06-12T02:34:55.988Z</lastmod>
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/content/howto.html</loc>
-    <lastmod>2024-06-12T02:23:59.367Z</lastmod>
+    <lastmod>2024-06-12T02:34:55.988Z</lastmod>
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/content/stations/virginiakey/index.html</loc>
-    <lastmod>2024-06-12T02:23:59.367Z</lastmod>
+    <lastmod>2024-06-12T02:34:55.988Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mdgrossi.github.io/climatology/NOAA-CO-OPS-data.html</loc>
+    <lastmod>2024-06-12T02:34:55.956Z</lastmod>
   </url>
 </urlset>
