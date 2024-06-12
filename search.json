@@ -11,7 +11,7 @@
     "href": "index.html#active-sites-updated-daily",
     "title": "Local Climatologies",
     "section": "Active Sites (updated daily)",
-    "text": "Active Sites (updated daily)\n\n\n\n\n\n\n\n\nBeaufort, NC\n\n\n\n\n\n\n\n\n\n\n\n\n\nVirginia Key, FL\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Active Sites (updated daily)\n\n\n\n\n\n\n\n\nBeaufort, NC\n\n\n\n\n\n\n\n\n\n\n\nVirginia Key, FL\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html#archived-sites-updated-less-frequently",
@@ -28,13 +28,6 @@
     "text": "Shout Out\nThis project is inspired by Brian McNoldy at the University of Miami, whose long-standing “Climatology of Virginia Key, FL” site never ceased to provide insightful weather perspectives during my time at the Rosenstiel School of Marine, Atmospheric, and Earth Science."
   },
   {
-    "objectID": "content/about.html",
-    "href": "content/about.html",
-    "title": "About",
-    "section": "",
-    "text": "About this site\n\n\n\n Back to top"
-  },
-  {
     "objectID": "content/archived/lewes/index.html",
     "href": "content/archived/lewes/index.html",
     "title": "Lewes, DE",
@@ -49,18 +42,11 @@
     "text": "Back to top"
   },
   {
-    "objectID": "content/stations/virginiakey/index.html",
-    "href": "content/stations/virginiakey/index.html",
-    "title": "Virginia Key, FL",
+    "objectID": "content/about.html",
+    "href": "content/about.html",
+    "title": "About",
     "section": "",
-    "text": "About\n\n\nVirginia Key is a small barrier island in southeast Florida with a tropical monsoon climate characterized by hot, humid summers and warm, dry winters. It is located east of Miami, south of Miami Beach, and north of Key Biscayne in Biscayne Bay. The NOAA weather station has been installed on a pier at the University of Miami Rosenstiel School of Marine, Atmospheric, and Earth Science since February 1994.\n\n\nDaily Air Temperature\n\n\n\nMonthly Air Temperature\nPlot of monthly air temperature climatology\n\n\nDaily Water Temperature\nPlot of daily water temperature climatology\n\n\nMonthly Water Temperature\nPlot of monthly water temperature climatology\n\n\n\n\n Back to top"
-  },
-  {
-    "objectID": "content/archived/passchristian/index.html",
-    "href": "content/archived/passchristian/index.html",
-    "title": "Pass Christian, MS",
-    "section": "",
-    "text": "Back to top"
+    "text": "About this site\n\n\n\n Back to top"
   },
   {
     "objectID": "content/404.html",
@@ -82,5 +68,12 @@
     "title": "Climatology",
     "section": "",
     "text": "Create local directory\nIn VS Code, install\n\nGit\nQuarto\nRemote - SSH (should also install “Remote - SSH: Editing Configuration Files” and “Remote Explorer”)\n\nCreate Containerfile (or Dockerfile)\nCreate requirements.txt\nIn VS Code:\n\nOpen the project directory: File &gt; Open Folder…\nView &gt; Command Palette… &gt; Dev Containers: Open Folder in Container &gt; select project folder &gt; select Dockerfile\n\nTHe Docker image will now be built. This may take awhile the first time."
+  },
+  {
+    "objectID": "content/archived/passchristian/index.html",
+    "href": "content/archived/passchristian/index.html",
+    "title": "Pass Christian, MS",
+    "section": "",
+    "text": "Back to top"
   }
 ]
