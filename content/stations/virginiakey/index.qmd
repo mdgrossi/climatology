@@ -591,43 +591,6 @@ display(Markdown(':::'))
 
 ```
 
-```{python}
-#| output: asis
-#| title: Bokeh test
-
-from bokeh.io import output_notebook
-from bokeh.models import HoverTool
-from bokeh.plotting import figure, show, output_file
-
-# Sample data
-x = [1, 2, 3, 4, 5]
-y = [6, 7, 2, 4, 5]
-
-# # Output to static HTML file
-# output_file("interactive_scatter_plot.html")
-output_notebook(hide_banner=True)
-
-# Create a new plot
-p = figure(title="Interactive scatter plot example");
-
-# Add circle renderer with a size, color, and alpha
-rs = p.scatter(x, y, size=20, color="red", alpha=0.5)
-
-# Create a HoverTool object
-hover = HoverTool()
-hover.tooltips=[
-    ("Index", "$index"),
-    ("(x, y)", "($x, $y)"),
-    ("Radius", "@size")
-]
-
-# Add the HoverTool to the figure
-p.add_tools(hover)
-
-# Show the results
-show(p)
-```
-
 # Data
 
 ## Row {.tabset}
