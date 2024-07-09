@@ -150,153 +150,6 @@ def round_up(num, divisor):
     """
     return num + (divisor - (num%divisor))
 
-# def daily_climo(data, var, scheme='mg'):
-#     """Create a daily climatology plot for environmental variable 'var'
-#     from 'data'.
-    
-#     Inputs:
-#         data: xarray containing climatological stats
-#         var: str, one of the available environmental variables in 'data'
-#         scheme: str, either 'mg' or 'bm' specifying whether to use M. Grossi's
-#             color scheme or B. McNoldy's
-#         show: Bool, display the plot to screen instead of saving to file
-#     """
-
-#     # Dates for x axis
-#     xdates = pd.date_range(start='2020-01-01',end='2020-12-31', freq='1D')
-#     df = data.sel(variable=var)
-    
-#     # Color dictionary
-#     colors = dict(
-#         mg=dict({
-#             'Record High Year': 'white',
-#             'Record High': '#d26c6c',
-#             'Average High': '#dc8d8d',
-#             'Daily Average': '#F5F5F5',
-#             'Average Low': '#a2bff4',
-#             'Record Low': '#74a0ef',
-#             'Record Low Year': 'white'}),
-#         bm=dict({
-#             'Record High Year': 'white',
-#             'Record High': 'orange',
-#             'Average High': 'red',
-#             'Daily Average': 'grey',
-#             'Average Low': 'purple',
-#             'Record Low': 'white'}),
-#         cb=dict({
-#             'Record High Year': 'white',
-#             'Record High': colsdict['RecordHigh'],
-#             'Average High': colsdict['AvgHigh'],
-#             'Daily Average': colsdict['DailyAvg'],
-#             'Average Low': colsdict['AvgLow'],
-#             'Record Low': colsdict['RecordLow']})
-#         )
-    
-#     # Create figure
-#     fig = go.Figure()
-
-#     # Record highs
-#     # High records this year
-#     thisYear = pd.to_datetime('today').year
-#     thisYearRecords = (data.sel(variable='Air Temperature')==thisYear)\
-#                        .to_dataframe().drop('variable', axis=1).sum().sum()
-#     lastYearRecords = (data.sel(variable='Air Temperature')==thisYear-1)\
-#                        .to_dataframe().drop('variable', axis=1).sum().sum()
-#     highRecords = df['Record High'].where(df['Record High Year'] == thisYear).to_dataframe()['Record High']
-#     highRecords.index = pd.to_datetime(highRecords.index+'-2020')
-#     lowRecords = df['Record Low'].where(df['Record Low Year'] == thisYear).to_dataframe()['Record Low']
-#     lowRecords.index = pd.to_datetime(lowRecords.index+'-2020')
-    
-#     first_time = datetime.strptime(df.attrs[f'{var} data range'][0], '%Y-%m-%d').strftime('%-m/%-d/%Y')
-#     last_time = datetime.strptime(df.attrs[f'{var} data range'][1], '%Y-%m-%d').strftime('%-m/%-d/%Y')
-#     fig.add_trace(
-#     go.Scatter(
-#         x=highRecords.index, y=highRecords.values,
-#         name=f'{pd.to_datetime("today").year} Record'.upper(),
-#         mode='markers',
-#         marker=dict(size=6, color='white'),
-#         hoverinfo='none'
-#     ))
-#     fig.add_trace(
-#     go.Scatter(
-#         x=lowRecords.index, y=lowRecords.values,
-#         name='Low Record',
-#         mode='markers',
-#         marker=dict(size=6, color='white'),
-#         hoverinfo='none',
-#         showlegend=False
-#     ))
-#     fig.add_trace(
-#     go.Scatter(
-#         x=xdates, y=df['Record High'],
-#         name='Record High'.upper(),
-#         mode='markers',
-#         marker=dict(size=3, color=colors[scheme]['Record High'])
-#     ))
-#     # Average highs
-#     fig.add_trace(
-#     go.Scatter(
-#         x=xdates, y=cos_fit(df['Average High']).round(1),
-#         name='Average High'.upper(),
-#         marker=dict(size=3, color=colors[scheme]['Average High'])
-#     ))
-#     # Daily average
-#     fig.add_trace(
-#     go.Scatter(
-#         x=xdates, y=cos_fit(df['Daily Average']).round(1),
-#         name='Daily Average'.upper(),
-#         marker=dict(size=3, color=colors[scheme]['Daily Average'])
-#     ))
-#     # Average lows
-#     fig.add_trace(
-#     go.Scatter(
-#         x=xdates,
-#         y=cos_fit(df['Average Low']).round(1),
-#         name='Average Low'.upper(),
-#         marker=dict(size=3, color=colors[scheme]['Average Low'])
-#     ))
-#     # Record lows
-#     fig.add_trace(
-#     go.Scatter(
-#         x=xdates, y=df['Record Low'],
-#         name='Record Low'.upper(),
-#         mode='markers',
-#         marker=dict(size=3, color=colors[scheme]['Record Low'])
-#     ))
-#     # Hover box
-#     fig.update_traces(
-#         hoverlabel = dict(bordercolor='white')
-#     )
-#     # Plot settings
-#     fig.update_layout(
-#         template='plotly_dark',
-#         paper_bgcolor='#404040',
-#         plot_bgcolor='#404040',
-#         margin=dict(l=50, r=50,
-#                     t=70, b=50,
-#                     pad=4),
-#         title=dict(text='Daily {} records'.format(var.lower())+
-#                         '<br><sup>{}-{}</sup>'.format(first_time, last_time)+
-#                         '<br><sup>As of today, <b>{}</b> {} records have been set. Last year, {} records were set.</sup>'.format(
-#                             thisYearRecords, var.lower(), lastYearRecords
-#                         ),
-#                   font=dict(size=22)),
-#         yaxis = dict(title=f'{var} ({data.attrs[f"{var} units"]})',
-#                      showgrid=True, gridcolor='grey'),
-#         xaxis = dict(showgrid=False, showspikes=True,
-#                      dtick='M1', tickformat='%b %d',
-#                      ),
-#         hovermode='x unified',
-#         legend=dict(itemsizing='constant',
-#                     yanchor='top',
-#                     y=0.7,
-#                     xanchor='left',
-#                     x=1),
-#         # hoverlabel=dict(font_size=12),
-#         font=dict(size=14)
-#     )
-#     fig.show()
-
 def daily_climo(data, var, flood_thresholds, scheme='mg'):
     """Create a daily climatology plot for environmental variable 'var'
     from 'data' using color scheme 'scheme'.
@@ -591,8 +444,6 @@ def monthly_climo(data, var, scheme='mg'):
     p.toolbar.autohide = True
 
     # x-axis
-    # p.xaxis[0].formatter = DatetimeTickFormatter(months="%b %d")
-    # p.xaxis[0].ticker.desired_num_ticks = 12
     p.xgrid.grid_line_color = None
     p.xaxis.axis_line_color = 'grey'
     p.xaxis.major_tick_line_color = 'grey'
@@ -670,18 +521,6 @@ def display_table(stats, var):
 
 
 # Plots
-
-<!-- 
-
-## Row {.fill}
-```{python}
-#| code-block-bg: true
-#| code-block-border-left: "#31BAE9"
-
-today = dt.today().strftime('%d-%b')
-Markdown("<b>Welcome!</b> Today is {}.".format(dt.today().strftime("%A, %B %d, %Y")))
-``` 
- -->
 
 ## Row {height=80%}
 
@@ -780,6 +619,15 @@ for var in daily_stats.variable.values:
 display(Markdown(':::'))
 
 ```
+
+
+
+
+
+
+
+
+
 
 # Data
 
