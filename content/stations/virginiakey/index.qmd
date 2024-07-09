@@ -13,7 +13,8 @@ https://github.com/quarto-dev/quarto-cli/issues/8612
 -->
 
 ```{python}
-#| title: Records
+#| include: False
+
 from IPython.display import Markdown
 from scipy.optimize import curve_fit
 from datetime import datetime as dt
@@ -22,12 +23,18 @@ import pandas as pd
 import xarray as xr
 import numpy as np
 import os
-from bokeh.models import ColumnDataSource, HoverTool, CrosshairTool, DatetimeTickFormatter, NumeralTickFormatter, Legend
+import bokeh.models as bm
 from bokeh.plotting import figure, show, output_file
 from bokeh.io import output_notebook
 output_notebook(hide_banner=True)
 
 dirName = 'virginiaKeyFl'
+
+# Flood thresholds for Virginia  Key, FL
+# https://water.noaa.gov/gauges/vakf1
+floods = {'Major Flood Threshold': 2.5,
+          'Moderate Flood Threshold': 1.7,
+          'Minor Flood Threshold': 1.3}
 
 daily_stats = xr.load_dataset(f'../../../{dirName}/statistics-daily.nc')
 monthly_stats = xr.load_dataset(f'../../../{dirName}/statistics-monthly.nc')
@@ -290,19 +297,21 @@ def round_up(num, divisor):
 #     )
 #     fig.show()
 
-def daily_climo(data, var, scheme='mg'):
+def daily_climo(data, var, flood_thresholds, scheme='mg'):
     """Create a daily climatology plot for environmental variable 'var'
     from 'data' using color scheme 'scheme'.
     
     Inputs:
         data: xarray containing climatological stats
         var: str, one of the available environmental variables in 'data'
-        scheme: str, either 'mg' or 'bm' specifying whether to use M. Grossi's
-            color scheme or B. McNoldy's
+        flood_threshold: dict containing flood thresholds to add to water
+            level plot
+        scheme: str specifying which color scheme to use. Options: 'mg'
+            for M. Grossi's, 'bm' for B. McNoldy's, or 'cb' to use a
+            colorblind scheme
     """
 
     # Dates for x axis
-    # xdates = pd.date_range(start='2020-01-01',end='2020-12-31', freq='1D')
     df = data.sel(variable=var).to_dataframe().drop('variable', axis=1)
     df['xdates'] = pd.date_range(start='2020-01-01',end='2020-12-31', freq='1D')
     df['Average High Curve'] = cos_fit(df['Average High']).round(1)
@@ -331,11 +340,11 @@ def daily_climo(data, var, scheme='mg'):
             'Plot Light Color': 'white'}),
         cb=dict({
             'Record High Year': 'white',
-            'Record High': colsdict['RecordHigh'],
-            'Average High': colsdict['AvgHigh'],
-            'Daily Average': colsdict['DailyAvg'],
-            'Average Low': colsdict['AvgLow'],
-            'Record Low': colsdict['RecordLow'],
+            'Record High': '#d26c6c',
+            'Average High': '#dc8d8d',
+            'Daily Average': '#F5F5F5',
+            'Average Low': '#a2bff4',
+            'Record Low': '#74a0ef',
             'Record Low Year': 'white',
             'Plot Light Color': 'white'})
         )
@@ -346,7 +355,7 @@ def daily_climo(data, var, scheme='mg'):
     lastYearRecords = (df==thisYear-1)[['Record High Year', 'Record Low Year']].sum().sum()
     df['High Records'] = df['Record High'].where(df['Record High Year'] == thisYear)
     df['Low Records'] = df['Record Low'].where(df['Record Low Year'] == thisYear)
-    source = ColumnDataSource(df)
+    source = bm.ColumnDataSource(df)
     
     # Create a new plot
     ts_start = dt.strptime(data.attrs[f'{var} data range'][0], '%Y-%m-%d').strftime('%-m/%-d/%Y')
@@ -387,11 +396,24 @@ def daily_climo(data, var, scheme='mg'):
                    name='Record Low', size=2,
                    color=colors[scheme]['Record Low'],
                    hover_fill_color='white', hover_alpha=0.5)
+
+    # Flood thresholds (water level plot only)
+    if var=='Water Level':
+        for level, threshold in flood_thresholds.items():
+            hline = Span(location=threshold, dimension='width',
+                         line_dash=[20,8], line_alpha=0.75,
+                         line_color='cadetblue', line_width=2)
+            p.renderers.extend([hline])
+            mytext = bm.Label(x=pd.to_datetime('2019-12-15'), y=threshold+0.1,
+                              text=level.upper(), text_color='cadetblue',
+                              text_font_size='8pt',
+                              text_font='arial narrow')
+            p.add_layout(mytext)
     
     # Tools
-    crosshair = CrosshairTool(dimensions='height',
+    crosshair = bm.CrosshairTool(dimensions='height',
                               line_color='grey', line_alpha=0.5)
-    hover = HoverTool(mode='vline', renderers=[da],
+    hover = bm.HoverTool(mode='vline', renderers=[da],
                       formatters={'@xdates': 'datetime'})
     hover.tooltips = """
         <b> @xdates{{%b %d}} </b> <br>
@@ -407,7 +429,7 @@ def daily_climo(data, var, scheme='mg'):
     p.toolbar.autohide = True
 
     # x-axis
-    p.xaxis[0].formatter = DatetimeTickFormatter(months="%b %d")
+    p.xaxis[0].formatter = bm.DatetimeTickFormatter(months="%b %d")
     p.xaxis[0].ticker.desired_num_ticks = 12
     p.xgrid.grid_line_color = None
     p.xaxis.axis_line_color = 'grey'
@@ -436,11 +458,173 @@ def daily_climo(data, var, scheme='mg'):
     p.yaxis.axis_label_text_font_size = "12pt"
 
     # Legend
-    legend = Legend(items=[
+    legend = bm.Legend(items=[
         ('{} Record'.format(thisYear), [hr, lr]),
         ('Record High', [rh]),
         ('Average High', [ah]),
         ('Daily Average', [da]),
+        ('Average Low', [al]),
+        ('Record Low', [rl])],
+                    background_fill_color='#404040', border_line_color=None,
+                    label_text_color=colors[scheme]['Plot Light Color'],
+                    location='center_right', click_policy='mute')
+    p.add_layout(legend, 'right')
+    
+    # Show the results
+    show(p)
+
+def monthly_climo(data, var, scheme='mg'):
+    """Create a monthly climatology plot for environmental variable 'var'
+    from 'data' using color scheme 'scheme'.
+    
+    Inputs:
+        data: xarray containing climatological stats
+        var: str, one of the available environmental variables in 'data'
+        scheme: str specifying which color scheme to use. Options: 'mg'
+            for M. Grossi's, 'bm' for B. McNoldy's, or 'cb' to use a
+            colorblind scheme
+    """
+
+    # Dates for x axis
+    df = data.sel(variable=var).to_dataframe().drop('variable', axis=1).reset_index()
+    df['Average High Curve'] = cos_fit(df['Average High']).round(1)
+    df['Monthly Average Curve'] = cos_fit(df['Monthly Average']).round(1)
+    df['Average Low Curve'] = cos_fit(df['Average Low']).round(1)
+    
+    # Color dictionary
+    colors = dict(
+        mg=dict({
+            'Record High Year': 'white',
+            'Record High': '#d26c6c',
+            'Average High': '#dc8d8d',
+            'Monthly Average': '#F5F5F5',
+            'Average Low': '#a2bff4',
+            'Record Low': '#74a0ef',
+            'Record Low Year': 'white',
+            'Plot Light Color': '#D3D3D3'}),
+        bm=dict({
+            'Record High Year': 'white',
+            'Record High': 'orange',
+            'Average High': 'orangered',
+            'Monthly Average': 'gainsboro',
+            'Average Low': 'mediumpurple',
+            'Record Low': 'lightblue',
+            'Record Low Year': 'white',
+            'Plot Light Color': 'white'}),
+        cb=dict({
+            'Record High Year': 'white',
+            'Record High': '#d26c6c',
+            'Average High': '#dc8d8d',
+            'Monthly Average': '#F5F5F5',
+            'Average Low': '#a2bff4',
+            'Record Low': '#74a0ef',
+            'Record Low Year': 'white',
+            'Plot Light Color': 'white'})
+        )
+
+    # Record this year
+    thisYear = pd.to_datetime('today').year
+    thisYearRecords = (df==thisYear)[['Record High Year', 'Record Low Year']].sum().sum()
+    lastYearRecords = (df==thisYear-1)[['Record High Year', 'Record Low Year']].sum().sum()
+    df['High Records'] = df['Record High'].where(df['Record High Year'] == thisYear)
+    df['Low Records'] = df['Record Low'].where(df['Record Low Year'] == thisYear)
+    source = bm.ColumnDataSource(df)
+    
+    # Create a new plot
+    ts_start = dt.strptime(data.attrs[f'{var} data range'][0], '%Y-%m-%d').strftime('%-m/%-d/%Y')
+    ts_end = dt.strptime(data.attrs[f'{var} data range'][1], '%Y-%m-%d').strftime('%-m/%-d/%Y')
+    p = figure(title='Monthly {} records  |  {} - {}\n'.format(var.lower(), ts_start, ts_end).upper()+
+                     'As of today, {} {} record highs/lows have been set. '.format(thisYearRecords, var.lower())+
+                     'Last year, {} records were set.'.format(lastYearRecords),
+               background_fill_color='#404040', border_fill_color='#404040',
+               width=1000, height=600,
+               x_range=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+               y_range=(round_down(df['Record Low'].min(), 10), round_up(df['Record High'].max(), 10)),
+               tools='pan, wheel_zoom, box_zoom, undo, reset, fullscreen',
+               outline_line_color = None)
+
+    # This year record highs
+    hr = p.scatter(x='Month', y='High Records', source=source,
+                   name=f'{thisYear} High Record', size=6, color='white')
+    # This year record lows
+    lr = p.scatter(x='Month', y='Low Records', source=source,
+                   name=f'{thisYear} Low Record', size=6, color='white')
+    # Record highs
+    rh = p.scatter(x='Month', y='Record High', source=source,
+                   name='Record High', size=7,
+                   color=colors[scheme]['Record High'])
+    # Average high
+    ah = p.line(x='Month', y='Average High Curve', source=source,
+                name='Average High', width=4,
+                color=colors[scheme]['Average High'])
+    # Monthly average
+    ma = p.line(x='Month', y='Monthly Average Curve', source=source,
+                name='Monthly Average', width=3,
+                color=colors[scheme]['Monthly Average'])
+    # Average lows
+    al = p.line(x='Month', y='Average Low Curve', source=source,
+                name='Average Low', width=4,
+                color=colors[scheme]['Average Low'])
+    # Record lows
+    rl = p.scatter(x='Month', y='Record Low', source=source,
+                   name='Record Low', size=7,
+                   color=colors[scheme]['Record Low'],
+                   hover_fill_color='white', hover_alpha=0.5)
+    
+    # Tools
+    crosshair = bm.CrosshairTool(dimensions='height',
+                              line_color='grey', line_alpha=0.5)
+    hover = bm.HoverTool(mode='vline', renderers=[ma],
+                      formatters={'@xdates': 'datetime'})
+    hover.tooltips = """
+        <b> @Month </b> <br>
+        Record High: @{{Record High}}{{0.0}} <br>
+        Average High: @{{Average High Curve}}{{0.0}} <br>
+        Daily Average: @{{Daily Average Curve}}{{0.0}} <br>
+        Average Low: @{{Average Low Curve}}{{0.0}} <br>
+        Record Low: @{{Record Low}}{{0.0}} <br>
+        {} High Record: @{{High Records}}{{0.0}} <br>
+        {} Low Record: @{{Low Records}}{{0.0}}
+        """.format(thisYear, thisYear)
+    p.add_tools(hover, crosshair)
+    p.toolbar.autohide = True
+
+    # x-axis
+    # p.xaxis[0].formatter = DatetimeTickFormatter(months="%b %d")
+    # p.xaxis[0].ticker.desired_num_ticks = 12
+    p.xgrid.grid_line_color = None
+    p.xaxis.axis_line_color = 'grey'
+    p.xaxis.major_tick_line_color = 'grey'
+    
+    # y-axis
+    p.yaxis.axis_label=f'{var} ({data.attrs[f"{var} units"]})'
+    p.yaxis.axis_label_text_color = colors[scheme]['Plot Light Color']
+    p.ygrid.grid_line_color = 'grey'
+    p.yaxis.axis_line_color = None
+    p.yaxis.major_tick_line_color = None
+    p.yaxis.minor_tick_line_color = None
+    
+    # Fonts
+    p.title.text_font = 'arial narrow'
+    p.title.text_font_size = '16pt'
+    p.title.text_color = colors[scheme]['Plot Light Color']
+    p.xaxis.major_label_text_font = 'arial narrow'
+    p.xaxis.major_label_text_color = colors[scheme]['Plot Light Color']
+    p.xaxis.major_label_text_font_size = "12pt"
+    p.yaxis.major_label_text_font = 'arial narrow'
+    p.yaxis.axis_label_text_font = 'arial narrow'
+    p.yaxis.axis_label_text_font_style = 'normal'
+    p.yaxis.major_label_text_color = colors[scheme]['Plot Light Color']    
+    p.yaxis.major_label_text_font_size = "12pt"
+    p.yaxis.axis_label_text_font_size = "12pt"
+
+    # Legend
+    legend = bm.Legend(items=[
+        ('{} Record'.format(thisYear), [hr, lr]),
+        ('Record High', [rh]),
+        ('Average High', [ah]),
+        ('Monthly Average', [ma]),
         ('Average Low', [al]),
         ('Record Low', [rl])],
                     background_fill_color='#404040', border_line_color=None,
@@ -460,6 +644,7 @@ def display_table(stats, var):
         colortable(stats)
     except KeyError:
         print(f'{freq} {var.lower()} data are not available for this station.')
+
 ```
 
 
@@ -486,13 +671,17 @@ def display_table(stats, var):
 
 # Plots
 
-## Row {.fill}
+<!-- 
 
+## Row {.fill}
 ```{python}
+#| code-block-bg: true
+#| code-block-border-left: "#31BAE9"
+
 today = dt.today().strftime('%d-%b')
-Markdown("**Welcome!** Today is {}."
-    .format(dt.today().strftime("%A, %B %d, %Y")))
-```
+Markdown("<b>Welcome!</b> Today is {}.".format(dt.today().strftime("%A, %B %d, %Y")))
+``` 
+ -->
 
 ## Row {height=80%}
 
@@ -569,7 +758,8 @@ display(Markdown('::: {.panel-tabset}'))
 
 for var in daily_stats.variable.values:
     display(Markdown(f'\n## {var}\n\n'))
-    daily_climo(data=daily_stats, var=var, scheme='cb')
+    daily_climo(data=daily_stats, var=var, flood_thresholds=floods,
+    scheme='cb')
     display(Markdown(' '))
 
 display(Markdown(':::'))
@@ -584,7 +774,7 @@ display(Markdown('::: {.panel-tabset}'))
 
 for var in daily_stats.variable.values:
     display(Markdown(f'\n## {var}\n\n'))
-    display(Markdown('Plot'))
+    monthly_climo(data=monthly_stats, var=var, scheme='cb')
     display(Markdown(' '))
 
 display(Markdown(':::'))
