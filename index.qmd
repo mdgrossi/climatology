@@ -40,4 +40,4 @@ tide observations at different locations along the U.S. East Coast
 
 
 ## Shout Out
-This project is inspired by Brian McNoldy at the [University of Miami](https://welcome.miami.edu/), whose long-standing “Climatology of Virginia Key, FL” site never ceased to provide insightful weather perspectives during my time at the [Rosenstiel School of Marine, Atmospheric, and Earth Science](https://www.earth.miami.edu/).
+This project is inspired by Brian McNoldy at the [University of Miami](https://welcome.miami.edu/), whose long-standing [Climatology of Virginia Key, FL](https://bmcnoldy.earth.miami.edu/vk/) site never ceased to provide insightful weather perspectives during my time at the [Rosenstiel School of Marine, Atmospheric, and Earth Science](https://www.earth.miami.edu/).
