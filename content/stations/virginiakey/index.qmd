@@ -1,11 +1,12 @@
 
 ---
 title: "Virginia Key, FL"
+image: ../../../images/vkfl.JPG
 format:
   dashboard:
     logo: ../../../images/vkfl.JPG
     # orientation: columns
-    scrolling: true
+    scrolling: false
 ---
 
 <!-- Known issue displaying plotly plots in Chrome, Brave:
@@ -36,6 +37,7 @@ floods = {'Major Flood Threshold': 2.5,
           'Moderate Flood Threshold': 1.7,
           'Minor Flood Threshold': 1.3}
 
+today = dt.today().strftime('%d-%b')
 daily_stats = xr.load_dataset(f'../../../{dirName}/statistics-daily.nc')
 monthly_stats = xr.load_dataset(f'../../../{dirName}/statistics-monthly.nc')
 
