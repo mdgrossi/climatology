@@ -581,6 +581,18 @@ dict(
 
 ```{python}
 #| content: valuebox
+#| title: "Today's Average Low"
+dict(
+  icon = "thermometer-low",
+  color = colsdict['AvgLow'],
+  value = getval(var, 'Average Low', 'daily')
+)
+```
+
+#### Row
+
+```{python}
+#| content: valuebox
 #| title: "Today's Record Low"
 dict(
   icon = "thermometer-snow",
