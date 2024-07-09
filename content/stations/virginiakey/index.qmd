@@ -222,7 +222,7 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
                width=1000, height=600, x_axis_type='datetime',
                y_range=(round_down(df['Record Low'].min(), 10), round_up(df['Record High'].max(), 10)),
                tools='pan, wheel_zoom, box_zoom, undo, reset, fullscreen',
-               outline_line_color = None)
+               outline_line_color=None, sizing_mode='scale_width')
 
     # This year record highs
     hr = p.scatter(x='xdates', y='High Records', source=source,
@@ -397,7 +397,7 @@ def monthly_climo(data, var, scheme='mg'):
                         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                y_range=(round_down(df['Record Low'].min(), 10), round_up(df['Record High'].max(), 10)),
                tools='pan, wheel_zoom, box_zoom, undo, reset, fullscreen',
-               outline_line_color = None)
+               outline_line_color=None, sizing_mode='scale_width')
 
     # This year record highs
     hr = p.scatter(x='Month', y='High Records', source=source,
