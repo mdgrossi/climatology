@@ -261,7 +261,7 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
             p.renderers.extend([hline])
             mytext = bm.Label(x=pd.to_datetime('2019-12-15'), y=threshold+0.1,
                               text=level.upper(), text_color='cadetblue',
-                              text_font_size='8pt',
+                              text_font_size='8px',
                               text_font='arial narrow')
             p.add_layout(mytext)
     
@@ -300,17 +300,17 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
     
     # Fonts
     p.title.text_font = 'arial narrow'
-    p.title.text_font_size = '16pt'
+    p.title.text_font_size = '16px'
     p.title.text_color = colors[scheme]['Plot Light Color']
     p.xaxis.major_label_text_font = 'arial narrow'
     p.xaxis.major_label_text_color = colors[scheme]['Plot Light Color']
-    p.xaxis.major_label_text_font_size = "12pt"
+    p.xaxis.major_label_text_font_size = "12px"
     p.yaxis.major_label_text_font = 'arial narrow'
     p.yaxis.axis_label_text_font = 'arial narrow'
     p.yaxis.axis_label_text_font_style = 'normal'
     p.yaxis.major_label_text_color = colors[scheme]['Plot Light Color']    
-    p.yaxis.major_label_text_font_size = "12pt"
-    p.yaxis.axis_label_text_font_size = "12pt"
+    p.yaxis.major_label_text_font_size = "12px"
+    p.yaxis.axis_label_text_font_size = "12px"
 
     # Legend
     legend = bm.Legend(items=[
@@ -460,17 +460,17 @@ def monthly_climo(data, var, scheme='mg'):
     
     # Fonts
     p.title.text_font = 'arial narrow'
-    p.title.text_font_size = '16pt'
+    p.title.text_font_size = '16px'
     p.title.text_color = colors[scheme]['Plot Light Color']
     p.xaxis.major_label_text_font = 'arial narrow'
     p.xaxis.major_label_text_color = colors[scheme]['Plot Light Color']
-    p.xaxis.major_label_text_font_size = "12pt"
+    p.xaxis.major_label_text_font_size = "12px"
     p.yaxis.major_label_text_font = 'arial narrow'
     p.yaxis.axis_label_text_font = 'arial narrow'
     p.yaxis.axis_label_text_font_style = 'normal'
     p.yaxis.major_label_text_color = colors[scheme]['Plot Light Color']    
-    p.yaxis.major_label_text_font_size = "12pt"
-    p.yaxis.axis_label_text_font_size = "12pt"
+    p.yaxis.major_label_text_font_size = "12px"
+    p.yaxis.axis_label_text_font_size = "12px"
 
     # Legend
     legend = bm.Legend(items=[
@@ -524,15 +524,21 @@ def display_table(stats, var):
 
 # Plots
 
-## Row {height=80%}
+### Row {height=30%}
 
-### Column {width=20%}
+#### Column
 
-#### Row
+```{python}
+
+display(Markdown(f"**{dt.today().strftime('%A, %B %d, %Y')}**\n\n Today's air temperature statistics"))
+
+```
+
+#### Column
 
 ```{python}
 #| content: valuebox
-#| title: "Today's Record High"
+#| title: "Record High"
 var = 'Air Temperature'
 dict(
   icon = "thermometer-sun",
@@ -541,11 +547,11 @@ dict(
 )
 ```
 
-#### Row
+#### Column
 
 ```{python}
 #| content: valuebox
-#| title: "Today's Average High"
+#| title: "Average High"
 dict(
   icon = "thermometer-high",
   color = colsdict['AvgHigh'],
@@ -553,11 +559,11 @@ dict(
 )
 ```
 
-#### Row
+#### Column
 
 ```{python}
 #| content: valuebox
-#| title: "Today's Lowest High"
+#| title: "Lowest High"
 dict(
   icon = "thermometer-half",
   color = colsdict['LowestHigh'],
@@ -565,11 +571,11 @@ dict(
 )
 ```
 
-#### Row
+#### Column
 
 ```{python}
 #| content: valuebox
-#| title: "Today's Highest Low"
+#| title: "Highest Low"
 dict(
   icon = "thermometer-half",
   color = colsdict['HighestLow'],
@@ -577,11 +583,11 @@ dict(
 )
 ```
 
-#### Row
+#### Column
 
 ```{python}
 #| content: valuebox
-#| title: "Today's Average Low"
+#| title: "Average Low"
 dict(
   icon = "thermometer-low",
   color = colsdict['AvgLow'],
@@ -589,11 +595,11 @@ dict(
 )
 ```
 
-#### Row
+#### Column
 
 ```{python}
 #| content: valuebox
-#| title: "Today's Record Low"
+#| title: "Record Low"
 dict(
   icon = "thermometer-snow",
   color = colsdict['RecordLow'],
@@ -601,7 +607,7 @@ dict(
 )
 ```
 
-### Column {.tabset}
+### Row {.tabset}
 
 ```{python}
 #| output: asis
