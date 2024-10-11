@@ -9,4 +9,4 @@ dash==2.17.0
 pyyaml==6.0.1
 jupyter==1.0.0
 bokeh
-ipyleaflet
+great_tables==0.13.0
