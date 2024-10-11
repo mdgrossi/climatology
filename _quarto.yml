@@ -2,7 +2,6 @@ project:
   type: website
   preview:
     port: 4000
-  
 
 theme:
   light: flatly
@@ -58,6 +57,7 @@ format:
     # theme: default
     css: styles.css
     toc: false
+    embed-resources: true
 
 
 
