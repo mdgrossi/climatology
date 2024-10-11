@@ -8,23 +8,19 @@ format:
     scrolling: false
 ---
 
-<!-- Known issue displaying plotly plots in Chrome, Brave:
-https://github.com/quarto-dev/quarto-cli/issues/8612
--->
-
 ```{python}
 #| include: False
 
 from IPython.display import Markdown
 from scipy.optimize import curve_fit
 from datetime import datetime as dt
-import plotly.graph_objects as go
 import pandas as pd
 import xarray as xr
 import numpy as np
 import bokeh.models as bm
 from bokeh.io import output_notebook
 from bokeh.plotting import figure, show
+from great_tables import GT, loc, style
 output_notebook(hide_banner=True)
 
 dirName = 'virginiaKeyFl'
@@ -39,77 +35,125 @@ today = dt.today().strftime('%d-%b')
 daily_stats = xr.load_dataset(f'../../../{dirName}/statistics-daily.nc')
 monthly_stats = xr.load_dataset(f'../../../{dirName}/statistics-monthly.nc')
 
-colsdict = {
-    'RecordHigh': '#d26c6c',
-    'AvgHigh': '#dc8d8d',
-    'LowestHigh': '#e6aeae',
-    'RecordHighAvg': '#ff8080',
-    'DailyAvg': '#F5F5F5',
-    'RecordLowAvg': '#c1d5f8',
-    'HighestLow': '#d1dffa',
-    'AvgLow': '#a2bff4',
-    'RecordLow': '#74a0ef'
-}
-
-# colsdict = {
-#     'RecordHigh': '#b31529',
-#     'AvgHigh': '#d75f4c',
-#     'LowestHigh': '#f6a482',
-#     'RecordHighAvg': '#fedbc7',
-#     'DailyAvg': '#f9f9f9',
-#     'RecordLowAvg': '#d1e5f0',
-#     'HighestLow': '#8ec4de',
-#     'AvgLow': '#3a93c3',    
-#     'RecordLow': '#1065ab'
-# }
+# Color dictionary
+# https://www.tutorialrepublic.com/css-reference/css-color-names.php
+colors = dict(
+    mg=dict({
+        'Date': 'white',
+        'Month': 'white',
+        'Daily Average': '#F5F5F5',
+        'Monthly Average': '#F5F5F5',
+        'Record High Daily Average': '#ff8080',
+        'Record High Daily Average Year': '#ff8080',
+        'Record High Monthly Average': '#ff8080',
+        'Record High Monthly Average Year': '#ff8080',
+        'Record Low Daily Average': '#c1d5f8',
+        'Record Low Daily Average Year': '#c1d5f8',
+        'Record Low Monthly Average': '#c1d5f8',
+        'Record Low Monthly Average Year': '#c1d5f8',
+        'Average High': '#dc8d8d',
+        'Lowest High': '#e6aeae',
+        'Lowest High Year': '#e6aeae',        
+        'Record High': '#d26c6c',
+        'Record High Year': '#d26c6c',
+        'Average Low': '#a2bff4',
+        'Highest Low': '#d1dffa',
+        'Highest Low Year': '#d1dffa',
+        'Record Low': '#74a0ef',
+        'Record Low Year': '#74a0ef',
+        'Years': 'white',
+        'Plot Light Color': '#D3D3D3'}),
+    bm=dict({
+        'Date': 'white',
+        'Month': 'white',
+        'Daily Average': 'gainsboro',
+        'Monthly Average': 'gainsboro',
+        'Record High Daily Average': 'mistyrose',
+        'Record High Daily Average Year': 'mistyrose',
+        'Record High Monthly Average': 'mistyrose',
+        'Record High Monthly Average Year': 'mistyrose',
+        'Record Low Daily Average': 'lavender',
+        'Record Low Daily Average Year': 'lavender',
+        'Record Low Monthly Average': 'lavender',
+        'Record Low Monthly Average Year': 'lavender',
+        'Average High': 'orangered',
+        'Lowest High': 'darkorange',
+        'Lowest High Year': 'darkorange',        
+        'Record High': 'orange',
+        'Record High Year': 'orange',
+        'Average Low': 'mediumpurple',
+        'Highest Low': 'navyblue',
+        'Highest Low Year': 'navyblue',
+        'Record Low': 'lightblue',
+        'Record Low Year': 'lightblue',
+        'Years': 'white',
+        'Plot Light Color': 'white'}),
+    cb=dict({
+        'Date': 'white',
+        'Month': 'white',
+        'Daily Average': '#F5F5F5',
+        'Monthly Average': '#F5F5F5',
+        'Record High Daily Average': '#',
+        'Record High Daily Average Year': '#',
+        'Record High Monthly Average': '#',
+        'Record High Monthly Average Year': '#',
+        'Record Low Daily Average': '#',
+        'Record Low Daily Average Year': '#',
+        'Record Low Monthly Average': '#',
+        'Record Low Monthly Average Year': '#',
+        'Average High': '#dc8d8d',
+        'Lowest High': '#',
+        'Lowest High Year': '#',        
+        'Record High': '#d26c6c',
+        'Record High Year': '#d26c6c',
+        'Average Low': '#a2bff4',
+        'Highest Low': '#',
+        'Highest Low Year': '#',
+        'Record Low': '#74a0ef',
+        'Record Low Year': '#74a0ef',
+        'Years': 'white',
+        'Plot Light Color': 'white'})
+    )
 
 deg = u'\N{DEGREE SIGN}'
 
-def getval(var, record, type):
-    """Retrieve 'var' 'record' from stats table"""
-    if type.lower() == 'daily':
-        val = daily_stats[record].sel(variable=var, Date=today).values
-    elif type.lower() == 'monthly':
-        val = monthly_stats[record].sel(variable=var, Date=today).values
-    else:
-        raise ValueError("'type' must be either 'daily' or 'monthly'")
-    return str(val)+f' {deg}F'
+# def getval(var, record, type):
+#     """Retrieve 'var' 'record' from stats table for use in valueboxes"""
+#     if type.lower() == 'daily':
+#         val = daily_stats[record].sel(variable=var, Date=today).values
+#     elif type.lower() == 'monthly':
+#         val = monthly_stats[record].sel(variable=var, Date=today).values
+#     else:
+#         raise ValueError("'type' must be either 'daily' or 'monthly'")
+#     return str(val)+f' {deg}F'
 
-def colortable(stats):
-    """Create a colored table"""
-    # Colors:
-    # https://www.tutorialrepublic.com/css-reference/css-color-names.php
-    fig = go.Figure(data=[go.Table(
-        header=dict( #values=list(stats.reset_index().columns),
-                    values=[f'<b>{i}</b>' for i in stats.reset_index().columns],
-                    fill_color='grey',
-                    font_color='white',
-                    font_size=12,
-                    align='left'),
-        cells=dict(values=stats.reset_index().T,
-                fill_color=['white', colsdict['DailyAvg'],
-                            colsdict['RecordHighAvg'],
-                            colsdict['RecordHighAvg'],
-                            colsdict['RecordLowAvg'],
-                            colsdict['RecordLowAvg'],
-                            colsdict['AvgHigh'],
-                            colsdict['LowestHigh'],
-                            colsdict['LowestHigh'],
-                            colsdict['RecordHigh'],
-                            colsdict['RecordHigh'],
-                            colsdict['AvgLow'],
-                            colsdict['HighestLow'],
-                            colsdict['HighestLow'],
-                            colsdict['RecordLow'],
-                            colsdict['RecordLow'], 'white'],
-                font_size=12,
-                align='center')
-        )
-    ])
-    fig.show()
+def colortable(df):
+    """Create a colored data table to display data from dataframe 'df'"""
+    
+    # Add columns
+    gtbl = GT(df)
+    for column in df.columns:
+        gtbl = gtbl.tab_style(style=[style.fill(color=colors['mg'][column]), style.text(v_align='middle')], locations=loc.body(columns=column))
+    
+    # Format table
+    gtbl = (gtbl
+    .cols_align(align='center')
+    .tab_style(style=[style.text(color='gainsboro', weight='bold'), style.fill(color='dimgray')], locations=loc.column_header())
+    .tab_options(table_font_size='13px', table_body_hlines_color='white'))
+    
+    gtbl.show()
 
+def display_table(stats, var):
+    """Display the table if the variable 'var' exists in 'stats'. Otherwise, display a message that the data do not exist.
+    """
+    freq = 'Monthly' if 'Month' in stats.sizes.keys() else 'Daily'
+    try:
+        stats = stats.sel(variable=var.title()).to_dataframe().drop('variable', axis=1).reset_index()
+        colortable(stats)
+    except KeyError:
+        print(f'{freq} {var.lower()} data are not available for this station.')
 
-def cos_fit(data, plot=False):
+def cos_fit(data):
     """Fit cosine curve to data"""
     X = np.arange(0, len(data))/len(data)
 
@@ -127,17 +171,8 @@ def cos_fit(data, plot=False):
 
     # Fit curve to data
     fit = curve_fit(my_cos, X, data, p0=p0)
-
-    if plot:
-        fig, ax = plt.subplots(1, 1, figsize=(12,5))
-
-        ax.plot(data, label=data.name)
-        ax.plot(fit, color='red', label=f'Cosine fit')
-
-        ax.legend(loc='best')
-        plt.show()
-    else:
-        return my_cos(np.array(X), *fit[0])
+    
+    return my_cos(np.array(X), *fit[0])
 
 def round_down(num, divisor):
     """Round num down to the nearest divisor.
@@ -167,42 +202,11 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
 
     # Dates for x axis
     df = data.sel(variable=var).to_dataframe().drop('variable', axis=1)
-    df['xdates'] = pd.date_range(start='2020-01-01',end='2020-12-31', freq='1D')
+    df['xdates'] = pd.date_range(start='2020-01-01', end='2020-12-31', freq='1D')
     df['Average High Curve'] = cos_fit(df['Average High']).round(1)
     df['Daily Average Curve'] = cos_fit(df['Daily Average']).round(1)
     df['Average Low Curve'] = cos_fit(df['Average Low']).round(1)
     
-    # Color dictionary
-    colors = dict(
-        mg=dict({
-            'Record High Year': 'white',
-            'Record High': '#d26c6c',
-            'Average High': '#dc8d8d',
-            'Daily Average': '#F5F5F5',
-            'Average Low': '#a2bff4',
-            'Record Low': '#74a0ef',
-            'Record Low Year': 'white',
-            'Plot Light Color': '#D3D3D3'}),
-        bm=dict({
-            'Record High Year': 'white',
-            'Record High': 'orange',
-            'Average High': 'orangered',
-            'Daily Average': 'gainsboro',
-            'Average Low': 'mediumpurple',
-            'Record Low': 'lightblue',
-            'Record Low Year': 'white',
-            'Plot Light Color': 'white'}),
-        cb=dict({
-            'Record High Year': 'white',
-            'Record High': '#d26c6c',
-            'Average High': '#dc8d8d',
-            'Daily Average': '#F5F5F5',
-            'Average Low': '#a2bff4',
-            'Record Low': '#74a0ef',
-            'Record Low Year': 'white',
-            'Plot Light Color': 'white'})
-        )
-
     # Record this year
     thisYear = pd.to_datetime('today').year
     thisYearRecords = (df==thisYear)[['Record High Year', 'Record Low Year']].sum().sum()
@@ -345,37 +349,6 @@ def monthly_climo(data, var, scheme='mg'):
     df['Monthly Average Curve'] = cos_fit(df['Monthly Average']).round(1)
     df['Average Low Curve'] = cos_fit(df['Average Low']).round(1)
     
-    # Color dictionary
-    colors = dict(
-        mg=dict({
-            'Record High Year': 'white',
-            'Record High': '#d26c6c',
-            'Average High': '#dc8d8d',
-            'Monthly Average': '#F5F5F5',
-            'Average Low': '#a2bff4',
-            'Record Low': '#74a0ef',
-            'Record Low Year': 'white',
-            'Plot Light Color': '#D3D3D3'}),
-        bm=dict({
-            'Record High Year': 'white',
-            'Record High': 'orange',
-            'Average High': 'orangered',
-            'Monthly Average': 'gainsboro',
-            'Average Low': 'mediumpurple',
-            'Record Low': 'lightblue',
-            'Record Low Year': 'white',
-            'Plot Light Color': 'white'}),
-        cb=dict({
-            'Record High Year': 'white',
-            'Record High': '#d26c6c',
-            'Average High': '#dc8d8d',
-            'Monthly Average': '#F5F5F5',
-            'Average Low': '#a2bff4',
-            'Record Low': '#74a0ef',
-            'Record Low Year': 'white',
-            'Plot Light Color': 'white'})
-        )
-
     # Record this year
     thisYear = pd.to_datetime('today').year
     thisYearRecords = (df==thisYear)[['Record High Year', 'Record Low Year']].sum().sum()
@@ -487,16 +460,6 @@ def monthly_climo(data, var, scheme='mg'):
     # Show the results
     show(p)
 
-def display_table(stats, var):
-    """Display the table if the variable 'var' exists in 'stats'. Otherwise, display a message that the data do not exist.
-    """
-    freq = 'Monthly' if 'Month' in stats.sizes.keys() else 'Daily'
-    try:
-        stats = stats.sel(variable=var.title()).to_dataframe().drop('variable', axis=1)
-        colortable(stats)
-    except KeyError:
-        print(f'{freq} {var.lower()} data are not available for this station.')
-
 ```
 
 # {.sidebar}
@@ -560,15 +523,13 @@ display(Markdown(':::'))
 #| output: asis
 #| title: Daily Stats
 
-display(Markdown('::: {..column-screen}'))
 display(Markdown('::: {.panel-tabset}'))
 
 for var in daily_stats.variable.values:
-    display(Markdown(f'\n## {var}\n\n'))
+    display(Markdown(f'\n### {var}\n\n'))
     display_table(daily_stats, var)
     display(Markdown(' '))
 
-display(Markdown(':::'))
 display(Markdown(':::'))
 
 ```
@@ -579,8 +540,8 @@ display(Markdown(':::'))
 
 display(Markdown('::: {.panel-tabset}'))
 
-for var in daily_stats.variable.values:
-    display(Markdown(f'\n## {var}\n\n'))
+for var in monthly_stats.variable.values:
+    display(Markdown(f'\n### {var}\n\n'))
     display_table(monthly_stats, var)
     display(Markdown(' '))
 
