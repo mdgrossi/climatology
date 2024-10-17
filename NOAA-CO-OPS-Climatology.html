@@ -171,7 +171,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 
 <hr class="bslib-grid-item html-fill-item">
-<div class="bslib-grid-item html-fill-item bslib-grid" data-layout="fill" style="display: grid; grid-template-rows: minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, max-content) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, max-content) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
+<div class="bslib-grid-item html-fill-item bslib-grid" data-layout="fill" style="display: grid; grid-template-rows: minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, max-content) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, max-content) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
 <div class="card cell bslib-card html-fill-container" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
 <div class="card-body html-fill-item html-fill-container">
 <div class="cell-output cell-output-stdout html-fill-item html-fill-container">
@@ -197,7 +197,72 @@ Retrieving water temperature data
 Updated observational data written to file '/workspaces/climatology/virginiaKeyFl/observational_data_record.csv.gz'.
 Done! (Don't forget to run Data.update_stats() to update statistics.)
 No new daily records set.
-No new monthly records set.</code></pre>
+Monthly stats dicts differ. Updating and saving to file. If new records have been set, they will be printed below.
+
+Record high monthly average air temperature set Jan 1994:
+    74.4 F (previously 72.6 F in 2013)
+Record high air temperature set Jan 2016:
+    78.7 F (previously 78.0 F in 2015)
+Highest low air temperature set Jan 1994:
+    71.6 F (previously 63.5 F in 2013)
+Record low monthly average air temperature set Feb 2010:
+    62.7 F (previously 65.5 F in 1996)
+Lowest high air temperature set Feb 2010:
+    73.8 F (previously 74.2 F in 2000)
+Highest low air temperature set Feb 2003:
+    71.8 F (previously 70.0 F in 2018)
+Record high monthly average water temperature set Feb 2017:
+    80.3 F (previously 76.3 F in 2021)
+Lowest high water temperature set Feb 2010:
+    73.6 F (previously 73.7 F in 2016)
+Record high water temperature set Feb 2017:
+    82.2 F (previously 81.5 F in 2021)
+Highest low water temperature set Feb 2017:
+    76.8 F (previously 73.4 F in 2023)
+Record high monthly average air temperature set Apr 2002:
+    79.5 F (previously 79.4 F in 2020)
+Record low monthly average air temperature set Apr 2005:
+    71.4 F (previously 72.8 F in 2004)
+Lowest high air temperature set Apr 2005:
+    75.9 F (previously 77.3 F in 2004)
+Highest low air temperature set Apr 2002:
+    77.1 F (previously 72.6 F in 2015)
+Record low monthly average air temperature set May 2001:
+    74.8 F (previously 77.0 F in 2013)
+Lowest high air temperature set May 2007:
+    79.4 F (previously 80.8 F in 2014)
+Lowest high water temperature set May 2018:
+    82.5 F (previously 82.8 F in 2013)
+Record low monthly average air temperature set Jun 2002:
+    78.7 F (previously 79.8 F in 2014)
+Lowest high air temperature set Jun 2002:
+    82.0 F (previously 82.8 F in 2014)
+Record low air temperature set Jun 2007:
+    74.6 F (previously 75.1 F in 1995)
+Lowest high water temperature set Jun 1999:
+    84.8 F (previously 85.3 F in 1996)
+Highest low water temperature set Jul 2016:
+    87.4 F (previously 87.2 F in 2023)
+Record high monthly average air temperature set Sep 2022:
+    86.4 F (previously 83.7 F in 2024)
+Lowest high air temperature set Sep 1997:
+    82.8 F (previously 83.9 F in 2000)
+Record high air temperature set Sep 2022:
+    89.4 F (previously 86.7 F in 2021)
+Highest low air temperature set Sep 2022:
+    83.8 F (previously 81.6 F in 2024)
+Lowest high water temperature set Sep 2006:
+    84.4 F (previously 85.2 F in 1997)
+Record high water temperature set Sep 2020:
+    91.6 F (previously 91.2 F in 2021)
+Lowest high air temperature set Oct 1997:
+    80.0 F (previously 81.0 F in 2010)
+Highest low air temperature set Oct 1997:
+    78.5 F (previously 77.8 F in 1995)
+Lowest high water temperature set Nov 1997:
+    76.3 F (previously 76.8 F in 2001)
+
+Updated monthly observational statistics written to '/workspaces/climatology/virginiaKeyFl/statistics-monthly.nc'</code></pre>
 </div>
 </div>
 <bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
@@ -218,7 +283,7 @@ No new monthly records set.</code></pre>
 </bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
 <div class="card cell bslib-card html-fill-container" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
 <div class="card-body html-fill-item html-fill-container">
-<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="9">
+<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="28">
 <pre><code>Index(['Date', 'Daily Average', 'Record High Daily Average', 'Year1',
        'Record Low Daily Average', 'Year2', 'Average High', 'Lowest High',
        'Year3', 'Record High', 'Year4', 'Average Low', 'Highest Low', 'Year5',
@@ -234,7 +299,7 @@ No new monthly records set.</code></pre>
 </bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
 <div class="card cell bslib-card html-fill-container" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
 <div class="card-body html-fill-item html-fill-container">
-<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="147">
+<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="31">
 <pre><code>False</code></pre>
 </div>
 </div>
@@ -246,7 +311,7 @@ No new monthly records set.</code></pre>
 </bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
 <div class="card cell bslib-card html-fill-container" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
 <div class="card-body html-fill-item html-fill-container">
-<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="149">
+<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="32">
 <div class="html-fill-item html-fill-container">
 
 
@@ -277,87 +342,87 @@ No new monthly records set.</code></pre>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>01-Jan</td>
-<td>72.4</td>
+<td>72.7</td>
 <td>80.4</td>
 <td>2022</td>
 <td>66.4</td>
 <td>2011</td>
-<td>73.7</td>
+<td>73.9</td>
 <td>67.8</td>
 <td>2011</td>
 <td>81.1</td>
 <td>2022</td>
-<td>71.1</td>
+<td>71.4</td>
 <td>79.7</td>
 <td>2022</td>
 <td>63.9</td>
 <td>2001</td>
-<td>24</td>
+<td>27</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>02-Jan</td>
-<td>72.9</td>
+<td>73.2</td>
 <td>80.2</td>
 <td>2022</td>
 <td>66.8</td>
 <td>2011</td>
-<td>74.2</td>
+<td>74.4</td>
 <td>68.0</td>
 <td>2011</td>
 <td>81.0</td>
 <td>2022</td>
-<td>71.6</td>
+<td>71.9</td>
 <td>79.5</td>
 <td>2022</td>
 <td>64.4</td>
 <td>2001</td>
-<td>24</td>
+<td>27</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>03-Jan</td>
-<td>73.0</td>
+<td>73.3</td>
 <td>80.7</td>
 <td>2017</td>
 <td>67.3</td>
 <td>2011</td>
-<td>74.3</td>
+<td>74.6</td>
 <td>68.9</td>
 <td>2011</td>
 <td>81.5</td>
 <td>2017</td>
-<td>71.7</td>
+<td>72.1</td>
 <td>79.9</td>
 <td>2017</td>
 <td>65.5</td>
 <td>2001</td>
-<td>24</td>
+<td>27</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>04-Jan</td>
-<td>72.7</td>
+<td>72.9</td>
 <td>81.2</td>
 <td>2017</td>
 <td>67.6</td>
 <td>2001</td>
-<td>74.1</td>
+<td>74.3</td>
 <td>69.1</td>
 <td>2011</td>
 <td>81.9</td>
 <td>2017</td>
-<td>71.3</td>
+<td>71.5</td>
 <td>80.6</td>
 <td>2017</td>
 <td>64.5</td>
 <td>2010</td>
-<td>24</td>
+<td>27</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
 <td>05-Jan</td>
-<td>72.5</td>
+<td>72.6</td>
 <td>81.4</td>
 <td>2017</td>
 <td>66.2</td>
@@ -372,7 +437,7 @@ No new monthly records set.</code></pre>
 <td>2017</td>
 <td>63.6</td>
 <td>2010</td>
-<td>24</td>
+<td>27</td>
 </tr>
 </tbody>
 </table>
@@ -388,7 +453,7 @@ No new monthly records set.</code></pre>
 </bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
 <div class="card cell bslib-card html-fill-container" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
 <div class="card-body html-fill-item html-fill-container">
-<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="150">
+<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="33">
 <div class="html-fill-item html-fill-container">
 
 
@@ -530,7 +595,7 @@ No new monthly records set.</code></pre>
 </bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
 <div class="card cell bslib-card html-fill-container" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
 <div class="card-body html-fill-item html-fill-container">
-<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="60">
+<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="35">
 <pre><code>False</code></pre>
 </div>
 </div>
@@ -542,7 +607,7 @@ No new monthly records set.</code></pre>
 </bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
 <div class="card cell bslib-card html-fill-container" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
 <div class="card-body html-fill-item html-fill-container">
-<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="61">
+<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="36">
 <div class="html-fill-item html-fill-container">
 
 
@@ -588,7 +653,7 @@ No new monthly records set.</code></pre>
 <td>True</td>
 <td>True</td>
 <td>True</td>
-<td>True</td>
+<td>False</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
@@ -608,7 +673,7 @@ No new monthly records set.</code></pre>
 <td>True</td>
 <td>True</td>
 <td>True</td>
-<td>True</td>
+<td>False</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
@@ -628,7 +693,7 @@ No new monthly records set.</code></pre>
 <td>False</td>
 <td>True</td>
 <td>True</td>
-<td>True</td>
+<td>False</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
@@ -648,7 +713,7 @@ No new monthly records set.</code></pre>
 <td>False</td>
 <td>False</td>
 <td>False</td>
-<td>True</td>
+<td>False</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
@@ -713,12 +778,12 @@ No new monthly records set.</code></pre>
 <tr class="even">
 <td data-quarto-table-cell-role="th">361</td>
 <td>True</td>
-<td>True</td>
 <td>False</td>
 <td>False</td>
 <td>False</td>
 <td>False</td>
-<td>True</td>
+<td>False</td>
+<td>False</td>
 <td>True</td>
 <td>True</td>
 <td>False</td>
@@ -733,17 +798,17 @@ No new monthly records set.</code></pre>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">362</td>
 <td>True</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>False</td>
-<td>True</td>
-<td>False</td>
 <td>True</td>
 <td>False</td>
 <td>False</td>
 <td>False</td>
 <td>True</td>
+<td>False</td>
+<td>True</td>
+<td>False</td>
+<td>False</td>
+<td>False</td>
+<td>False</td>
 <td>False</td>
 <td>False</td>
 <td>False</td>
@@ -763,7 +828,7 @@ No new monthly records set.</code></pre>
 <td>False</td>
 <td>False</td>
 <td>False</td>
-<td>False</td>
+<td>True</td>
 <td>False</td>
 <td>False</td>
 <td>False</td>
@@ -805,437 +870,25 @@ No new monthly records set.</code></pre>
 </bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
 <div class="card cell bslib-card html-fill-container" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
 <div class="card-body html-fill-item html-fill-container">
-<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="62">
-<div class="html-fill-item html-fill-container">
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Date</th>
-<th data-quarto-table-cell-role="th">Daily Average</th>
-<th data-quarto-table-cell-role="th">Record High Daily Average</th>
-<th data-quarto-table-cell-role="th">Record High Daily Average Year</th>
-<th data-quarto-table-cell-role="th">Record Low Daily Average</th>
-<th data-quarto-table-cell-role="th">Record Low Daily Average Year</th>
-<th data-quarto-table-cell-role="th">Average High</th>
-<th data-quarto-table-cell-role="th">Lowest High</th>
-<th data-quarto-table-cell-role="th">Lowest High Year</th>
-<th data-quarto-table-cell-role="th">Record High</th>
-<th data-quarto-table-cell-role="th">Record High Year</th>
-<th data-quarto-table-cell-role="th">Average Low</th>
-<th data-quarto-table-cell-role="th">Highest Low</th>
-<th data-quarto-table-cell-role="th">Highest Low Year</th>
-<th data-quarto-table-cell-role="th">Record Low</th>
-<th data-quarto-table-cell-role="th">Record Low Year</th>
-<th data-quarto-table-cell-role="th">Years</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>01-Jan</td>
-<td>72.1</td>
-<td>80.4</td>
-<td>2022</td>
-<td>66.3</td>
-<td>2001</td>
-<td>73.4</td>
-<td>69.1</td>
-<td>2001</td>
-<td>81.1</td>
-<td>2022</td>
-<td>70.9</td>
-<td>79.9</td>
-<td>2022</td>
-<td>63.9</td>
-<td>2001</td>
-<td>25</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>02-Jan</td>
-<td>72.0</td>
-<td>80.2</td>
-<td>2022</td>
-<td>67.0</td>
-<td>2001</td>
-<td>73.4</td>
-<td>69.3</td>
-<td>1998</td>
-<td>81.0</td>
-<td>2022</td>
-<td>70.8</td>
-<td>79.5</td>
-<td>2022</td>
-<td>64.4</td>
-<td>2001</td>
-<td>25</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>03-Jan</td>
-<td>72.0</td>
-<td>80.0</td>
-<td>2022</td>
-<td>67.7</td>
-<td>2001</td>
-<td>73.3</td>
-<td>69.8</td>
-<td>1998</td>
-<td>80.2</td>
-<td>2022</td>
-<td>70.7</td>
-<td>79.7</td>
-<td>2022</td>
-<td>65.5</td>
-<td>2001</td>
-<td>25</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>04-Jan</td>
-<td>71.9</td>
-<td>78.7</td>
-<td>2022</td>
-<td>67.1</td>
-<td>2010</td>
-<td>73.2</td>
-<td>70.0</td>
-<td>2012</td>
-<td>79.7</td>
-<td>2022</td>
-<td>70.6</td>
-<td>77.9</td>
-<td>2022</td>
-<td>64.8</td>
-<td>2002</td>
-<td>25</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>05-Jan</td>
-<td>71.8</td>
-<td>78.1</td>
-<td>2022</td>
-<td>65.7</td>
-<td>2001</td>
-<td>73.2</td>
-<td>68.5</td>
-<td>2001</td>
-<td>78.6</td>
-<td>2022</td>
-<td>70.6</td>
-<td>77.4</td>
-<td>2022</td>
-<td>63.7</td>
-<td>2010</td>
-<td>26</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
-    <template>Expand</template>
-    <span class="bslib-full-screen-enter badge rounded-pill">
-        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
-    </span>
-</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
-<div class="card cell bslib-card html-fill-container" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
-<div class="card-body html-fill-item html-fill-container">
-<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="67">
-<div class="html-fill-item html-fill-container">
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Date</th>
-<th data-quarto-table-cell-role="th">Daily Average</th>
-<th data-quarto-table-cell-role="th">Record High Daily Average</th>
-<th data-quarto-table-cell-role="th">Record High Daily Average Year</th>
-<th data-quarto-table-cell-role="th">Record Low Daily Average</th>
-<th data-quarto-table-cell-role="th">Record Low Daily Average Year</th>
-<th data-quarto-table-cell-role="th">Average High</th>
-<th data-quarto-table-cell-role="th">Lowest High</th>
-<th data-quarto-table-cell-role="th">Lowest High Year</th>
-<th data-quarto-table-cell-role="th">Record High</th>
-<th data-quarto-table-cell-role="th">Record High Year</th>
-<th data-quarto-table-cell-role="th">Average Low</th>
-<th data-quarto-table-cell-role="th">Highest Low</th>
-<th data-quarto-table-cell-role="th">Highest Low Year</th>
-<th data-quarto-table-cell-role="th">Record Low</th>
-<th data-quarto-table-cell-role="th">Record Low Year</th>
-<th data-quarto-table-cell-role="th">Years</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>01-Jan</td>
-<td>72.4</td>
-<td>80.4</td>
-<td>2022</td>
-<td>66.4</td>
-<td>2011</td>
-<td>73.7</td>
-<td>67.8</td>
-<td>2011</td>
-<td>81.1</td>
-<td>2022</td>
-<td>71.1</td>
-<td>79.7</td>
-<td>2022</td>
-<td>63.9</td>
-<td>2001</td>
-<td>25</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>02-Jan</td>
-<td>72.9</td>
-<td>80.2</td>
-<td>2022</td>
-<td>66.8</td>
-<td>2011</td>
-<td>74.2</td>
-<td>68.0</td>
-<td>2011</td>
-<td>81.0</td>
-<td>2022</td>
-<td>71.6</td>
-<td>79.5</td>
-<td>2022</td>
-<td>64.4</td>
-<td>2001</td>
-<td>25</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>03-Jan</td>
-<td>73.0</td>
-<td>80.7</td>
-<td>2017</td>
-<td>67.3</td>
-<td>2011</td>
-<td>74.3</td>
-<td>68.9</td>
-<td>2011</td>
-<td>81.5</td>
-<td>2017</td>
-<td>71.7</td>
-<td>79.9</td>
-<td>2017</td>
-<td>65.5</td>
-<td>2001</td>
-<td>25</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>04-Jan</td>
-<td>72.7</td>
-<td>81.2</td>
-<td>2017</td>
-<td>67.6</td>
-<td>2001</td>
-<td>74.1</td>
-<td>69.1</td>
-<td>2011</td>
-<td>81.9</td>
-<td>2017</td>
-<td>71.3</td>
-<td>80.6</td>
-<td>2017</td>
-<td>64.5</td>
-<td>2010</td>
-<td>25</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>05-Jan</td>
-<td>72.5</td>
-<td>81.4</td>
-<td>2017</td>
-<td>66.2</td>
-<td>2001</td>
-<td>74.0</td>
-<td>68.5</td>
-<td>2001</td>
-<td>82.2</td>
-<td>2017</td>
-<td>71.1</td>
-<td>80.6</td>
-<td>2017</td>
-<td>63.6</td>
-<td>2010</td>
-<td>25</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">360</td>
-<td>27-Dec</td>
-<td>72.3</td>
-<td>81.8</td>
-<td>2016</td>
-<td>65.8</td>
-<td>1995</td>
-<td>73.6</td>
-<td>67.8</td>
-<td>1995</td>
-<td>82.6</td>
-<td>2016</td>
-<td>71.0</td>
-<td>81.1</td>
-<td>2016</td>
-<td>63.0</td>
-<td>2010</td>
-<td>25</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">361</td>
-<td>28-Dec</td>
-<td>72.5</td>
-<td>82.2</td>
-<td>2016</td>
-<td>65.2</td>
-<td>2010</td>
-<td>73.8</td>
-<td>67.1</td>
-<td>1995</td>
-<td>82.9</td>
-<td>2016</td>
-<td>71.2</td>
-<td>81.5</td>
-<td>2016</td>
-<td>62.2</td>
-<td>2010</td>
-<td>25</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">362</td>
-<td>29-Dec</td>
-<td>72.6</td>
-<td>82.6</td>
-<td>2016</td>
-<td>66.6</td>
-<td>1995</td>
-<td>74.1</td>
-<td>69.4</td>
-<td>2003</td>
-<td>83.3</td>
-<td>2016</td>
-<td>71.2</td>
-<td>81.9</td>
-<td>2016</td>
-<td>62.2</td>
-<td>2010</td>
-<td>25</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">363</td>
-<td>30-Dec</td>
-<td>72.7</td>
-<td>81.9</td>
-<td>2016</td>
-<td>66.4</td>
-<td>2010</td>
-<td>74.1</td>
-<td>68.4</td>
-<td>2010</td>
-<td>83.1</td>
-<td>2016</td>
-<td>71.4</td>
-<td>80.8</td>
-<td>2016</td>
-<td>64.4</td>
-<td>2010</td>
-<td>25</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">364</td>
-<td>31-Dec</td>
-<td>72.6</td>
-<td>80.5</td>
-<td>2021</td>
-<td>66.1</td>
-<td>2010</td>
-<td>73.9</td>
-<td>67.8</td>
-<td>2010</td>
-<td>81.7</td>
-<td>2021</td>
-<td>71.4</td>
-<td>79.3</td>
-<td>2021</td>
-<td>64.4</td>
-<td>2010</td>
-<td>25</td>
-</tr>
-</tbody>
-</table>
-
-<p>365 rows × 17 columns</p>
-</div>
-</div>
-</div>
-<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
-    <template>Expand</template>
-    <span class="bslib-full-screen-enter badge rounded-pill">
-        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
-    </span>
-</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
-<div class="card cell bslib-card html-fill-container" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
-<div class="card-body html-fill-item html-fill-container">
-<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="72">
-<pre><code>[22, 23, 24, 25, 26, 27]</code></pre>
-</div>
-</div>
-<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
-    <template>Expand</template>
-    <span class="bslib-full-screen-enter badge rounded-pill">
-        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
-    </span>
-</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
-<div class="card cell bslib-card html-fill-container" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
-<div class="card-body html-fill-item html-fill-container">
-<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="73">
-<pre><code>[22, 23, 24, 25, 26, 27]</code></pre>
-</div>
-</div>
-<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
-    <template>Expand</template>
-    <span class="bslib-full-screen-enter badge rounded-pill">
-        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
-    </span>
-</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
-<div class="card cell bslib-card html-fill-container" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
-<div class="card-body html-fill-item html-fill-container">
-<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="44">
-<pre><code>24</code></pre>
+<div class="cell-output cell-output-display html-fill-item html-fill-container" data-execution_count="42">
+<pre><code>Date                               0.0
+Daily Average                     90.4
+Record High Daily Average         84.4
+Record High Daily Average Year    38.4
+Record Low Daily Average          82.2
+Record Low Daily Average Year     14.0
+Average High                      88.2
+Lowest High                       20.5
+Lowest High Year                  14.0
+Record High                       49.0
+Record High Year                  39.5
+Average Low                       85.5
+Highest Low                       38.4
+Highest Low Year                  33.4
+Record Low                        21.4
+Record Low Year                    9.3
+Years                             99.7
+dtype: float64</code></pre>
 </div>
 </div>
 <bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
@@ -1271,7 +924,7 @@ Input <span class="ansi-green-fg">In [8]</span>, in <span class="ansi-cyan-fg">&
 </div>
 </div>
 <div class="cell-output cell-output-display html-fill-item html-fill-container">
-<img src="NOAA-CO-OPS-Climatology_files/figure-html/cell-25-output-2.png" class="img-fluid quarto-dashboard-img-contain">
+<img src="NOAA-CO-OPS-Climatology_files/figure-html/cell-20-output-2.png" class="img-fluid quarto-dashboard-img-contain">
 </div>
 </div>
 <bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
