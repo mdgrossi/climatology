@@ -412,7 +412,7 @@ def monthly_climo(data, var, scheme='mg'):
         <b> @Month </b> <br>
         Record High: @{{Record High}}{{0.0}} <br>
         Average High: @{{Average High Curve}}{{0.0}} <br>
-        Daily Average: @{{Daily Average Curve}}{{0.0}} <br>
+        Monthly Average: @{{Monthly Average Curve}}{{0.0}} <br>
         Average Low: @{{Average Low Curve}}{{0.0}} <br>
         Record Low: @{{Record Low}}{{0.0}} <br>
         {} High Record: @{{High Records}}{{0.0}} <br>
