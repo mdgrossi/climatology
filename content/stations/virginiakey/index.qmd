@@ -229,10 +229,12 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
 
     # This year record highs
     hr = p.scatter(x='xdates', y='High Records', source=source,
-                   name=f'{thisYear} High Record', size=6, color='white')
+                   name=f'{thisYear} High Record', size=4, color='white')
+    hr.level = 'overlay'
     # This year record lows
     lr = p.scatter(x='xdates', y='Low Records', source=source,
-                   name=f'{thisYear} Low Record', size=6, color='white')
+                   name=f'{thisYear} Low Record', size=4, color='white')
+    lr.level = 'overlay'
     # Record highs
     rh = p.scatter(x='xdates', y='Record High', source=source,
                    name='Record High', size=2,
@@ -373,10 +375,12 @@ def monthly_climo(data, var, scheme='mg'):
 
     # This year record highs
     hr = p.scatter(x='Month', y='High Records', source=source,
-                   name=f'{thisYear} High Record', size=6, color='white')
+                   name=f'{thisYear} High Record', size=7, color='white')
+    hr.level = 'overlay'
     # This year record lows
     lr = p.scatter(x='Month', y='Low Records', source=source,
-                   name=f'{thisYear} Low Record', size=6, color='white')
+                   name=f'{thisYear} Low Record', size=7, color='white')
+    lr.level = 'overlay'
     # Record highs
     rh = p.scatter(x='Month', y='Record High', source=source,
                    name='Record High', size=7,
