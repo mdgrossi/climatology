@@ -85,7 +85,6 @@ class Data:
             outFile = os.path.join(self.outdir,
                                    'observational_data_record.csv.gz')
             self.data.to_csv(outFile, compression='infer')
-            self.data = self._DOY(self.data)
             if self.verbose:
                 print(f"Observational data written to file '{outFile}'.")
 
@@ -120,12 +119,19 @@ class Data:
                 yaml.dump(self.meta, fp) 
                     
             # Create and save statistics dictionaries
-            self.filtered_data = \
-                pd.concat([self._filter_data(self.data[var],
-                                            hr_threshold=self.meta['hr_threshold'],
-                                            day_threshold=self.meta['day_threshold'])
-                                       for var in self.variables], axis=1)
-            self.filtered_data = self._DOY(self.filtered_data)
+            self.filtered_hours = \
+                pd.concat([self._filter_hours(
+                                self.data[var],
+                                hr_threshold=self.meta['hr_threshold'])
+                           for var in self.variables], axis=1)
+            self.filtered_hours = self._DOY(self.filtered_hours)
+            self.filtered_days = \
+                pd.concat([self._filter_days(
+                                self.data[var],
+                                hr_threshold=self.meta['hr_threshold'],
+                                day_threshold=self.meta['day_threshold'])
+                           for var in self.variables], axis=1)
+            self.filtered_days = self._DOY(self.filtered_days)
             # Daily stats
             self.daily_records = self.daily_stats()
             statsOutFile = os.path.join(self.outdir, 'statistics-daily.nc')
@@ -156,32 +162,38 @@ class Data:
             if self.verbose:
                 print('Loading historical data from file')
             dataInFile = os.path.join(self.outdir,
-                                  'observational_data_record.csv.gz')
+                                    'observational_data_record.csv.gz')
             self.data = pd.read_csv(dataInFile, index_col=f'time_{self.tz}',
-                                    parse_dates=True, compression='infer')
-            self.data = self._DOY(self.data)
-            
+                                        parse_dates=True, compression='infer')
+                
             # Load daily statistics from file
             if self.verbose:
                 print('Loading daily statistics from file')
             statsInFile = os.path.join(self.outdir, 'statistics-daily.nc')
             with xr.open_dataset(statsInFile) as dds:
                 self.daily_records = dds.load()
-
+            
             # Load monthly statistics from file
             if self.verbose:
                 print('Loading monthly statistics from file')
             statsInFile = os.path.join(self.outdir, 'statistics-monthly.nc')
             with xr.open_dataset(statsInFile) as mds:
                 self.monthly_records = mds.load()
-
+            
             # Clean and format
-            self.filtered_data = \
-                pd.concat([self._filter_data(self.data[var],
-                                            hr_threshold=self.meta['hr_threshold'],
-                                            day_threshold=self.meta['day_threshold'])
-                                       for var in self.variables], axis=1)
-            self.filtered_data = self._DOY(self.filtered_data)
+            self.filtered_hours = \
+                pd.concat([self._filter_hours(
+                                self.data[var],
+                                hr_threshold=self.meta['hr_threshold'])
+                           for var in self.variables], axis=1)
+            self.filtered_hours = self._DOY(self.filtered_hours)
+            self.filtered_days = \
+                pd.concat([self._filter_days(
+                                self.data[var],
+                                hr_threshold=self.meta['hr_threshold'],
+                                day_threshold=self.meta['day_threshold'])
+                           for var in self.variables], axis=1)
+            self.filtered_days = self._DOY(self.filtered_days)
         if self.verbose:
             print('Done!')
 
@@ -210,9 +222,9 @@ class Data:
                     self.station.data_inventory['Air Temperature']['start_date'])
             self._load_atemp(start_date=start_date, end_date=end_date)
             self.air_temp['atemp_flag'] = self.air_temp['atemp_flag'].str\
-                                                .split(',', expand=True)\
-                                                .astype(int)\
-                                                .sum(axis=1)
+                                              .split(',', expand=True)\
+                                              .astype(int)\
+                                              .sum(axis=1)
             self.air_temp.loc[self.air_temp['atemp_flag']>0, 'atemp'] = np.nan
             datasets.append(self.air_temp['atemp'])
 
@@ -220,20 +232,26 @@ class Data:
         # if 'Barometric Pressure' in self.station.data_inventory:
         #     self.variables.append('Barometric Pressure')
         #     if not start_date:
-        #         start_date = self._format_date(self.station.data_inventory['Barometric Pressure']['start_date'])
+        #         start_date = self._format_date(
+        #             self.station.data_inventory['Barometric Pressure']['start_date'])
         #     self._load_atm_pres(start_date=start_date, end_date=end_date)
-            # self.pressure['apres_flag'] = self.pressure['apres_flag'].str.split(',', expand=True).astype(int).sum(axis=1)
-            # self.pressure.loc[self.pressure['apres_flag'] > 0, 'apres'] = np.nan
+        #     self.pressure['apres_flag'] = self.pressure['apres_flag'].str\
+        #                                       .split(',', expand=True)\
+        #                                       .astype(int).sum(axis=1)
+        #     self.pressure.loc[self.pressure['apres_flag']>0, 'apres'] = np.nan
         #     datasets.append(self.pressure['apres'])
 
         # # Wind
         # if 'Wind' in self.station.data_inventory:
         #     self.variables.extend(['Wind Speed', 'Wind Gust'])
         #     if not start_date:
-        #         start_date = self._format_date(self.station.data_inventory['Wind']['start_date'])
+        #         start_date = self._format_date(
+        #             self.station.data_inventory['Wind']['start_date'])
         #     self._load_wind(start_date=start_date, end_date=end_date)
-            # self.wind['windflag'] = self.wind['wind_flag'].str.split(',', expand=True).astype(int).sum(axis=1)
-            # self.wind.loc[self.wind['wind_flag'] > 0, ['windspeed', 'windgust']] = np.nan
+        #     self.wind['windflag'] = self.wind['wind_flag'].str\
+        #                                 .split(',', expand=True).astype(int)\
+        #                                 .sum(axis=1)
+        #     self.wind.loc[self.wind['wind_flag'] > 0, ['windspeed', 'windgust']] = np.nan
         #     datasets.append(self.wind[['windspeed', 'windgust']])
 
         # Water temperature
@@ -244,9 +262,9 @@ class Data:
                     self.station.data_inventory['Water Temperature']['start_date'])
             self._load_water_temp(start_date=start_date, end_date=end_date)
             self.water_temp['wtemp_flag'] = self.water_temp['wtemp_flag'].str\
-                                                    .split(',', expand=True)\
-                                                    .astype(int)\
-                                                    .sum(axis=1)
+                                                .split(',', expand=True)\
+                                                .astype(int)\
+                                                .sum(axis=1)
             self.water_temp.loc[self.water_temp['wtemp_flag']>0, 'wtemp'] = np.nan
             datasets.append(self.water_temp['wtemp'])
 
@@ -254,10 +272,13 @@ class Data:
         # if 'Verified 6-Minute Water Level' in self.station.data_inventory:
         #     self.variables.append('Water Level')
         #     if not start_date:
-        #         start_date = self._format_date(self.station.data_inventory['Verified 6-Minute Water Level']['start_date'])
+        #         start_date = self._format_date(
+        #             self.station.data_inventory['Verified 6-Minute Water Level']['start_date'])
         #     self._load_water_level(start_date=start_date, end_date=end_date)
-            # self.water_levels['wlevel_flag'] = self.water_levels['wlevel_flag'].str.split(',', expand=True).astype(int).sum(axis=1)
-            # self.water_levels.loc[self.water_levels['wlevel_flag'] > 0, 'wlevel'] = np.nan
+        #     self.water_levels['wlevel_flag'] = self.water_levels['wlevel_flag']\
+        #                                            .str.split(',', expand=True)\
+        #                                            .astype(int).sum(axis=1)
+        #     self.water_levels.loc[self.water_levels['wlevel_flag'] > 0, 'wlevel'] = np.nan
         #     datasets.append(self.water_levels['wlevel'])
 
         # Merge into single dataframe
@@ -284,7 +305,8 @@ class Data:
             
         # If no 'end_date' is passed, download through end of current date
         if not end_date:
-            end_date = self._format_date(pd.to_datetime('today') + pd.Timedelta(days=1))
+            end_date = self._format_date(
+                            pd.to_datetime('today') + pd.Timedelta(days=1))
         
         # Air temperature
         if 'Air Temperature' in self.variables:
@@ -322,19 +344,26 @@ class Data:
                               data[data.index.isin(self.data.index) == False]],
                              axis=0)
             self.data = data
-            self.filtered_data = \
-                pd.concat([self._filter_data(self.data[var],
-                                            hr_threshold=self.meta['hr_threshold'],
-                                            day_threshold=self.meta['day_threshold'])
-                                       for var in self.variables], axis=1)
-            self.filtered_data = self._DOY(self.filtered_data)
+            self.filtered_hours = \
+                pd.concat([self._filter_hours(
+                                self.data[var],
+                                hr_threshold=self.meta['hr_threshold'])
+                           for var in self.variables], axis=1)
+            self.filtered_hours = self._DOY(self.filtered_hours)
+            self.filtered_days = \
+                pd.concat([self._filter_days(
+                                self.data[var],
+                                hr_threshold=self.meta['hr_threshold'],
+                                day_threshold=self.meta['day_threshold'])
+                           for var in self.variables], axis=1)
+            self.filtered_days = self._DOY(self.filtered_days)
             statsOutFile = os.path.join(self.outdir,
                                         'observational_data_record.csv.gz')
             self.data.to_csv(statsOutFile, compression='infer')
             if self.verbose:
                 print("Updated observational data written to file "\
                       f"'{statsOutFile}'.")
-                print("Done! (Don't forget to run Data.update_stats() to update statistics.)")
+                print("Done! Run Data.update_stats() to update statistics.")
     
     def update_stats(self):    
         """Calculate new statistics and update if any changes"""
@@ -345,14 +374,17 @@ class Data:
                 print('No new daily records set.')
         else:
             if self.verbose:
-                print('Daily stats differ. Updating and saving to file. If new records have been set, they will be printed below.\n')
-                self._compare(old=self.daily_stats, new=_new_daily_stats)
+                print('Daily stats differ. Updating and saving to file. If "\
+                      "new records have been set, they will be printed "\
+                      "below.\n')
+                self._compare(old=self.daily_records, new=_new_daily_stats)
             self.daily_records = _new_daily_stats
             # Write to file
             statsOutFile = os.path.join(self.outdir, 'statistics-daily.nc')
             self.daily_records.to_netcdf(statsOutFile, mode='w')
             if self.verbose:
-                print(f"\nUpdated daily observational statistics written to '{statsOutFile}\n'")
+                print("\nUpdated daily observational statistics written to "\
+                      f"'{statsOutFile}\n'")
             print('*'*10)
 
         # Monthly stats
@@ -362,15 +394,18 @@ class Data:
                 print('No new monthly records set.')
         else:
             if self.verbose:
-                print('Monthly stats dicts differ. Updating and saving to file. If new records have been set, they will be printed below.\n')
-                self._compare(old=self.monthly_stats,
+                print('Monthly stats dicts differ. Updating and saving to "\
+                      "file. If new records have been set, they will be "\
+                      "printed below.\n')
+                self._compare(old=self.monthly_records,
                               new=_new_monthly_stats)
             self.monthly_records = _new_monthly_stats
             # Write to file
             statsOutFile = os.path.join(self.outdir, 'statistics-monthly.nc')
             self.monthly_records.to_netcdf(statsOutFile, mode='w')
             if self.verbose:
-                print(f"\nUpdated monthly observational statistics written to '{statsOutFile}'")
+                print("\nUpdated monthly observational statistics written to "\
+                      f"'{statsOutFile}'")
 
     def _format_date(self, datestr):
         dtdt = pd.to_datetime(datestr)
@@ -484,6 +519,7 @@ class Data:
         df['YearDay'] = df.index.day_of_year.astype(int)
         # Years that are NOT leap years
         leapInd = [not calendar.isleap(i) for i in df.index.year]
+        # mask = (leapInd) & (df['Month'] > 2)
         mask = (leapInd) & (df.index.month > 2)
         # Advance by one day everything after February 28 
         df.loc[mask, 'YearDay'] += 1
@@ -499,7 +535,8 @@ class Data:
     def _count_missing_days(self, group, threshold=2):
         """Return True if the number of days in a month with missing data 
         is less than or equal to 'theshold' and False otherwise. Two tests 
-        are performed: missing data (NaN) and compare to the number of days in the given month.
+        are performed: missing data (NaN) and compare to the number of days in
+        the given month.
         """
         try:
             days_in_month = pd.Period(group.index[0].strftime(format='%Y-%m-%d')).days_in_month
@@ -510,14 +547,22 @@ class Data:
         except IndexError:
             pass
 
-    def _filter_data(self, data, hr_threshold=3, day_threshold=2):
+    def _filter_hours(self, data, hr_threshold=3):
         """Filter data to remove days with more than 'hr_threshold' missing
-        hours of data and months with more than 'day_threshold' days of missing
-        data.
+        hours of data.
         """
         # Filter out days missing more than <hr_threshold> hours
         filtered = data.groupby(pd.Grouper(freq='1D')).filter(
             lambda x: self._count_missing_hours(group=x, threshold=hr_threshold))
+        return filtered
+
+    def _filter_days(self, data, hr_threshold=3, day_threshold=2):
+        """Filter months with more than 'day_threshold' days of missing
+        data by first filtering data to remove days with more than 
+        'hr_threshold' missing hours of data.
+        """
+        # Filter out days missing more than <hr_threshold> hours
+        filtered = self._filter_hours(data, hr_threshold=hr_threshold)
         # Filter out months missing more than <day_threshold> days
         filtered = filtered.groupby(pd.Grouper(freq='1M')).filter(
             lambda x: self._count_missing_days(group=x, threshold=day_threshold))
@@ -525,13 +570,13 @@ class Data:
 
     def daily_highs(self):
         """Daily highs"""
-        return self.filtered_data.groupby(
+        return self.filtered_hours.groupby(
             pd.Grouper(freq='1D', closed='left', label='left', dropna=True))\
               .max(numeric_only=True)
     
     def daily_lows(self):
         """Daily lows"""
-        return self.filtered_data.groupby(
+        return self.filtered_hours.groupby(
             pd.Grouper(freq='1D', closed='left', label='left', dropna=True))\
               .min(numeric_only=True)
 
@@ -542,7 +587,7 @@ class Data:
         observations are used. Defaults to False (meteorological standard).
         """
         if true_average:
-            return self.filtered_data.groupby(
+            return self.filtered_hours.groupby(
                 pd.Grouper(freq='1D', closed='left', label='left', dropna=True))\
                   .mean(numeric_only=True).round(decimals)
         else:
@@ -557,7 +602,8 @@ class Data:
         average. Otherwise, only the maximum and minimum observations are used.
         Defaults to False (meteorological standard).
         """
-        dailyAvgs = self.daily_avgs(decimals=decimals,  true_average=true_average)
+        dailyAvgs = self.daily_avgs(decimals=decimals,
+                                    true_average=true_average)
         dailyAvg = dailyAvgs.groupby('YearDay')\
                             .mean(numeric_only=True).round(decimals)
         dailyAvg.index = dailyAvg.index.astype(int)
@@ -571,7 +617,8 @@ class Data:
         average. Otherwise, only the maximum and minimum observations are used.
         Defaults to False (meteorological standard).
         """
-        dailyAvgs = self.daily_avgs(decimals=decimals, true_average=true_average)
+        dailyAvgs = self.daily_avgs(decimals=decimals,
+                                    true_average=true_average)
         monthHighs = dailyAvgs.groupby(pd.Grouper(freq='M'))\
                               .max(numeric_only=True)
         return monthHighs
@@ -582,7 +629,8 @@ class Data:
         average. Otherwise, only the maximum and minimum observations are used.
         Defaults to False (meteorological standard).
         """
-        dailyAvgs = self.daily_avgs(decimals=decimals, true_average=true_average)
+        dailyAvgs = self.daily_avgs(decimals=decimals,
+                                    true_average=true_average)
         monthLows = dailyAvgs.groupby(pd.Grouper(freq='M'))\
                              .min(numeric_only=True)
         return monthLows
@@ -623,7 +671,8 @@ class Data:
             lambda x: x.sort_index().idxmax(numeric_only=True).dt.year)
         recordHighDailyAvgYear.drop('YearDay', axis=1, inplace=True)
         recordHighDailyAvgYear.index = recordHighDailyAvgYear.index.astype(int)
-        recordHighDailyAvgYear.columns = [i+' Year' for i in recordHighDailyAvgYear.columns]
+        recordHighDailyAvgYear.columns = \
+            [i+' Year' for i in recordHighDailyAvgYear.columns]
         # Create xarray
         results = pd.concat((recordHighDailyAvg, recordHighDailyAvgYear), 
                             axis=1)
@@ -767,7 +816,8 @@ class Data:
         are used. Defaults to False (meteorological standard).
         """
         # Calculate the record
-        monthlyHighs = self.monthly_highs(decimals=decimals, true_average=true_average)
+        monthlyHighs = self.monthly_highs(decimals=decimals,
+                                          true_average=true_average)
         monthlyHighs.drop('YearDay', axis=1, inplace=True)
         lowMonthlyHigh = monthlyHighs.groupby(monthlyHighs.index.month)\
                                      .min(numeric_only=True).round(decimals)
@@ -823,7 +873,8 @@ class Data:
             monthlyHighs.groupby(monthlyHighs.index.month).apply(
                 lambda x: x.sort_index().idxmax(numeric_only=True).dt.year)
         recordMonthlyHighYear.index = recordMonthlyHighYear.index.astype(int)
-        recordMonthlyHighYear.columns = [i+' Year' for i in recordMonthlyHighYear.columns]
+        recordMonthlyHighYear.columns = \
+            [i+' Year' for i in recordMonthlyHighYear.columns]
         # Create xarray
         results = pd.concat((recordMonthlyHigh, recordMonthlyHighYear), axis=1)
         results = xr.DataArray(results, dims=['month', 'variable'])
@@ -947,11 +998,12 @@ class Data:
     def number_of_years_byday(self):
         """Number of years in the historical data records by day of year."""
         numYears = pd.concat(
-            [self.filtered_data[[v, 'YearDay']]\
+            [self.filtered_hours[[v, 'YearDay']]\
                 .dropna().groupby('YearDay').apply(
+                # .groupby('YearDay').apply(
                     lambda x: len(x.index.year.unique())) \
-                for v in self.filtered_data.columns if v != 'YearDay'], axis=1)
-        numYears.columns = [v for v in self.filtered_data.columns \
+             for v in self.filtered_hours.columns if v != 'YearDay'], axis=1)
+        numYears.columns = [v for v in self.filtered_hours.columns \
                             if v != 'YearDay']
         results = xr.DataArray(numYears, dims=['yearday', 'variable'])
         results.name = 'Number of Years'
@@ -960,11 +1012,12 @@ class Data:
     def number_of_years_bymonth(self):
         """Number of years in the historical data records by month."""
         numYears = pd.concat(
-            [self.filtered_data[v]\
-                .dropna().groupby(self.filtered_data[v].dropna().index.month).apply(
+            [self.filtered_days[v]\
+                 .dropna().groupby(self.filtered_days[v].dropna().index.month).apply(
+                #  .groupby(self.filtered_days[v].index.month).apply(
                     lambda x: len(x.index.year.unique())) \
-                for v in self.filtered_data.columns if v != 'YearDay'], axis=1)
-        numYears.columns = [v for v in self.filtered_data.columns \
+                for v in self.filtered_days if v != 'YearDay'], axis=1)
+        numYears.columns = [v for v in self.filtered_days.columns \
                             if v != 'YearDay']
         results = xr.DataArray(numYears, dims=['month', 'variable'])
         results.name = 'Number of Years'
@@ -999,8 +1052,8 @@ class Data:
         for var in daily_records.coords['variable'].values:
             if 'Year' not in var:
                 daily_records.attrs[var+' data range'] = \
-                    (self.filtered_data[var].dropna().index.min().strftime('%Y-%m-%d'),
-                    self.filtered_data[var].dropna().index.max().strftime('%Y-%m-%d'))
+                    (self.filtered_hours[var].dropna().index.min().strftime('%Y-%m-%d'),
+                     self.filtered_hours[var].dropna().index.max().strftime('%Y-%m-%d'))
         
         # Rearrange array coordinates and variables: separate records and 
         # years into smaller arrays
@@ -1013,14 +1066,17 @@ class Data:
         # Add "Year" to variable names and remove it from coordinate name
         day_years = day_years.rename_vars(
             {i:i+' Year' for i in day_years.data_vars})
-        day_years.coords['variable'] = [i.removesuffix(' Year') for i in day_years.coords['variable'].values]
+        day_years.coords['variable'] = \
+            [i.removesuffix(' Year') for i in day_years.coords['variable'].values]
 
         # Merge arrays together
         daily_records = xr.merge([day_records, day_years])
         daily_records = daily_records[
-            [item for items in zip(day_records.data_vars, day_years.data_vars) for item in items]]
+            [item for items in zip(day_records.data_vars, day_years.data_vars) \
+             for item in items]]
         daily_records = daily_records.drop_vars(
-            [x for x in daily_records.data_vars if daily_records[x].isnull().all()])
+            [x for x in daily_records.data_vars \
+             if daily_records[x].isnull().all()])
         
         # Convert years to integers
         daily_records[[i for i in daily_records.data_vars if "Year" in i]] = \
@@ -1050,6 +1106,7 @@ class Data:
              'Years': self.number_of_years_bymonth()},
             attrs = {k:v for k, v in self.meta.items() \
                      if k not in ['outdir', 'variables', 'units']})
+
         # Add data units for each variable to the array as metadata attributes
         for k, v in self.meta['units'].items():
             monthly_records.attrs[k+' units'] = v
@@ -1059,8 +1116,8 @@ class Data:
         for var in monthly_records.coords['variable'].values:
             if 'Year' not in var:
                 monthly_records.attrs[var+' data range'] = \
-                    (self.filtered_data[var].dropna().index.min().strftime('%Y-%m-%d'),
-                    self.filtered_data[var].dropna().index.max().strftime('%Y-%m-%d'))
+                    (self.filtered_days[var].dropna().index.min().strftime('%Y-%m-%d'),
+                     self.filtered_days[var].dropna().index.max().strftime('%Y-%m-%d'))
         
         # Rearrange array coordinates and variables: separate records and 
         # years into smaller arrays
@@ -1074,7 +1131,8 @@ class Data:
         # Add "Year" to variable names and remove it from coordinate name
         mon_years = mon_years.rename_vars(
             {i:i+' Year' for i in mon_years.data_vars})
-        mon_years.coords['variable'] = [i.removesuffix(' Year') for i in mon_years.coords['variable'].values]
+        mon_years.coords['variable'] = \
+            [i.removesuffix(' Year') for i in mon_years.coords['variable'].values]
 
         # Merge arrays together
         monthly_records = xr.merge([mon_records, mon_years])
@@ -1084,7 +1142,8 @@ class Data:
             [x for x in monthly_records.data_vars if monthly_records[x].isnull().all()])
         
         # Convert years to integers
-        monthly_records[[i for i in monthly_records.data_vars if "Year" in i]] = monthly_records[[i for i in monthly_records.data_vars if "Year" in i]].astype(int)
+        monthly_records[[i for i in monthly_records.data_vars if "Year" in i]] = \
+            monthly_records[[i for i in monthly_records.data_vars if "Year" in i]].astype(int)
 
         # Replace yearday with calendar day and rename coordinate
         monthly_records.coords['month'] = \
@@ -1095,12 +1154,13 @@ class Data:
         return monthly_records
 
     def _compare(self, old, new):
-        """
-        Compare 'old' and 'new' records xarrays excluding daily highs, lows, and averages, since these will always change with updated data
+        """Compare 'old' and 'new' records xarrays excluding daily highs, lows,
+        and averages, since these will always change with updated data.
         """
         # Mask out unchanged records
         diffs = old != new
-        exclude = ['Daily Average', 'Monthly Average', 'Average High', 'Average Low', 'Years']
+        exclude = ['Daily Average', 'Monthly Average', 'Average High',
+                   'Average Low', 'Years']
         try:
             new_records = xr.where(diffs, new, np.nan)\
                             .drop_vars(exclude, errors='ignore')\
@@ -1119,8 +1179,8 @@ class Data:
         record_set = [i.replace(' Year', '') for i in record_set]
 
         # Loop through the dataframe of new records to report out the updates
-        # This is a hacky solution that pieces together the various compoents of the 
-        # iterrows() output.
+        # This is a hacky solution that pieces together the various compoents
+        # of the iterrows() output.
         for row in new_records.iterrows():
             for record in record_set:
                 if not np.isnan(row[1][record]):
@@ -1130,15 +1190,13 @@ class Data:
                     try:
                         oldRecord = old.sel(variable=var,
                                             Date=row[0][0])[record].values
-                        oldYear = old .sel(variable=var,
-                                           Date=row[0][0])[record+' Year']\
-                                      .values
+                        oldYear = old.sel(variable=var,
+                                          Date=row[0][0])[record+' Year'].values
                     except KeyError:
                         oldRecord = old.sel(variable=var,
                                             Month=row[0][0])[record].values
                         oldYear = old.sel(variable=var,
-                                          Month=row[0][0])[record+' Year']\
-                                     .values
+                                          Month=row[0][0])[record+' Year'].values
                     units = self.units[var]
                     print(f"{record.capitalize()} {var.lower()} set {row[0][0]} {newYear}:\n\t"\
                         f"{newRecord} {units} (previously {oldRecord} {units} in {oldYear})")
