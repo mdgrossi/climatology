@@ -2,7 +2,7 @@ datum: MHHW
 day_threshold: 2
 hr_threshold: 3
 last_updated: '2024-05-25 10:00:00'
-outdir: /home/climatology/virginiaKeyFl
+outdir: virginiaKeyFl
 stationid: '8723214'
 stationname: Virginia Key, FL
 tz: lst
