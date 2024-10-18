@@ -30,10 +30,11 @@ RUN curl -LO https://quarto.org/download/latest/quarto-linux-amd64.deb
 RUN gdebi --non-interactive quarto-linux-amd64.deb
 
 # Copy requirements into container
-WORKDIR /home
 COPY requirements.txt .
 
 # Update pip and install Python package dependencies
 RUN pip install --upgrade pip setuptools wheel && \
     pip install --no-cache-dir -r requirements.txt
 RUN jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+
+WORKDIR /home
