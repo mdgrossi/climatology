@@ -37,8 +37,8 @@ import bokeh.models as bm
 from bokeh.io import output_notebook
 from bokeh.plotting import figure, show
 from great_tables import GT, loc, style
-# import plotly.io as pio
-# pio.renderers.default = 'notebook_connected'
+import plotly.io as pio
+pio.renderers.default = 'notebook_connected'
 output_notebook(hide_banner=True)
 
 today = dt.today().strftime('%d-%b')
@@ -576,6 +576,40 @@ display(Markdown('::: {.panel-tabset}'))
 for var in monthly_stats.variable.values:
     display(Markdown(f'\n### {var}\n\n'))
     colortable(monthly_stats, var)
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
+
+# Plotly Problems
+
+## Row {.tabset}
+
+```{python}
+#| output: asis
+#| title: Daily Stats
+
+display(Markdown('::: {.panel-tabset}'))
+
+for var in daily_stats.variable.values:
+    display(Markdown(f'\n### {var}\n\n'))
+    plotlytable(daily_stats, var)
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
+
+```{python}
+#| output: asis
+#| title: Monthly Stats
+
+display(Markdown('::: {.panel-tabset}'))
+
+for var in monthly_stats.variable.values:
+    display(Markdown(f'\n### {var}\n\n'))
+    plotlytable(monthly_stats, var)
     display(Markdown(' '))
 
 display(Markdown(':::'))
