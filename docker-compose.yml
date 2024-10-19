@@ -1,15 +1,15 @@
 version: '3.3'
-
 services:
-  climatequarto:
+  climatology:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      - JUPYTER_ENABLE_LAB=yes
-    stdin_open: true
-    tty: true
-    ports:
-      - 8888:8888
+    image: climatology:latest
+    container_name: climatology
+    platform: linux/amd64
     volumes:
-      - .:/home/climatology/
+      - .:/home
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
+    entrypoint: python3 climoDL.py
+    command: python3 climoDL.py -h
