@@ -9,7 +9,7 @@ import os
 
 class Data:
     def __init__(self, stationname, stationid, units='metric', timezone='gmt',
-                datum='MHHW', outdir=None, hr_threshold=3, day_threshold=2,
+                datum='MHHW', hr_threshold=3, day_threshold=2,
                 redownload=False, verbose=True):
         """Data class for downloading, formatting, and saving to file
         historical atmospheric (air temperature, barometric pressure, wind) and
@@ -23,8 +23,6 @@ class Data:
                 CO-OPS name; it is used only for saving data to file.
             stationid: str, NOAA CO-OPS tide station number from which to
                 retrieve data
-            outdir: str, directory to save data to. Defaults to present working
-                directory.
             units: str, either 'metric' or 'english', indicating the units to
                 download data in. Defaults to 'metric'.
             timezone: str, one of either 'gmt' for Greenwich Mean Time, 'lst'
