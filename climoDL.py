@@ -93,9 +93,9 @@ def main():
         units=args.units,
         timezone=args.timezone,
         datum=args.datum,
-        outdir=args.outdir,
         hr_threshold=args.hr,
         day_threshold=args.day,
+        redownload=args.redownload,
         verbose=args.verbose
         )
     data.update_data()
