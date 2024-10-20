@@ -63,12 +63,9 @@ class Data:
         self._valid_tz(self.tz)
         self._valid_datum(self.datum)
         
-        # Set data directory, creating station subdirectory if needed
-        if outdir:
-            self.outdir = os.path.join(outdir, self.dirname)
-        else:
-            HOMEDIR = os.getcwd()
-            self.outdir = os.path.join(HOMEDIR, self.dirname)
+        # Set out directory as a station subdirectory within the home directory
+        HOMEDIR = os.getcwd()
+        self.outdir = os.path.join(HOMEDIR, self.dirname)
 
         # =====================================================================
         # If 'redownload' argument is True OR if the directory station name
@@ -107,7 +104,7 @@ class Data:
             self.meta = dict({
                 'stationname': self.name,
                 'stationid': self.id,
-                'outdir': self.dirname,
+                'dirname': self.dirname,
                 'unit_system': self.unit_system,
                 'tz': self.tz,
                 'datum': self.datum,
@@ -156,7 +153,6 @@ class Data:
             with open(os.path.join(self.outdir, 'metadata.yml')) as m:
                 self.meta = yaml.safe_load(m)
             self._load_from_yaml(self.meta)
-            self.outdir = os.path.join(os.getcwd(), self.meta['outdir'])
             
             # Load the historical data from file
             if self.verbose:
