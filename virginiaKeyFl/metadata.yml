@@ -1,15 +1,16 @@
 datum: MHHW
 day_threshold: 2
+dirname: virginiaKeyFl
 hr_threshold: 3
-last_updated: '2024-05-25 10:00:00'
-outdir: virginiaKeyFl
 stationid: '8723214'
 stationname: Virginia Key, FL
 tz: lst
 unit_system: english
 units:
-  Air Temperature: F
-  Water Temperature: F
+  Air Temperature: "\xB0F"
+  Water Level: ft
+  Water Temperature: "\xB0F"
 variables:
 - Air Temperature
 - Water Temperature
+- Water Level
