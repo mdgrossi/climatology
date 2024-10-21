@@ -82,5 +82,12 @@
     "title": "````",
     "section": "Row",
     "text": "Row\n\ndisplay(Markdown('::: {..column-screen}'))\ndisplay(Markdown('::: {.panel-tabset}'))\n\nfor var in daily_stats.variable.values:\n    display(Markdown(f'\\n## {var}\\n\\n'))\n    display_table(daily_stats, var)\n    display(Markdown(' '))\n\ndisplay(Markdown(':::'))\ndisplay(Markdown(':::'))\n\n\nAir TemperatureWater Temperature\n\n\n                                                \n\n\n                                                \n\n\n\n\n\n\ndisplay(Markdown('::: {.panel-tabset}'))\n\nfor var in daily_stats.variable.values:\n    display(Markdown(f'\\n## {var}\\n\\n'))\n    display_table(monthly_stats, var)\n    display(Markdown(' '))\n\ndisplay(Markdown(':::'))\n\nAir TemperatureWater Temperature\n\n\n                                                \n\n\n                                                \n\n\n\n\n````"
+  },
+  {
+    "objectID": "content/about.html",
+    "href": "content/about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n\n\n Back to top"
   }
 ]
