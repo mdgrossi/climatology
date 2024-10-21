@@ -132,15 +132,13 @@ class Data:
             statsOutFile = os.path.join(self.outdir, 'statistics-daily.nc')
             self.daily_records.to_netcdf(statsOutFile, mode='w')
             if self.verbose:
-                print("Observational daily statistics written to "\
-                      f"'{statsOutFile}'")
+                print(f"Observational daily statistics written to '{statsOutFile}'")
             # Monthly stats
             self.monthly_records = self.monthly_stats()
             statsOutFile = os.path.join(self.outdir, 'statistics-monthly.nc')
             self.monthly_records.to_netcdf(statsOutFile, mode='w')
             if self.verbose:
-                print("Observational monthly statistics written to "
-                      f"'{statsOutFile}'")            
+                print(f"Observational monthly statistics written to '{statsOutFile}'")
 
         # =====================================================================
         # If historical data for this station already exists:
@@ -205,8 +203,8 @@ class Data:
 
         # If no 'end_date' is passed, download through current day
         if not end_date:
-            end_date = self._format_date(pd.to_datetime('today')) + \
-                       pd.Timedelta(days=1)
+            end_date = self._format_date(
+                            pd.to_datetime('today') + pd.Timedelta(days=1))
 
         # Air temperature
         if 'Air Temperature' in self.station.data_inventory:
@@ -221,6 +219,33 @@ class Data:
                                               .sum(axis=1)
             self.air_temp.loc[self.air_temp['atemp_flag']>0, 'atemp'] = np.nan
             datasets.append(self.air_temp['atemp'])
+
+        # Water temperature
+        if 'Water Temperature' in self.station.data_inventory:
+            self.variables.append('Water Temperature')
+            if not start_date:
+                start_date = self._format_date(
+                    self.station.data_inventory['Water Temperature']['start_date'])
+            self._load_water_temp(start_date=start_date, end_date=end_date)
+            self.water_temp['wtemp_flag'] = self.water_temp['wtemp_flag'].str\
+                                                .split(',', expand=True)\
+                                                .astype(int)\
+                                                .sum(axis=1)
+            self.water_temp.loc[self.water_temp['wtemp_flag']>0, 'wtemp'] = np.nan
+            datasets.append(self.water_temp['wtemp'])
+
+        # Water level (tides)
+        if 'Verified 6-Minute Water Level' in self.station.data_inventory:
+            self.variables.append('Water Level')
+            if not start_date:
+                start_date = self._format_date(
+                    self.station.data_inventory['Verified 6-Minute Water Level']['start_date'])
+            self._load_water_level(start_date=start_date, end_date=end_date)
+            self.water_levels['wlevel_flag'] = self.water_levels['wlevel_flag']\
+                                                   .str.split(',', expand=True)\
+                                                   .astype(int).sum(axis=1)
+            self.water_levels.loc[self.water_levels['wlevel_flag'] > 0, 'wlevel'] = np.nan
+            datasets.append(self.water_levels['wlevel'])
 
         # # Barometric pressure
         # if 'Barometric Pressure' in self.station.data_inventory:
@@ -247,33 +272,6 @@ class Data:
         #                                 .sum(axis=1)
         #     self.wind.loc[self.wind['wind_flag'] > 0, ['windspeed', 'windgust']] = np.nan
         #     datasets.append(self.wind[['windspeed', 'windgust']])
-
-        # Water temperature
-        if 'Water Temperature' in self.station.data_inventory:
-            self.variables.append('Water Temperature')
-            if not start_date:
-                start_date = self._format_date(
-                    self.station.data_inventory['Water Temperature']['start_date'])
-            self._load_water_temp(start_date=start_date, end_date=end_date)
-            self.water_temp['wtemp_flag'] = self.water_temp['wtemp_flag'].str\
-                                                .split(',', expand=True)\
-                                                .astype(int)\
-                                                .sum(axis=1)
-            self.water_temp.loc[self.water_temp['wtemp_flag']>0, 'wtemp'] = np.nan
-            datasets.append(self.water_temp['wtemp'])
-
-        # # Water level (tides)
-        # if 'Verified 6-Minute Water Level' in self.station.data_inventory:
-        #     self.variables.append('Water Level')
-        #     if not start_date:
-        #         start_date = self._format_date(
-        #             self.station.data_inventory['Verified 6-Minute Water Level']['start_date'])
-        #     self._load_water_level(start_date=start_date, end_date=end_date)
-        #     self.water_levels['wlevel_flag'] = self.water_levels['wlevel_flag']\
-        #                                            .str.split(',', expand=True)\
-        #                                            .astype(int).sum(axis=1)
-        #     self.water_levels.loc[self.water_levels['wlevel_flag'] > 0, 'wlevel'] = np.nan
-        #     datasets.append(self.water_levels['wlevel'])
 
         # Merge into single dataframe
         if self.verbose:
@@ -307,6 +305,16 @@ class Data:
             self._load_atemp(start_date=start_date, end_date=end_date)
             datasets.append(self.air_temp['atemp'])
 
+        # Water temperature
+        if 'Water Temperature' in self.variables:
+            self._load_water_temp(start_date=start_date, end_date=end_date)
+            datasets.append(self.water_temp['wtemp'])
+
+        # Water level (tides)
+        if 'Water Level' in self.variables:
+            self._load_water_level(start_date=start_date, end_date=end_date)
+            datasets.append(self.water_levels['wlevel'])
+
         # Barometric pressure
         if 'Barometric Pressure' in self.variables:
             self._load_atm_pres(start_date=start_date, end_date=end_date)
@@ -316,16 +324,6 @@ class Data:
         if 'Wind Speed' in self.variables:
             self._load_wind(start_date=start_date, end_date=end_date)
             datasets.append(self.wind[['windspeed', 'windgust']])
-
-        # Water temperature
-        if 'Water Temperature' in self.variables:
-            self._load_water_temp(start_date=start_date, end_date=end_date)
-            datasets.append(self.water_temp['wtemp'])
-
-        # Water level (tides)
-        if 'Verified 6-Minute Water Level' in self.variables:
-            self._load_water_level(start_date=start_date, end_date=end_date)
-            datasets.append(self.water_levels['wlevel'])
 
         # Merge into single dataframe
         data = pd.concat(datasets, axis=1)
@@ -355,8 +353,7 @@ class Data:
                                         'observational_data_record.csv.gz')
             self.data.to_csv(statsOutFile, compression='infer')
             if self.verbose:
-                print("Updated observational data written to file "\
-                      f"'{statsOutFile}'.")
+                print(f"Updated observational data written to file '{statsOutFile}'.")
                 print("Done! Run Data.update_stats() to update statistics.")
     
     def update_stats(self):    
@@ -368,17 +365,15 @@ class Data:
                 print('No new daily records set.')
         else:
             if self.verbose:
-                print('Daily stats differ. Updating and saving to file. If "\
-                      "new records have been set, they will be printed "\
-                      "below.\n')
+                print("""Daily stats differ. Updating and saving to file. If new records have been set,
+                they will be printed below.\n""")
                 self._compare(old=self.daily_records, new=_new_daily_stats)
             self.daily_records = _new_daily_stats
             # Write to file
             statsOutFile = os.path.join(self.outdir, 'statistics-daily.nc')
             self.daily_records.to_netcdf(statsOutFile, mode='w')
             if self.verbose:
-                print("\nUpdated daily observational statistics written to "\
-                      f"'{statsOutFile}\n'")
+                print(f"\nUpdated daily observational statistics written to '{statsOutFile}\n'")
             print('*'*10)
 
         # Monthly stats
@@ -388,9 +383,8 @@ class Data:
                 print('No new monthly records set.')
         else:
             if self.verbose:
-                print('Monthly stats dicts differ. Updating and saving to "\
-                      "file. If new records have been set, they will be "\
-                      "printed below.\n')
+                print("""Monthly stats dicts differ. Updating and saving to file. If new records have
+                been set, they will be printed below.\n""")
                 self._compare(old=self.monthly_records,
                               new=_new_monthly_stats)
             self.monthly_records = _new_monthly_stats
@@ -398,8 +392,7 @@ class Data:
             statsOutFile = os.path.join(self.outdir, 'statistics-monthly.nc')
             self.monthly_records.to_netcdf(statsOutFile, mode='w')
             if self.verbose:
-                print("\nUpdated monthly observational statistics written to "\
-                      f"'{statsOutFile}'")
+                print(f"Updated monthly observational statistics written to '{statsOutFile}'")
 
     def _format_date(self, datestr):
         dtdt = pd.to_datetime(datestr)
@@ -574,91 +567,85 @@ class Data:
             pd.Grouper(freq='1D', closed='left', label='left', dropna=True))\
               .min(numeric_only=True)
 
-    def daily_avgs(self, decimals=1, true_average=False):
-        """Daily averages by calendar day rounded to 'decimals'. If
-        'true_average' is True, all measurements from each 24-hour day will be
-        used to calculate the average. Otherwise, only the maximum and minimum
-        observations are used. Defaults to False (meteorological standard).
+    def daily_avgs(self, true_average=False):
+        """Daily averages by calendar day. If 'true_average' is True, all
+        measurements from each 24-hour day will be used to calculate the
+        average. Otherwise, only the maximum and minimum observations are used.
+        Defaults to False (meteorological standard).
         """
         if true_average:
             return self.filtered_hours.groupby(
                 pd.Grouper(freq='1D', closed='left', label='left', dropna=True))\
-                  .mean(numeric_only=True).round(decimals)
+                  .mean(numeric_only=True)
         else:
             dailyHighs = self.daily_highs()
             dailyLows = self.daily_lows()
             results = (dailyHighs + dailyLows) / 2
-            return results.round(decimals)
+            return results
 
-    def daily_avg(self, decimals=1, true_average=False):
-        """Daily averages rounded to 'decimals'. If 'true_average' is True, all
-        measurements from each 24-hour day will be used to calculate the daily
-        average. Otherwise, only the maximum and minimum observations are used.
-        Defaults to False (meteorological standard).
+    def daily_avg(self, true_average=False):
+        """Daily averages. If 'true_average' is True, all measurements from
+        each 24-hour day will be used to calculate the daily average.
+        Otherwise, only the maximum and minimum observations are used. Defaults
+        to False (meteorological standard).
         """
-        dailyAvgs = self.daily_avgs(decimals=decimals,
-                                    true_average=true_average)
+        dailyAvgs = self.daily_avgs(true_average=true_average)
         dailyAvg = dailyAvgs.groupby('YearDay')\
-                            .mean(numeric_only=True).round(decimals)
+                            .mean(numeric_only=True)
         dailyAvg.index = dailyAvg.index.astype(int)
         results = xr.DataArray(dailyAvg, dims=['yearday', 'variable'])
         results.name = 'Daily Average'
         return results
 
-    def monthly_highs(self, decimals=1, true_average=False):
-        """Monthly highs rounded to 'decimals'. If 'true_average' is True, all
-        measurements from each 24-hour day will be used to calculate the daily
-        average. Otherwise, only the maximum and minimum observations are used.
-        Defaults to False (meteorological standard).
+    def monthly_highs(self, true_average=False):
+        """Monthly highs. If 'true_average' is True, all measurements from each
+        24-hour day will be used to calculate the daily average. Otherwise,
+        only the maximum and minimum observations are used. Defaults to False
+        (meteorological standard).
         """
-        dailyAvgs = self.daily_avgs(decimals=decimals,
-                                    true_average=true_average)
+        dailyAvgs = self.daily_avgs(true_average=true_average)
         monthHighs = dailyAvgs.groupby(pd.Grouper(freq='M'))\
                               .max(numeric_only=True)
         return monthHighs
     
-    def monthly_lows(self, decimals=1, true_average=False):
-        """Monthly lows rounded to 'decimals'. If 'true_average' is True, all
-        measurements from each 24-hour day will be used to calculate the daily
-        average. Otherwise, only the maximum and minimum observations are used.
-        Defaults to False (meteorological standard).
+    def monthly_lows(self, true_average=False):
+        """Monthly lows. If 'true_average' is True, all measurements from each
+        24-hour day will be used to calculate the daily average. Otherwise,
+        only the maximum and minimum observations are used. Defaults to False
+        (meteorological standard).
         """
-        dailyAvgs = self.daily_avgs(decimals=decimals,
-                                    true_average=true_average)
+        dailyAvgs = self.daily_avgs(true_average=true_average)
         monthLows = dailyAvgs.groupby(pd.Grouper(freq='M'))\
                              .min(numeric_only=True)
         return monthLows
     
-    def monthly_avg(self, decimals=1, true_average=False):
-        """Monthly averages for variable 'var' rounded to 'decimals'. If
-        'true_average' is True, all measurements from each 24-hour day will be
-        used to calculate the daily average. Otherwise, only the maximum and
-        minimum observations are used. Defaults to False (meteorological
-        standard).
+    def monthly_avg(self, true_average=False):
+        """Monthly averages. If 'true_average' is True, all measurements from
+        each 24-hour day will be used to calculate the daily average.
+        Otherwise, only the maximum and minimum observations are used. Defaults
+        to False (meteorological standard).
         """
-        dailyAvgs = self.daily_avgs(decimals=decimals, 
-                                    true_average=true_average)
+        dailyAvgs = self.daily_avgs(true_average=true_average)
         monthlyMeans = dailyAvgs.groupby(pd.Grouper(freq='M'))\
-                                .mean(numeric_only=True).round(decimals)
+                                .mean(numeric_only=True)
         monthlyMeans.drop('YearDay', axis=1, inplace=True)
         monthlyAvg = monthlyMeans.groupby(monthlyMeans.index.month)\
-                                 .mean(numeric_only=True).round(decimals)
+                                 .mean(numeric_only=True)
         monthlyAvg.index = monthlyAvg.index.astype(int)
         results = xr.DataArray(monthlyAvg, dims=['month', 'variable'])
         results.name = 'Monthly Average'
         return results
 
-    def record_high_daily_avg(self, decimals=1, true_average=False):
-        """Record high daily averages rounded to 'decimals'. If 'true_average'
-        is True, all measurements from each 24-hour day will be used to
-        calculate the daily average. Otherwise, only the maximum and minimum
-        observations are used. Defaults to False (meteorological standard).
+    def record_high_daily_avg(self, true_average=False):
+        """Record high daily averages. If 'true_average' is True, all
+        measurements from each 24-hour day will be used to calculate the daily
+        average. Otherwise, only the maximum and minimum observations are used.
+        Defaults to False (meteorological standard).
         """
         # Calculate the records
-        dailyAvgs = self.daily_avgs(decimals=decimals, 
-                                    true_average=true_average)
+        dailyAvgs = self.daily_avgs(true_average=true_average)
         recordHighDailyAvg = \
-            dailyAvgs.groupby('YearDay').max(numeric_only=True).round(decimals)
+            dailyAvgs.groupby('YearDay').max(numeric_only=True)
         recordHighDailyAvg.index = recordHighDailyAvg.index.astype(int)
         # Record years
         recordHighDailyAvgYear = dailyAvgs.groupby('YearDay').apply(
@@ -674,18 +661,16 @@ class Data:
         results.name = 'Record High Daily Average'
         return results
 
-    def record_high_monthly_avg(self, decimals=1, true_average=False):
-        """Record high monthly averages rounded to 'decimals'. If
-        'true_average' is True, all measurements from each 24-hour day will be
-        used to calculate the daily average. Otherwise, only the maximum and
-        minimum observations are used. Defaults to False (meteorological
-        standard).
+    def record_high_monthly_avg(self, true_average=False):
+        """Record high monthly averages. If 'true_average' is True, all
+        measurements from each 24-hour day will be used to calculate the daily
+        average. Otherwise, only the maximum and minimum observations are used.
+        Defaults to False (meteorological standard).
         """
         # Calculate the records
-        dailyAvgs = self.daily_avgs(decimals=decimals, 
-                                    true_average=true_average)
+        dailyAvgs = self.daily_avgs(true_average=true_average)
         monthlyAvgs = dailyAvgs.groupby(pd.Grouper(freq='M'))\
-                               .mean(numeric_only=True).round(decimals)
+                               .mean(numeric_only=True)
         monthlyAvgs.drop('YearDay', axis=1, inplace=True)
         recordHighMonthlyAvg = monthlyAvgs.groupby(monthlyAvgs.index.month)\
                                           .max(numeric_only=True)
@@ -705,16 +690,15 @@ class Data:
         results.name = 'Record High Monthly Average'
         return results
 
-    def record_low_daily_avg(self, decimals=1, true_average=False):
-        """Record low daily averages rounded to 'decimals'.  If 'true_average'
-        True, all measurements from each 24-hour day will be used to calculate
-        the average. Otherwise, only the maximum and minimum observations are
-        used. Defaults to False (meteorological standard)."""
+    def record_low_daily_avg(self, true_average=False):
+        """Record low daily averages.  If 'true_average' is True, all
+        measurements from each 24-hour day will be used to calculate the
+        average. Otherwise, only the maximum and minimum observations are used.
+        Defaults to False (meteorological standard)."""
         # Calculate the records
-        dailyAvgs = self.daily_avgs(decimals=decimals, 
-                                    true_average=true_average)
+        dailyAvgs = self.daily_avgs(true_average=true_average)
         recordLowDailyAvg = \
-            dailyAvgs.groupby('YearDay').min(numeric_only=True).round(decimals)
+            dailyAvgs.groupby('YearDay').min(numeric_only=True)
         recordLowDailyAvg.index = recordLowDailyAvg.index.astype(int)
         # Record years
         recordLowDailyAvgYear = dailyAvgs.groupby('YearDay').apply(
@@ -729,17 +713,16 @@ class Data:
         results.name = 'Record Low Daily Average'
         return results
 
-    def record_low_monthly_avg(self, decimals=1, true_average=False):
-        """Record low monthly averages rounded to 'decimals'. If 'true_average'
-        is True, all measurements from each 24-hour day will be used to
-        calculate the daily average. Otherwise, only the maximum and minimum
-        observations are used. Defaults to False (meteorological standard).
+    def record_low_monthly_avg(self, true_average=False):
+        """Record low monthly averages. If 'true_average' is True, all
+        measurements from each 24-hour day will be used to calculate the daily
+        average. Otherwise, only the maximum and minimum observations are used.
+        Defaults to False (meteorological standard).
         """
         # Calculate the records
-        dailyAvgs = self.daily_avgs(decimals=decimals, 
-                                    true_average=true_average)
+        dailyAvgs = self.daily_avgs(true_average=true_average)
         monthlyAvgs = dailyAvgs.groupby(pd.Grouper(freq='M'))\
-                               .mean(numeric_only=True).round(decimals)
+                               .mean(numeric_only=True)
         monthlyAvgs.drop('YearDay', axis=1, inplace=True)
         recordLowMonthlyAvg = \
             monthlyAvgs.groupby(monthlyAvgs.index.month).min(numeric_only=True)
@@ -759,36 +742,35 @@ class Data:
         results.name = 'Record Low Monthly Average'
         return results
 
-    def avg_daily_high(self, decimals=1):
-        """Average daily highs rounded to 'decimals'."""        
+    def avg_daily_high(self):
+        """Average daily highs."""        
         dailyHighs = self.daily_highs()
         results = dailyHighs.groupby('YearDay')\
-                            .mean(numeric_only=True).round(decimals)
+                            .mean(numeric_only=True)
         results = xr.DataArray(results, dims=['yearday', 'variable'])
         results.name = 'Average Daily High'
         return results
 
-    def avg_monthly_high(self, decimals=1, true_average=False):
-        """Average monthly highs rounded to 'decimals'. If 'true_average' is
-        True, all measurements from each 24-hour day will be used to calculate
-        the daily average. Otherwise, only the maximum and minimum observations
-        are used. Defaults to False (meteorological standard).
+    def avg_monthly_high(self, true_average=False):
+        """Average monthly highs. If 'true_average' is True, all measurements
+        from each 24-hour day will be used to calculate the daily average.
+        Otherwise, only the maximum and minimum observations are used. Defaults
+        to False (meteorological standard).
         """
-        monthlyHighs = self.monthly_highs(decimals=decimals, 
-                                          true_average=true_average)
+        monthlyHighs = self.monthly_highs(true_average=true_average)
         monthlyHighs.drop('YearDay', axis=1, inplace=True)
         avgMonthlyHighs = monthlyHighs.groupby(monthlyHighs.index.month)\
-                                      .mean(numeric_only=True).round(decimals)
+                                      .mean(numeric_only=True)
         results = xr.DataArray(avgMonthlyHighs, dims=['month', 'variable'])
         results.name = 'Average Monthly High'
         return results
 
-    def lowest_daily_high(self, decimals=1):
-        """Lowest daily highs rounded to 'decimals'."""
+    def lowest_daily_high(self):
+        """Lowest daily highs."""
         # Calculate the record
         dailyHighs = self.daily_highs()
         lowestHigh = dailyHighs.groupby('YearDay')\
-                               .min(numeric_only=True).round(decimals)
+                               .min(numeric_only=True)
         lowestHigh.index = lowestHigh.index.astype(int)
         # Record years
         lowestHighYear = dailyHighs.groupby('YearDay').apply(
@@ -803,18 +785,17 @@ class Data:
         results.name = 'Lowest Daily High'
         return results
 
-    def lowest_monthly_high(self, decimals=1, true_average=False):
-        """Lowest monthly highs rounded to 'decimals'. If 'true_average' is
-        True, all measurements from each 24-hour day will be used to calculate
-        the daily average. Otherwise, only the maximum and minimum observations
-        are used. Defaults to False (meteorological standard).
+    def lowest_monthly_high(self, true_average=False):
+        """Lowest monthly highs. If 'true_average' is True, all measurements
+        from each 24-hour day will be used to calculate the daily average.
+        Otherwise, only the maximum and minimum observations are used. Defaults
+        to False (meteorological standard).
         """
         # Calculate the record
-        monthlyHighs = self.monthly_highs(decimals=decimals,
-                                          true_average=true_average)
+        monthlyHighs = self.monthly_highs(true_average=true_average)
         monthlyHighs.drop('YearDay', axis=1, inplace=True)
         lowMonthlyHigh = monthlyHighs.groupby(monthlyHighs.index.month)\
-                                     .min(numeric_only=True).round(decimals)
+                                     .min(numeric_only=True)
         lowMonthlyHigh.index = lowMonthlyHigh.index.astype(int)
         # Record years
         lowMonthlyHighYear = \
@@ -829,12 +810,12 @@ class Data:
         results.name = 'Lowest Monthly High'
         return results
 
-    def record_daily_high(self, decimals=1):
-        """Record daily highs rounded to 'decimal'."""
+    def record_daily_high(self):
+        """Record daily highs."""
         # Calculate the record
         dailyHighs = self.daily_highs()
         recordHigh = dailyHighs.groupby('YearDay')\
-                               .max(numeric_only=True).round(decimals)
+                               .max(numeric_only=True)
         recordHigh.index = recordHigh.index.astype(int)
         # Record years
         recordHighYear = dailyHighs.groupby('YearDay').apply(
@@ -849,18 +830,17 @@ class Data:
         results.name = 'Record Daily High'
         return results
 
-    def record_monthly_high(self, decimals=1, true_average=False):
-        """Record monthly highs rounded to 'decimals'. If 'true_average' is
-        True, all measurements from each 24-hour day will be used to calculate
-        the daily average. Otherwise, only the maximum and minimum observations
-        are used. Defaults to False (meteorological standard).
+    def record_monthly_high(self, true_average=False):
+        """Record monthly highs. If 'true_average' is True, all measurements
+        from each 24-hour day will be used to calculate the daily average.
+        Otherwise, only the maximum and minimum observations are used. Defaults
+        to False (meteorological standard).
         """
         # Calculate the record
-        monthlyHighs = self.monthly_highs(decimals=decimals, 
-                                          true_average=true_average)
+        monthlyHighs = self.monthly_highs(true_average=true_average)
         monthlyHighs.drop('YearDay', axis=1, inplace=True)
         recordMonthlyHigh = monthlyHighs.groupby(monthlyHighs.index.month)\
-                                        .max(numeric_only=True).round(decimals)
+                                        .max(numeric_only=True)
         recordMonthlyHigh.index = recordMonthlyHigh.index.astype(int)
         # Record years
         recordMonthlyHighYear = \
@@ -875,36 +855,35 @@ class Data:
         results.name = 'Record Monthly High'
         return results
 
-    def avg_daily_low(self, decimals=1):
-        """Average daily lows rounded to 'decimals'."""        
+    def avg_daily_low(self):
+        """Average daily lows."""        
         dailyLows = self.daily_lows()
         results = dailyLows.groupby('YearDay')\
-                           .mean(numeric_only=True).round(decimals)
+                           .mean(numeric_only=True)
         results = xr.DataArray(results, dims=['yearday', 'variable'])
         results.name = 'Average Daily Low'
         return results
 
-    def avg_monthly_low(self, decimals=1, true_average=False):
-        """Average monthly lows rounded to 'decimals'. If 'true_average' is
-        True, all measurements from each 24-hour day will be used to calculate
-        the daily average. Otherwise, only the maximum and minimum observations
-        are used. Defaults to False (meteorological standard).
+    def avg_monthly_low(self, true_average=False):
+        """Average monthly lows. If 'true_average' is True, all measurements
+        from each 24-hour day will be used to calculate the daily average.
+        Otherwise, only the maximum and minimum observations are used. Defaults
+        to False (meteorological standard).
         """
-        monthlyLows = self.monthly_lows(decimals=decimals, 
-                                        true_average=true_average)
+        monthlyLows = self.monthly_lows(true_average=true_average)
         monthlyLows.drop('YearDay', axis=1, inplace=True)
         avgMonthlyLows = monthlyLows.groupby(monthlyLows.index.month)\
-                                    .mean(numeric_only=True).round(decimals)
+                                    .mean(numeric_only=True)
         results = xr.DataArray(avgMonthlyLows, dims=['month', 'variable'])
         results.name = 'Average Monthly Low'
         return results
 
-    def highest_daily_low(self, decimals=1):
-        """Highest daily lows rounded to 'decimals'."""
+    def highest_daily_low(self):
+        """Highest daily lows."""
         # Calculate the record
         dailyLows = self.daily_lows()
         highestLow = dailyLows.groupby('YearDay')\
-                              .max(numeric_only=True).round(decimals)
+                              .max(numeric_only=True)
         highestLow.index = highestLow.index.astype(int)
         # Record years
         highestLowYear = dailyLows.groupby('YearDay').apply(
@@ -918,18 +897,17 @@ class Data:
         results.name = 'Highest Daily Low'
         return results
 
-    def highest_monthly_low(self, decimals=1, true_average=False):
-        """Highest monthly lows rounded to 'decimals'. If 'true_average' is
-        True, all measurements from each 24-hour day will be used to calculate
-        the daily average. Otherwise, only the maximum and minimum observations
-        are used. Defaults to False (meteorological standard).
+    def highest_monthly_low(self, true_average=False):
+        """Highest monthly lows. If 'true_average' is True, all measurements
+        from each 24-hour day will be used to calculate the daily average.
+        Otherwise, only the maximum and minimum observations are used. Defaults
+        to False (meteorological standard).
         """
         # Calculate the record
-        monthlyLows = self.monthly_lows(decimals=decimals, 
-                                        true_average=true_average)
+        monthlyLows = self.monthly_lows(true_average=true_average)
         monthlyLows.drop('YearDay', axis=1, inplace=True)
         highestMonthlyLow = monthlyLows.groupby(monthlyLows.index.month)\
-                                       .max(numeric_only=True).round(decimals)
+                                       .max(numeric_only=True)
         highestMonthlyLow.index = highestMonthlyLow.index.astype(int)
         # Record years
         highestMonthlyLowYear = \
@@ -944,12 +922,12 @@ class Data:
         results.name = 'Highest Monthly Low'
         return results
 
-    def record_daily_low(self, decimals=1):
-        """Record daily lows rounded to 'decimals'."""
+    def record_daily_low(self):
+        """Record daily lows."""
         # Calculate the record
         dailyLows = self.daily_lows()
         recordLow = dailyLows.groupby('YearDay')\
-                             .min(numeric_only=True).round(decimals)
+                             .min(numeric_only=True)
         recordLow.index = recordLow.index.astype(int)
         # Record years
         recordLowYear = dailyLows.groupby('YearDay').apply(
@@ -963,18 +941,17 @@ class Data:
         results.name = 'Record Daily Low'
         return results
 
-    def record_monthly_low(self, decimals=1, true_average=False):
-        """Record monthly lows rounded to 'decimals'. If 'true_average' is
-        True, all measurements from each 24-hour day will be used to calculate
-        the daily average. Otherwise, only the maximum and minimum observations
-        are used. Defaults to False (meteorological standard).
+    def record_monthly_low(self, true_average=False):
+        """Record monthly lows. If 'true_average' is True, all measurements
+        from each 24-hour day will be used to calculate the daily average.
+        Otherwise, only the maximum and minimum observations are used. Defaults
+        to False (meteorological standard).
         """
         # Calculate the record
-        monthlyLows = self.monthly_lows(decimals=decimals, 
-                                        true_average=true_average)
+        monthlyLows = self.monthly_lows(true_average=true_average)
         monthlyLows.drop('YearDay', axis=1, inplace=True)
         recordMonthlyLow = monthlyLows.groupby(monthlyLows.index.month)\
-                                      .min(numeric_only=True).round(decimals)
+                                      .min(numeric_only=True)
         recordMonthlyLow.index = recordMonthlyLow.index.astype(int)
         # Record years
         recordMonthlyLowYear = \
@@ -1200,18 +1177,17 @@ class Data:
         try:
             return self.daily_records.sel(variable=var)
         except AttributeError:
-            raise AttributeError('Instance of Data has no daily stats yet. '\
-                                 'Run Data.stats() to calculate stats and '\
-                                 'try again.')
+            raise AttributeError(
+                """Instance of Data has no daily stats yet. Run Data.stats() to
+                calculate stats and try again.""")
     
     def get_monthly_stats(self, var=None):
         """Return the monthly statistics dictionary"""
         try:
             return self.monthly_records.sel(variable=var)
         except AttributeError:
-            raise AttributeError('Instance of Data has no monthly stats yet. '\
-                                 'Run Data.stats() to calculate stats and '\
-                                 'try again.')
+            raise AttributeError(
+                """Instance of Data has no monthly stats yet. Run Data.stats() to calculate stats and try again.""")
 
     def get_daily_stats_table(self, var=None):
         """Return the daily statistics table"""
@@ -1219,9 +1195,8 @@ class Data:
             return self.daily_records.sel(variable=var)\
                                      .to_dataframe().drop('variable', axis=1)
         except AttributeError:
-            raise AttributeError('Instance of Data has no daily stats table '\
-                                 'yet. Run Data.daily_stats() to calculate '\
-                                 'stats and try again.')
+            raise AttributeError(
+                """Instance of Data has no daily stats table yet. Run Data.daily_stats() to calculate stats and try again.""")
             
     def get_monthly_stats_table(self, var=None):
         """Return the monthly statistics table"""
@@ -1229,9 +1204,8 @@ class Data:
             return self.monthly_records.sel(variable=var)\
                                        .to_dataframe().drop('variable', axis=1)
         except AttributeError:
-            raise AttributeError('Instance of Data has no monthly stats '\
-                                 'table yet. Run Data.monthly_stats() to '\
-                                 'calculate stats and try again.')
+            raise AttributeError(
+                """Instance of Data has no monthly stats table yet. Run Data.monthly_stats() to calculate stats and try again.""")
 
     def _skip_keys(self, d, keys):
         return {x: d[x] for x in d if x not in keys}
@@ -1249,14 +1223,13 @@ class Data:
         return self.variables
     
     def __str__(self):
-        return("Oceanic and atmospheric observations for station "\
-               f"'{self.name}' (station ID {self.id}):\n"\
-               f"{self.station.data_inventory}")
+        return(
+            f"""Oceanic and atmospheric observations for station '{self.name}'   
+            (station ID {self.id}): {self.station.data_inventory}"""
+            )
     
     def __repr__(self):
-        return(f"{type(self).__name__}("\
-               f"stationname='{self.name}', stationid='{self.id}', "\
-               f"outdir='{self.outdir}', timezone='{self.tz}', "\
-               f"units='{self.units}', datum='{self.datum}', "\
-               f"hr_threshold='{self.hr_threshold}', "\
-               f"day_threshold='{self.day_threshold}')")
+        return(
+            f"""{type(self).__name__}(stationname='{self.name}', stationid='{self.id}',
+            timezone='{self.tz}', units='{self.units}', datum='{self.datum}', hr_threshold='{self.hr_threshold}', day_threshold='{self.day_threshold}')"""
+            )
