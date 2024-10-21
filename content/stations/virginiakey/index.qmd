@@ -141,8 +141,12 @@ def colortable(stats, var):
     """Display a great_tables table if the variable 'var' exists in 'stats'. Otherwise, display a message that the data do not exist."""
     freq = 'Monthly' if 'Month' in stats.sizes.keys() else 'Daily'
     try:
-        stats = stats.sel(variable=var.title()).to_dataframe()\
-                     .drop('variable', axis=1).reset_index()
+        if var == 'Water Level':
+            stats = stats.sel(variable=var.title()).to_dataframe()\
+                        .drop('variable', axis=1).round(2).reset_index()
+        else:
+            stats = stats.sel(variable=var.title()).to_dataframe()\
+                        .drop('variable', axis=1).round(1).reset_index()
         # Add columns
         gtbl = GT(stats)
         for column in stats.columns:
@@ -164,8 +168,12 @@ def plotlytable(stats, var):
     # https://www.tutorialrepublic.com/css-reference/css-color-names.php
     freq = 'Monthly' if 'Month' in stats.sizes.keys() else 'Daily'
     try:
-        stats = stats.sel(variable=var.title()).to_dataframe()\
-                     .drop('variable', axis=1).reset_index()
+        if var == 'Water Level':
+            stats = stats.sel(variable=var.title()).to_dataframe()\
+                        .drop('variable', axis=1).round(2).reset_index()
+        else:
+            stats = stats.sel(variable=var.title()).to_dataframe()\
+                        .drop('variable', axis=1).round(1).reset_index()
         fig = go.Figure(data=[go.Table(
             header=dict(#values=list(stats.reset_index().columns),
                         values=[f'<b>{i}</b>' for i in stats.reset_index().columns],
@@ -232,9 +240,9 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
     # Dates for x axis
     df = data.sel(variable=var).to_dataframe().drop('variable', axis=1)
     df['xdates'] = pd.date_range(start='2020-01-01', end='2020-12-31', freq='1D')
-    df['Average High Curve'] = cos_fit(df['Average High']).round(1)
-    df['Daily Average Curve'] = cos_fit(df['Daily Average']).round(1)
-    df['Average Low Curve'] = cos_fit(df['Average Low']).round(1)
+    df['Average High Curve'] = cos_fit(df['Average High'])
+    df['Daily Average Curve'] = cos_fit(df['Daily Average'])
+    df['Average Low Curve'] = cos_fit(df['Average Low'])
     
     # Record this year
     thisYear = pd.to_datetime('today').year
@@ -289,7 +297,7 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
     # Flood thresholds (water level plot only)
     if var=='Water Level':
         for level, threshold in flood_thresholds.items():
-            hline = Span(location=threshold, dimension='width',
+            hline = bm.Span(location=threshold, dimension='width',
                          line_dash=[20,8], line_alpha=0.75,
                          line_color='cadetblue', line_width=2)
             p.renderers.extend([hline])
@@ -298,22 +306,36 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
                               text_font_size='8px',
                               text_font='arial narrow')
             p.add_layout(mytext)
+            p.y_range.start = -4
+            p.y_range.end = 4
     
     # Tools
     crosshair = bm.CrosshairTool(dimensions='height',
                               line_color='grey', line_alpha=0.5)
     hover = bm.HoverTool(mode='vline', renderers=[da],
                       formatters={'@xdates': 'datetime'})
-    hover.tooltips = """
-        <b> @xdates{{%b %d}} </b> <br>
-        Record High: @{{Record High}}{{0.0}} <br>
-        Average High: @{{Average High Curve}}{{0.0}} <br>
-        Daily Average: @{{Daily Average Curve}}{{0.0}} <br>
-        Average Low: @{{Average Low Curve}}{{0.0}} <br>
-        Record Low: @{{Record Low}}{{0.0}} <br>
-        {} High Record: @{{High Records}}{{0.0}} <br>
-        {} Low Record: @{{Low Records}}{{0.0}}
-        """.format(thisYear, thisYear)
+    if var=='Water Level':
+        hover.tooltips = """
+            <b> @xdates{{%b %d}} </b> <br>
+            Record High: @{{Record High}}{{0.00}} <br>
+            Average High: @{{Average High Curve}}{{0.00}} <br>
+            Daily Average: @{{Daily Average Curve}}{{0.00}} <br>
+            Average Low: @{{Average Low Curve}}{{0.00}} <br>
+            Record Low: @{{Record Low}}{{0.00}} <br>
+            {} High Record: @{{High Records}}{{0.00}} <br>
+            {} Low Record: @{{Low Records}}{{0.00}}
+            """.format(thisYear, thisYear)
+    else:
+        hover.tooltips = """
+            <b> @xdates{{%b %d}} </b> <br>
+            Record High: @{{Record High}}{{0.0}} <br>
+            Average High: @{{Average High Curve}}{{0.0}} <br>
+            Daily Average: @{{Daily Average Curve}}{{0.0}} <br>
+            Average Low: @{{Average Low Curve}}{{0.0}} <br>
+            Record Low: @{{Record Low}}{{0.0}} <br>
+            {} High Record: @{{High Records}}{{0.0}} <br>
+            {} Low Record: @{{Low Records}}{{0.0}}
+            """.format(thisYear, thisYear)
     p.add_tools(hover, crosshair)
     p.toolbar.autohide = True
 
@@ -376,9 +398,9 @@ def monthly_climo(data, var, scheme='mg'):
 
     # Dates for x axis
     df = data.sel(variable=var).to_dataframe().drop('variable', axis=1).reset_index()
-    df['Average High Curve'] = cos_fit(df['Average High']).round(1)
-    df['Monthly Average Curve'] = cos_fit(df['Monthly Average']).round(1)
-    df['Average Low Curve'] = cos_fit(df['Average Low']).round(1)
+    df['Average High Curve'] = cos_fit(df['Average High'])
+    df['Monthly Average Curve'] = cos_fit(df['Monthly Average'])
+    df['Average Low Curve'] = cos_fit(df['Average Low'])
     
     # Record this year
     thisYear = pd.to_datetime('today').year
@@ -398,7 +420,7 @@ def monthly_climo(data, var, scheme='mg'):
                width=1000, height=600,
                x_range=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-               y_range=(round_down(df['Record Low'].min(), 10), round_up(df['Record High'].max(), 10)),
+               y_range=(round_down(df['Record Low'].min(), 1), round_up(df['Record High'].max(), 1)),
                tools='pan, wheel_zoom, box_zoom, undo, reset, fullscreen',
                outline_line_color=None, sizing_mode='scale_height')
 
