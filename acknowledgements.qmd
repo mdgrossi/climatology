@@ -1,0 +1,8 @@
+---
+title: Giving credit where credit is due
+order: 1
+---
+
+This project is inspired by [Brian McNoldy](https://bmcnoldy.earth.miami.edu) at the [University of Miami](https://welcome.miami.edu), whose long-standing ["Climatology of Virginia Key, FL" site](https://mcnoldy.earth.miami.edu/vk/) never ceased to provide insightful weather perpectives during my time at the [Rosenstiel School of Marine, Atmospheric, and Earth Science](https://earth.miami.edu).
+
+Climatology dashboards are provided here for a number of locations along the east coast to which I have some degree of connection. Some are updated more regularly than others.
