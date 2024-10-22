@@ -1,0 +1,10 @@
+---
+title: Demonstrations
+order: 2
+---
+
+The following notebooks demonstrate the code behind the dashboards. There are three steps:
+
+1. [Download the data](../demos/NOAA-CO-OPS-data.ipynb)
+2. [Calculate the statistics and determine the records](../demos/NOAA-CO-OPS-records.ipynb)
+3. [Plot and display the results](../demos/NOAA-CO-OPS-plots.ipynb)
