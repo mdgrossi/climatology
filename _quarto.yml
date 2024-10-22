@@ -10,11 +10,16 @@ theme:
 website:
   title: "Climatology"
   favicon: images/logo.png
+  site-url: "https://mdgrossi.github.io/climatology"
+  repo-url: "https://github.com/mdgrossi/climatology"
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - content/about.qmd
+      - text: Home
+        href: index.qmd
+      - text: Data
+        href: data.qmd
+      - text: Methods
+        href: methods.qmd
     right:
       - text: "More"
         menu:
@@ -34,12 +39,26 @@ website:
             url: https://www.github.com/mdgrossi/climatology
           - text: Report a Bug
             url: https://github.com/mdgrossi/climatology/issues
-  # sidebar:
-  #   style: "docked"
-  #   subtitle: Available Sites
-  #   contents: auto
+  sidebar:
+    style: "docked"
+    subtitle: Available Sites
+    contents:
+      - text: "About the Data"
+        href: data.qmd
+      - text: "Methodology"
+        href: methods.qmd
+      - section: Demonstration
+        href: demos/index.qmd
+        contents:
+          - demos/NOAA-CO-OPS-data.ipynb
+          - demos/NOAA-CO-OPS-records.ipynb
+          - demos/NOAA-CO-OPS-plots.ipynb
+      - text: "Shout Out"
+        href: acknowledgements.qmd
   page-navigation: true
   back-to-top-navigation: true
+  repo-actions: [source, issue]
+  repo-branch: main
   page-footer:
     left: "Copyright 2024, M.D. Grossi"
     right:
