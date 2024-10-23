@@ -8,11 +8,13 @@ project:
     - "methods.qmd"
     - "acknowledgements.qmd"
     - "demos/*"
-    - "content/*"
+    - "content/stations/virginiakey/*.qmd"
+    - "!content/stations/beaufort/*.qmd"
     - "!NOAA-CO-OPS-Climatology.ipynb"
 
 theme:
-  light: flatly
+  # dark: sandstone
+  # light: sandstone
   dark: darkly
 
 website:
