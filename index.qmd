@@ -1,5 +1,5 @@
 ---
-title: "Local Climatologies"
+title: "Local Climatology and Records"
 
 about:
   id: hero-heading
