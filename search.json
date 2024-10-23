@@ -1,19 +1,5 @@
 [
   {
-    "objectID": "content/stations/beaufort/index.html",
-    "href": "content/stations/beaufort/index.html",
-    "title": "Beaufort, NC",
-    "section": "",
-    "text": "Back to top"
-  },
-  {
-    "objectID": "content/404.html",
-    "href": "content/404.html",
-    "title": "Page Not Found",
-    "section": "",
-    "text": "Well, that’s unfortunate. The page you requested cannot be found. Perhaps it was moved or renamed.\nYou may try searching to find the page’s new location. Or open an issue to let us know what happened.\n\n\n\n Back to top"
-  },
-  {
     "objectID": "acknowledgements.html",
     "href": "acknowledgements.html",
     "title": "Giving credit where credit is due",
@@ -83,14 +69,14 @@
     "href": "index.html#active-sites-updated-daily",
     "title": "Local Climatologies",
     "section": "Active Sites (updated daily)",
-    "text": "Active Sites (updated daily)\n\n\n\n\n\n\n\n\nBeaufort, NC\n\n\n\n\n\n\n\n\n\n\n\n\n\nVirginia Key, FL\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Active Sites (updated daily)\n\n\n\n\n\n\n\n\n\n\nVirginia Key, FL\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html#archived-sites-updated-less-frequently",
     "href": "index.html#archived-sites-updated-less-frequently",
     "title": "Local Climatologies",
     "section": "Archived Sites (updated less frequently)",
-    "text": "Archived Sites (updated less frequently)\n\n\n\n\n\n\n\n\nLewes, DE\n\n\n\n\n\n\n\n\n\n\n\nPass Christian, MS\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Archived Sites (updated less frequently)\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "methods.html",
@@ -135,19 +121,5 @@
       "Home",
       "Behind the Scenes"
     ]
-  },
-  {
-    "objectID": "content/archived/lewes/index.html",
-    "href": "content/archived/lewes/index.html",
-    "title": "Lewes, DE",
-    "section": "",
-    "text": "Back to top"
-  },
-  {
-    "objectID": "content/archived/passchristian/index.html",
-    "href": "content/archived/passchristian/index.html",
-    "title": "Pass Christian, MS",
-    "section": "",
-    "text": "Back to top"
   }
 ]
