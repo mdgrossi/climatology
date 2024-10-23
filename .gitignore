@@ -3,3 +3,4 @@
 .RHistory
 
 /.quarto/
+__pycache__/
