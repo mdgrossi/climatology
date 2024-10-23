@@ -16,22 +16,20 @@ website:
     left:
       - text: Home
         href: index.qmd
-      - text: Data
+      - text: Learn more
         href: data.qmd
-      - text: Methods
-        href: methods.qmd
-    right:
-      - text: "More"
-        menu:
-          - href: https://www.github.com/mdgrossi
-            text: GitHub
-            icon: github
-          - href: https://www.linkedin.com/in/matthewgrossi
-            text: LinkedIn
-            icon: linkedin
-          - href: https://www.youtube.com/@seaswellsnippets
-            text: YouTube
-            icon: youtube
+    # right:
+    #   - text: "More"
+    #     menu:
+    #       - href: https://www.github.com/mdgrossi
+    #         text: GitHub
+    #         icon: github
+    #       - href: https://www.linkedin.com/in/matthewgrossi
+    #         text: LinkedIn
+    #         icon: linkedin
+    #       - href: https://www.youtube.com/@seaswellsnippets
+    #         text: YouTube
+    #         icon: youtube
     tools:
       - icon: github
         menu:
@@ -47,7 +45,7 @@ website:
         href: data.qmd
       - text: "Methodology"
         href: methods.qmd
-      - section: Demonstration
+      - section: Behind the Scenes
         href: demos/index.qmd
         contents:
           - demos/NOAA-CO-OPS-data.ipynb
@@ -68,11 +66,11 @@ website:
         icon: linkedin
       - href: https://www.youtube.com/@seaswellsnippets
         icon: youtube
-    background: light
+    # background: light
 
 format:
   html:
-    theme: cosmo
+    # theme: cosmo
     # theme: default
     css: styles.css
     toc: false
