@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://mdgrossi.github.io/climatology/index.html</loc>
-    <lastmod>2024-10-23T02:51:56.569Z</lastmod>
+    <lastmod>2024-10-23T14:58:08.286Z</lastmod>
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/NOAA-CO-OPS-Climatology.html</loc>
@@ -10,7 +10,7 @@
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/content/stations/virginiakey/index.html</loc>
-    <lastmod>2024-10-21T02:27:43.025Z</lastmod>
+    <lastmod>2024-10-23T12:35:24.004Z</lastmod>
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/content/data.html</loc>
@@ -54,7 +54,7 @@
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/data.html</loc>
-    <lastmod>2024-10-23T02:12:53.234Z</lastmod>
+    <lastmod>2024-10-23T12:55:22.600Z</lastmod>
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/demos/NOAA-CO-OPS-plots.html</loc>
@@ -62,7 +62,7 @@
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/demos/NOAA-CO-OPS-data.html</loc>
-    <lastmod>2024-10-21T20:42:06.009Z</lastmod>
+    <lastmod>2024-10-23T12:27:37.427Z</lastmod>
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/howto.html</loc>
@@ -95,5 +95,9 @@
   <url>
     <loc>https://mdgrossi.github.io/climatology/acknowledgements.html</loc>
     <lastmod>2024-10-22T22:36:55.562Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mdgrossi.github.io/climatology/content/stations/beaufort/index.html</loc>
+    <lastmod>2024-10-23T14:35:23.026Z</lastmod>
   </url>
 </urlset>
