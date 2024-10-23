@@ -3,10 +3,13 @@ project:
   preview:
     port: 4000
   render:
-    - index.qmd
-    - data.qmd
-    - methods.qmd
-    - acknowledgements.qmd
+    - "index.qmd"
+    - "data.qmd"
+    - "methods.qmd"
+    - "acknowledgements.qmd"
+    - "demos/*"
+    - "content/*"
+    - "!NOAA-CO-OPS-Climatology.ipynb"
 
 theme:
   light: flatly
