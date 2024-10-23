@@ -6,15 +6,13 @@ toc: true
 
 All data from the beginning of each time series to the present are retrieved from the NOAA CO-OPS [Tides and Currents](https://tidesandcurrents.noaa.gov/faq.html) data portal and saved to file to avoid having to repeatedly re-download the historical data. Subsequent data updates retrieve from the most recently saved timestamp onward and append these new data to the saved historical record.
 
-Six-minute data are used whenever possible and hourly data otherwise.
-
-Any observations flagged by NOAA as being suspect for any reason (flag > 0) are discarded. Examples of flagged data are a minimum or maximum value or a rate of change exceeding an acceptable tolerance. A day is allowed to have up to three hours of missing data to be counted in the daily climatologies, and a month is allowed up to two days of missing data to be counted in the monthly climatologies.
+Six-minute data are used whenever possible and hourly data otherwise. Any observations flagged by NOAA as being suspect for any reason (flag > 0) are discarded. Examples of flagged data are a minimum or maximum value or a rate of change exceeding an acceptable tolerance. A day is allowed to have up to three hours of missing data to be counted in the daily climatology, and a month is allowed up to two days of missing data to be counted in the monthly climatology. Data gaps are acceptable (averages omit NAs) as long as they do not collectively exceed these thresholds.
 
 All of the statistics and records herein start with one of three quantities: daily highs, daily lows, or daily averages. Each of these is first calculated for each environmental variable (*i.e.*, air temperature, water temperature, water level) and for every day in the data time series as follows. 
 
 ### Daily High
 
-This is the **maximum temperature recorded on any given day**. Let $X$ be a 24-hr time series of some environmental variable (*e.g.*, air temperature) sampled $n$ times during the day:
+This is the **maximum temperature recorded on any given day**. Let $X$ be a 24-hr time series of some environmental variable sampled $n$ times during the day:
 
 $$X = \{x_1, x_2,...,x_n\}$$
 
@@ -34,7 +32,7 @@ The daily average is the **average of all recorded observations of a given varia
 
 #### Method 1: True average
 
-This is the conventional method of calculating an average where one sums up all observations during the 24-hour period and divides by the number of observations, $n$:
+This is the conventional method of calculating an average: the sum of all observations during the 24-hour period divided by the number of observations, $n$:
 
 $$\text{true daily average} = \frac{1}{n} \sum_{i=1}^n x_i$$ {#eq-tda}
 
@@ -48,9 +46,9 @@ This project uses the true average (@eq-tda) for all calculations.
 
 Daily statistics are calculated next, followed by monthly statistics.
 
-## Daily Climatologies
+## Daily Climatology and Records
 
-Daily climatologies are calculated for each day-of-year (DOY), where
+Daily climatology and records are calculated for each day-of-year (DOY), where
 
 > Jan 1 $\longrightarrow$ Day 1  
 Jan 2 $\longrightarrow$ Day 2  
@@ -61,19 +59,19 @@ Feb 29 $\longrightarrow$ Day 60
 Dec 30 $\longrightarrow$ Day 365  
 Dec 31 $\longrightarrow$ Day 366
 
-Instead of eliminating February 29 on leap years, Day 60 simply skipped in years that are *not* leap years. Thus, December 31 is always Day 366. Days start at midnight (00:00) and go until 23:59 (11:59 PM) local time.
+Instead of eliminating February 29 on leap years, Day 60 is skipped in years that are *not* leap years. Thus, December 31 is always Day 366. Days start at midnight (00:00) and go until 23:59 (11:59 PM) local time.
 
 ### DOY Daily Average
 
-The DOY daily average is the **average of all daily averages for any given DOY**. It is calculated by taking the daily averages calculated using @eq-tda, grouping them by DOY, and calculating the average for each DOY.
+The DOY daily average is the **average of all daily averages for any given DOY**. It is calculated by taking the daily averages from @eq-tda, grouping them by DOY, and calculating the average for each DOY.
 
 Let $\textbf{A}$ be a matrix of daily averages from @eq-tda arranged with years in rows and DOY in columns, and for simplicity, let subscript $y$ indicate year and $d$ indicate DOY:
 
 $$\textbf{A} = (a_{yd}) = \left( \begin{array}{cccc}
-a_{1,1} & a_{1,2} & ... & a_{1,d} \\
-a_{2,1} & a_{2,2} & ... & a_{2,d} \\
+a_{1,1} & a_{1,2} & ... & a_{1,366} \\
+a_{2,1} & a_{2,2} & ... & a_{2,366} \\
 \vdotswithin{=} & \vdotswithin{=} &  & \vdotswithin{=} \\
-a_{y,1} & a_{y,2} & ... & a_{y,d} \end{array} \right)$$ {#eq-avgs-d}
+a_{y,1} & a_{y,2} & ... & a_{y,366} \end{array} \right)$$ {#eq-avgs-d}
 
 The DOY daily average is the average over each column:
 
@@ -81,31 +79,33 @@ $$\text{DOY daily average} = \frac{1}{Y}\sum_{y=1}^Y a_{yd}$$ {#eq-ddy-d}
 
 where $Y$ is the number of years in the observational time series.
 
-Note: The Daily Average reported in the statistics dashboard are DOY daily averages from @eq-ddy-d.
+::: {.callout-note}
+Note: The Daily Average reported in the statistics dashboard are DOY daily averages from @eq-ddy-d, not to be confused with @eq-tda or [-@eq-mda].
+:::
 
 ### Record High Daily Average
 
-The record high daily average is the **maximum daily average for any given DOY**. It is determined by taking the daily averages calculated using @eq-tda, grouping them by DOY, and finding the maximum value for each DOY. Given $\textbf{A}$ from @eq-avgs-d above:
+The record high daily average is the **maximum daily average for any given DOY**. It is determined by taking the daily averages from @eq-tda, grouping them by DOY, and finding the maximum value for each DOY. Given $\textbf{A}$ from @eq-avgs-d above:
 
-$$\text{record high daily average} = {\max}_d |a_{yd}| = \max\{|a_{yd}|: d=1,2,...,366\}$$ {#eq-rhda-d}
+$$\text{record high daily average} = \max\{|a_{yd}|: d=1,2,...,366\}$$ {#eq-rhda-d}
 
 ### Record Low Daily Average
 
-The record low daily average is the **minimum daily average for any given DOY**. It is determined by taking the daily averages calculated using @eq-tda, grouping them by DOY, and finding the minimum value for each DOY. Given $\textbf{A}$ from @eq-avgs-d above:
+The record low daily average is the **minimum daily average for any given DOY**. It is determined by taking the daily averages from @eq-tda, grouping them by DOY, and finding the minimum value for each DOY. Given $\textbf{A}$ from @eq-avgs-d above:
 
-$$\text{record low daily average} = {\min}_d |a_{yd}| = \min\{|a_{yd}|: d=1,2,...,366\}$$ {#eq-rlda-d}
+$$\text{record low daily average} = \min\{|a_{yd}|: d=1,2,...,366\}$$ {#eq-rlda-d}
 
 ### Average High
 
-The average high is the **average of all daily highs for any given DOY**. It is determined by taking the daily highs calculated using @eq-dh, grouping them by DOY, and calculating the average for each DOY.
+The average high is the **average of all daily highs for any given DOY**. It is determined by taking the daily highs from @eq-dh, grouping them by DOY, and calculating the average for each DOY.
 
 Let $\textbf{H}$ be a matrix of daily highs from @eq-dh arranged with years in rows and DOY in columns, and for simplicity, let subscript $y$ indicate year and $d$ indicate DOY:
 
 $$\textbf{H} = (h_{yd}) = \left( \begin{array}{cccc}
-h_{1,1} & h_{1,2} & ... & h_{1,d} \\
-h_{2,1} & h_{2,2} & ... & h_{2,d} \\
+h_{1,1} & h_{1,2} & ... & h_{1,366} \\
+h_{2,1} & h_{2,2} & ... & h_{2,366} \\
 \vdotswithin{=} & \vdotswithin{=} &  & \vdotswithin{=} \\
-h_{y,1} & h_{y,2} & ... & h_{y,d} \end{array} \right)$$ {#eq-highs-d}
+h_{y,1} & h_{y,2} & ... & h_{y,366} \end{array} \right)$$ {#eq-highs-d}
 
 The average high is the average over each column:
 
@@ -115,27 +115,27 @@ where $Y$ is the number of years in the observational time series.
 
 ### Record High
 
-The record high is the **maximum daily high for any given DOY**. It is determined by taking the daily highs calculated using @eq-dh, grouping them by DOY, and finding the maximum value for each DOY. Given $\textbf{H}$ from @eq-highs-d above:
+The record high is the **maximum daily high for any given DOY**. It is determined by taking the daily highs from @eq-dh, grouping them by DOY, and finding the maximum value for each DOY. Given $\textbf{H}$ from @eq-highs-d above:
 
-$$\text{record high} = {\max}_d |h_{yd}| = \max\{|h_{yd}|: d=1,2,...,366\}$$ {#eq-rh-d}
+$$\text{record high} = \max\{|h_{yd}|: d=1,2,...,366\}$$ {#eq-rh-d}
 
 ### Lowest High
 
-The lowest high is the **minimum daily high for any given DOY**. It is determined by taking the daily highs calculated using @eq-dh, grouping them by DOY, and finding the minimum value for each DOY. Given $\textbf{H}$ from @eq-highs-d above:
+The lowest high is the **minimum daily high for any given DOY**. It is determined by taking the daily highs from @eq-dh, grouping them by DOY, and finding the minimum value for each DOY. Given $\textbf{H}$ from @eq-highs-d above:
 
-$$\text{lowest high} = {\min}_d |h_{yd}| = \min\{|h_{yd}|: d=1,2,...,366\}$$ {#eq-lh-d}
+$$\text{lowest high} = \min\{|h_{yd}|: d=1,2,...,366\}$$ {#eq-lh-d}
 
 ### Average Low
 
-The average low is the **average of all daily lows for any given DOY**. It is determined by taking the daily lows calculated using @eq-dl, grouping them by DOY, and calculating the average for each DOY.
+The average low is the **average of all daily lows for any given DOY**. It is determined by taking the daily lows from @eq-dl, grouping them by DOY, and calculating the average for each DOY.
 
 Let $\textbf{L}$ be a matrix of daily lows from @eq-dl arranged with years in rows and DOY in columns, and for simplicity, let subscript $y$ indicate year and $d$ indicate DOY:
 
 $$\textbf{L} = (l_{yd}) = \left( \begin{array}{cccc}
-l_{1,1} & l_{1,2} & ... & l_{1,d} \\
-l_{2,1} & l_{2,2} & ... & l_{2,d} \\
+l_{1,1} & l_{1,2} & ... & l_{1,366} \\
+l_{2,1} & l_{2,2} & ... & l_{2,366} \\
 \vdotswithin{=} & \vdotswithin{=} &  & \vdotswithin{=} \\
-l_{y,1} & l_{y,2} & ... & l_{y,d} \end{array} \right)$$ {#eq-lows-d}
+l_{y,1} & l_{y,2} & ... & l_{y,366} \end{array} \right)$$ {#eq-lows-d}
 
 The average low is the average over each column:
 
@@ -145,28 +145,28 @@ where $Y$ is the number of years in the observational time series.
 
 ### Highest Low
 
-The highest low is the **maximum daily low for any given DOY**. It is determined by taking the daily lows calculated using @eq-dl, grouping them by DOY, and finding the maximum value for each DOY. Given $\textbf{L}$ from @eq-lows-d above:
+The highest low is the **maximum daily low for any given DOY**. It is determined by taking the daily lows from @eq-dl, grouping them by DOY, and finding the maximum value for each DOY. Given $\textbf{L}$ from @eq-lows-d above:
 
-$$\text{highest low} = {\max}_d |l_{yd}| = \max\{|l_{yd}|: d=1,2,...,366\}$$ {#eq-hl-d}
+$$\text{highest low} = \max\{|l_{yd}|: d=1,2,...,366\}$$ {#eq-hl-d}
 
 ### Record Low
 
-The record low is the **minimum daily low for any given DOY**. It is determined by taking the daily lows calculated using @eq-dl, grouping them by DOY, and finding the minimum value for each DOY. Given $\textbf{L}$ from @eq-lows-d above:
+The record low is the **minimum daily low for any given DOY**. It is determined by taking the daily lows from @eq-dl, grouping them by DOY, and finding the minimum value for each DOY. Given $\textbf{L}$ from @eq-lows-d above:
 
-$$\text{record low} = {\min}_d |l_{yd}| = \min\{|l_{yd}|: d=1,2,...,366\}$$ {#eq-rl-d}
+$$\text{record low} = \min\{|l_{yd}|: d=1,2,...,366\}$$ {#eq-rl-d}
 
 ### Number of Years in Record
 
-The number of years of data available varies from day to day and between variables due to sensor availability, gaps in the observational record, or bad data being filtered out. Years are tallied by grouping the entire time series by DOY and counting the number of years for each day. For example, given $\textbf{A}$ from @eq-avgs-d above, the number of years is the total number of unique years in each column.
+The number of years of data available varies from day to day and between variables due to sensor availability, gaps in the observational record, or bad data being filtered out. Years are tallied by grouping the entire time series by DOY and counting the number of years for each day. For example, given $\textbf{A}$ from @eq-avgs-d above, the number of years available for each DOY is the total number of unique years in each column.
 
 
-## Monthly Climatologies
+## Monthly Climatology and Records
 
-Monthly climatologies are calculated in the same way as daily climatologies except daily highs, lows, and averages are grouped by calendar month instead of DOY.
+Monthly climatology and records are calculated in the same way as daily climatology and records except that daily highs, lows, and averages are grouped by calendar month instead of DOY.
 
 ### Monthly Average
 
-The monthly average is the **average of all daily averages for any given month**. It is calculated by taking the daily averages calculated using @eq-tda, grouping them by calendar month, and calculating the average for each month.
+The monthly average is the **average of all daily averages for any given month**. It is calculated by taking the daily averages from @eq-tda, grouping them by calendar month, and calculating the average for each month.
 
 Let $\textbf{A}$ now be a matrix of daily averages from @eq-tda arranged with years in rows and months in columns, and for simplicity, let subscript $y$ indicate year and $m$ indicate month:
 
@@ -184,19 +184,19 @@ where $Y$ is the number of years in the observational time series.
 
 ### Record High Monthly Average
 
-The record high monthly average is the **maximum daily average for any given calendar month**. It is determined by taking the daily averages calculated using @eq-tda, grouping them by calendar month, and finding the maximum value for each month. Given $\textbf{A}$ from @eq-avgs-m above:
+The record high monthly average is the **maximum daily average for any given calendar month**. It is determined by taking the daily averages from @eq-tda, grouping them by calendar month, and finding the maximum value for each month. Given $\textbf{A}$ from @eq-avgs-m above:
 
-$$\text{record high monthly average} = {\max}_m |a_{ym}| = \max\{|a_{ym}|: m=1,2,...,12\}$$ {#eq-rhda-m}
+$$\text{record high monthly average} = \max\{|a_{ym}|: m=1,2,...,12\}$$ {#eq-rhda-m}
 
 ### Record Low Monthly Average
 
-The record low monthly average is the **minimum daily average for any given calendar month**. It is determined by taking the daily averages calculated using @eq-tda, grouping them by calendar month, and finding the minimum value for each month. Given $\textbf{A}$ from @eq-avgs-m above:
+The record low monthly average is the **minimum daily average for any given calendar month**. It is determined by taking the daily averages from @eq-tda, grouping them by calendar month, and finding the minimum value for each month. Given $\textbf{A}$ from @eq-avgs-m above:
 
-$$\text{record low monthly average} = {\min}_m |a_{ym}| = \min\{|a_{ym}|: m=1,2,...,12\}$$ {#eq-rhda-m}
+$$\text{record low monthly average} = \min\{|a_{ym}|: m=1,2,...,12\}$$ {#eq-rhda-m}
 
 ### Average High
 
-The average high is the **average of all daily highs for any given calendar month**. It is determined by taking the daily highs calculated using @eq-dh, grouping them by calendar month, and calculating the average for each month.
+The average high is the **average of all daily highs for any given calendar month**. It is determined by taking the daily highs from @eq-dh, grouping them by calendar month, and calculating the average for each month.
 
 Let $\textbf{H}$ now be a matrix of daily highs from @eq-dh arranged with years in rows and months in columns, and for simplicity, let subscript $y$ indicate year and $m$ indicate month:
 
@@ -214,19 +214,19 @@ where $Y$ is the number of years in the observational time series.
 
 ### Record High
 
-The record high is the **maximum daily high for any given calendar month**. It is determined by taking the daily highs calculated using @eq-dh, grouping them by calendar month, and finding the maximum value for each month. Given $\textbf{H}$ from @eq-highs-m above:
+The record high is the **maximum daily high for any given calendar month**. It is determined by taking the daily highs from @eq-dh, grouping them by calendar month, and finding the maximum value for each month. Given $\textbf{H}$ from @eq-highs-m above:
 
 $$\text{record high} = {\max}_m |h_{ym}| = \max\{|h_{ym}|: m=1,2,...,12\}$$ {#eq-rh-m}
 
 ### Lowest High
 
-The lowest high is the **minimum daily high for any given calendar month**. It is determined by taking the daily highs calculated using @eq-dh, grouping them by calendar month, and finding the minimum value for each month. Given $\textbf{H}$ from @eq-highs-m above:
+The lowest high is the **minimum daily high for any given calendar month**. It is determined by taking the daily highs from @eq-dh, grouping them by calendar month, and finding the minimum value for each month. Given $\textbf{H}$ from @eq-highs-m above:
 
 $$\text{lowest high} = {\min}_m |h_{ym}| = \min\{|h_{ym}|: m=1,2,...,12\}$$ {#eq-lh-m}
 
 ### Average Low
 
-The average low is the **average of all daily lows for any given calendar month**. It is determined by taking the daily lows calculated using @eq-dl, grouping them by calendar month, and calculating the average for each month.
+The average low is the **average of all daily lows for any given calendar month**. It is determined by taking the daily lows from @eq-dl, grouping them by calendar month, and calculating the average for each month.
 
 Let $\textbf{L}$ now be a matrix of daily lows from @eq-dl arranged with years in rows and months in columns, and for simplicity, let subscript $y$ indicate year and $m$ indicate month:
 
@@ -244,16 +244,16 @@ where $Y$ is the number of years in the observational time series.
 
 ### Highest Low
 
-The highest low is the **maximum daily low for any given calendar month**. It is determined by taking the daily lows calculated using @eq-dl, grouping them by calendar month, and finding the maximum value for each month. Given $\textbf{L}$ from @eq-lows-m above:
+The highest low is the **maximum daily low for any given calendar month**. It is determined by taking the daily lows from @eq-dl, grouping them by calendar month, and finding the maximum value for each month. Given $\textbf{L}$ from @eq-lows-m above:
 
-$$\text{highest low} = {\max}_m |l_{ym}| = \max\{|l_{ym}|: m=1,2,...,12\}$$ {#eq-hl-m}
+$$\text{highest low} = \max\{|l_{ym}|: m=1,2,...,12\}$$ {#eq-hl-m}
 
 ### Record Low
 
-The record low is the **minimum daily low for any given calendar month**. It is determined by taking the daily lows calculated using @eq-dl, grouping them by calendar month, and finding the minimum value for each month. Given $\textbf{L}$ from @eq-lows-m above:
+The record low is the **minimum daily low for any given calendar month**. It is determined by taking the daily lows from @eq-dl, grouping them by calendar month, and finding the minimum value for each month. Given $\textbf{L}$ from @eq-lows-m above:
 
-$$\text{record low} = {\min}_m |l_{ym}| = \min\{|l_{ym}|: m=1,2,...,12\}$$ {#eq-rl-m}
+$$\text{record low} = \min\{|l_{ym}|: m=1,2,...,12\}$$ {#eq-rl-m}
 
 ### Number of Years in Record
 
-The number of years of data available varies from month to month and between variables due to sensor availability, gaps in the observational record, or bad data being filtered out. Years are tallied by grouping the entire time series by calendar month and counting the number of years for each month. For example, given $\textbf{A}$ from @eq-avgs-m above, the number of years is the total number of unique years in each column.
+The number of years of data available varies from month to month and between variables due to sensor availability, gaps in the observational record, or bad data being filtered out. Years are tallied by grouping the entire time series by calendar month and counting the number of years for each month. For example, given $\textbf{A}$ from @eq-avgs-m above, the number of years available for each month is the total number of unique years in each column.
