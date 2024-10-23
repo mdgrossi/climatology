@@ -86,6 +86,22 @@ def main():
     # Parse command line arguments
     args = parse_args()
     
+    # Dictionary of station IDs
+    stationids = {
+        'Beaufort, NC': '8656483',
+        'Woods Hole, MA': '8447930',
+        'Naples, FL': '8725114',
+        'Bay St. Louis, MS': '8747437',
+        'Virginia Key, FL': '8723214',
+        'Lewes, DE': '8557380'
+    }
+    if args.id == 'auto':
+        try:
+            args.id = stationids[args.station]
+        except KeyError:
+            print('No station ID was passed and unable to automatically determine one using "station". Pass a valid "station" or specify station ID and try again.')
+
+
     # Download data and update stats
     data = Data(
         stationname=args.station,
@@ -98,6 +114,7 @@ def main():
         redownload=args.redownload,
         verbose=args.verbose
         )
+    
     data.update_data()
     data.update_stats()
 
