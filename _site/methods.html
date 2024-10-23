@@ -4978,7 +4978,7 @@ window.Quarto = {
   <li><a href="#daily-high" id="toc-daily-high" class="nav-link active" data-scroll-target="#daily-high">Daily High</a></li>
   <li><a href="#daily-low" id="toc-daily-low" class="nav-link" data-scroll-target="#daily-low">Daily Low</a></li>
   <li><a href="#daily-average" id="toc-daily-average" class="nav-link" data-scroll-target="#daily-average">Daily Average</a></li>
-  <li><a href="#daily-climatologies" id="toc-daily-climatologies" class="nav-link" data-scroll-target="#daily-climatologies">Daily Climatologies</a>
+  <li><a href="#daily-climatology-and-records" id="toc-daily-climatology-and-records" class="nav-link" data-scroll-target="#daily-climatology-and-records">Daily Climatology and Records</a>
   <ul class="collapse">
   <li><a href="#doy-daily-average" id="toc-doy-daily-average" class="nav-link" data-scroll-target="#doy-daily-average">DOY Daily Average</a></li>
   <li><a href="#record-high-daily-average" id="toc-record-high-daily-average" class="nav-link" data-scroll-target="#record-high-daily-average">Record High Daily Average</a></li>
@@ -4991,7 +4991,7 @@ window.Quarto = {
   <li><a href="#record-low" id="toc-record-low" class="nav-link" data-scroll-target="#record-low">Record Low</a></li>
   <li><a href="#number-of-years-in-record" id="toc-number-of-years-in-record" class="nav-link" data-scroll-target="#number-of-years-in-record">Number of Years in Record</a></li>
   </ul></li>
-  <li><a href="#monthly-climatologies" id="toc-monthly-climatologies" class="nav-link" data-scroll-target="#monthly-climatologies">Monthly Climatologies</a>
+  <li><a href="#monthly-climatology-and-records" id="toc-monthly-climatology-and-records" class="nav-link" data-scroll-target="#monthly-climatology-and-records">Monthly Climatology and Records</a>
   <ul class="collapse">
   <li><a href="#monthly-average" id="toc-monthly-average" class="nav-link" data-scroll-target="#monthly-average">Monthly Average</a></li>
   <li><a href="#record-high-monthly-average" id="toc-record-high-monthly-average" class="nav-link" data-scroll-target="#record-high-monthly-average">Record High Monthly Average</a></li>
@@ -5030,12 +5030,11 @@ window.Quarto = {
 
 
 <p>All data from the beginning of each time series to the present are retrieved from the NOAA CO-OPS <a href="https://tidesandcurrents.noaa.gov/faq.html">Tides and Currents</a> data portal and saved to file to avoid having to repeatedly re-download the historical data. Subsequent data updates retrieve from the most recently saved timestamp onward and append these new data to the saved historical record.</p>
-<p>Six-minute data are used whenever possible and hourly data otherwise.</p>
-<p>Any observations flagged by NOAA as being suspect for any reason (flag &gt; 0) are discarded. Examples of flagged data are a minimum or maximum value or a rate of change exceeding an acceptable tolerance. A day is allowed to have up to three hours of missing data to be counted in the daily climatologies, and a month is allowed up to two days of missing data to be counted in the monthly climatologies.</p>
+<p>Six-minute data are used whenever possible and hourly data otherwise. Any observations flagged by NOAA as being suspect for any reason (flag &gt; 0) are discarded. Examples of flagged data are a minimum or maximum value or a rate of change exceeding an acceptable tolerance. A day is allowed to have up to three hours of missing data to be counted in the daily climatology, and a month is allowed up to two days of missing data to be counted in the monthly climatology. Data gaps are acceptable (averages omit NAs) as long as they do not collectively exceed these thresholds.</p>
 <p>All of the statistics and records herein start with one of three quantities: daily highs, daily lows, or daily averages. Each of these is first calculated for each environmental variable (<em>i.e.</em>, air temperature, water temperature, water level) and for every day in the data time series as follows.</p>
 <section id="daily-high" class="level3">
 <h3 class="anchored" data-anchor-id="daily-high">Daily High</h3>
-<p>This is the <strong>maximum temperature recorded on any given day</strong>. Let <span class="math inline">\(X\)</span> be a 24-hr time series of some environmental variable (<em>e.g.</em>, air temperature) sampled <span class="math inline">\(n\)</span> times during the day:</p>
+<p>This is the <strong>maximum temperature recorded on any given day</strong>. Let <span class="math inline">\(X\)</span> be a 24-hr time series of some environmental variable sampled <span class="math inline">\(n\)</span> times during the day:</p>
 <p><span class="math display">\[X = \{x_1, x_2,...,x_n\}\]</span></p>
 <p>The daily high is the maximum value in this observation set:</p>
 <p><span id="eq-dh"><span class="math display">\[\text{daily high} = \max(X) \tag{1}\]</span></span></p>
@@ -5050,7 +5049,7 @@ window.Quarto = {
 <p>The daily average is the <strong>average of all recorded observations of a given variable on any given day</strong>. It can be calculated in one of two ways:</p>
 <section id="method-1-true-average" class="level4">
 <h4 class="anchored" data-anchor-id="method-1-true-average">Method 1: True average</h4>
-<p>This is the conventional method of calculating an average where one sums up all observations during the 24-hour period and divides by the number of observations, <span class="math inline">\(n\)</span>:</p>
+<p>This is the conventional method of calculating an average: the sum of all observations during the 24-hour period divided by the number of observations, <span class="math inline">\(n\)</span>:</p>
 <p><span id="eq-tda"><span class="math display">\[\text{true daily average} = \frac{1}{n} \sum_{i=1}^n x_i \tag{3}\]</span></span></p>
 </section>
 <section id="method-2-meteorological-average" class="level4">
@@ -5061,9 +5060,9 @@ window.Quarto = {
 <p>Daily statistics are calculated next, followed by monthly statistics.</p>
 </section>
 </section>
-<section id="daily-climatologies" class="level2">
-<h2 class="anchored" data-anchor-id="daily-climatologies">Daily Climatologies</h2>
-<p>Daily climatologies are calculated for each day-of-year (DOY), where</p>
+<section id="daily-climatology-and-records" class="level2">
+<h2 class="anchored" data-anchor-id="daily-climatology-and-records">Daily Climatology and Records</h2>
+<p>Daily climatology and records are calculated for each day-of-year (DOY), where</p>
 <blockquote class="blockquote">
 <p>Jan 1 <span class="math inline">\(\longrightarrow\)</span> Day 1<br>
 Jan 2 <span class="math inline">\(\longrightarrow\)</span> Day 2<br>
@@ -5074,88 +5073,100 @@ Feb 29 <span class="math inline">\(\longrightarrow\)</span> Day 60<br>
 Dec 30 <span class="math inline">\(\longrightarrow\)</span> Day 365<br>
 Dec 31 <span class="math inline">\(\longrightarrow\)</span> Day 366</p>
 </blockquote>
-<p>Instead of eliminating February 29 on leap years, Day 60 simply skipped in years that are <em>not</em> leap years. Thus, December 31 is always Day 366. Days start at midnight (00:00) and go until 23:59 (11:59 PM) local time.</p>
+<p>Instead of eliminating February 29 on leap years, Day 60 is skipped in years that are <em>not</em> leap years. Thus, December 31 is always Day 366. Days start at midnight (00:00) and go until 23:59 (11:59 PM) local time.</p>
 <section id="doy-daily-average" class="level3">
 <h3 class="anchored" data-anchor-id="doy-daily-average">DOY Daily Average</h3>
-<p>The DOY daily average is the <strong>average of all daily averages for any given DOY</strong>. It is calculated by taking the daily averages calculated using <a href="#eq-tda" class="quarto-xref">Equation 3</a>, grouping them by DOY, and calculating the average for each DOY.</p>
+<p>The DOY daily average is the <strong>average of all daily averages for any given DOY</strong>. It is calculated by taking the daily averages from <a href="#eq-tda" class="quarto-xref">Equation 3</a>, grouping them by DOY, and calculating the average for each DOY.</p>
 <p>Let <span class="math inline">\(\textbf{A}\)</span> be a matrix of daily averages from <a href="#eq-tda" class="quarto-xref">Equation 3</a> arranged with years in rows and DOY in columns, and for simplicity, let subscript <span class="math inline">\(y\)</span> indicate year and <span class="math inline">\(d\)</span> indicate DOY:</p>
 <p><span id="eq-avgs-d"><span class="math display">\[\textbf{A} = (a_{yd}) = \left( \begin{array}{cccc}
-a_{1,1} &amp; a_{1,2} &amp; ... &amp; a_{1,d} \\
-a_{2,1} &amp; a_{2,2} &amp; ... &amp; a_{2,d} \\
+a_{1,1} &amp; a_{1,2} &amp; ... &amp; a_{1,366} \\
+a_{2,1} &amp; a_{2,2} &amp; ... &amp; a_{2,366} \\
 \vdotswithin{=} &amp; \vdotswithin{=} &amp;  &amp; \vdotswithin{=} \\
-a_{y,1} &amp; a_{y,2} &amp; ... &amp; a_{y,d} \end{array} \right) \tag{5}\]</span></span></p>
+a_{y,1} &amp; a_{y,2} &amp; ... &amp; a_{y,366} \end{array} \right) \tag{5}\]</span></span></p>
 <p>The DOY daily average is the average over each column:</p>
 <p><span id="eq-ddy-d"><span class="math display">\[\text{DOY daily average} = \frac{1}{Y}\sum_{y=1}^Y a_{yd} \tag{6}\]</span></span></p>
 <p>where <span class="math inline">\(Y\)</span> is the number of years in the observational time series.</p>
-<p>Note: The Daily Average reported in the statistics dashboard are DOY daily averages from <a href="#eq-ddy-d" class="quarto-xref">Equation 6</a>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note: The Daily Average reported in the statistics dashboard are DOY daily averages from <a href="#eq-ddy-d" class="quarto-xref">Equation 6</a>, not to be confused with <a href="#eq-tda" class="quarto-xref">Equation 3</a> or <a href="#eq-mda" class="quarto-xref">4</a>.</p>
+</div>
+</div>
 </section>
 <section id="record-high-daily-average" class="level3">
 <h3 class="anchored" data-anchor-id="record-high-daily-average">Record High Daily Average</h3>
-<p>The record high daily average is the <strong>maximum daily average for any given DOY</strong>. It is determined by taking the daily averages calculated using <a href="#eq-tda" class="quarto-xref">Equation 3</a>, grouping them by DOY, and finding the maximum value for each DOY. Given <span class="math inline">\(\textbf{A}\)</span> from <a href="#eq-avgs-d" class="quarto-xref">Equation 5</a> above:</p>
-<p><span id="eq-rhda-d"><span class="math display">\[\text{record high daily average} = {\max}_d |a_{yd}| = \max\{|a_{yd}|: d=1,2,...,366\} \tag{7}\]</span></span></p>
+<p>The record high daily average is the <strong>maximum daily average for any given DOY</strong>. It is determined by taking the daily averages from <a href="#eq-tda" class="quarto-xref">Equation 3</a>, grouping them by DOY, and finding the maximum value for each DOY. Given <span class="math inline">\(\textbf{A}\)</span> from <a href="#eq-avgs-d" class="quarto-xref">Equation 5</a> above:</p>
+<p><span id="eq-rhda-d"><span class="math display">\[\text{record high daily average} = \max\{|a_{yd}|: d=1,2,...,366\} \tag{7}\]</span></span></p>
 </section>
 <section id="record-low-daily-average" class="level3">
 <h3 class="anchored" data-anchor-id="record-low-daily-average">Record Low Daily Average</h3>
-<p>The record low daily average is the <strong>minimum daily average for any given DOY</strong>. It is determined by taking the daily averages calculated using <a href="#eq-tda" class="quarto-xref">Equation 3</a>, grouping them by DOY, and finding the minimum value for each DOY. Given <span class="math inline">\(\textbf{A}\)</span> from <a href="#eq-avgs-d" class="quarto-xref">Equation 5</a> above:</p>
-<p><span id="eq-rlda-d"><span class="math display">\[\text{record low daily average} = {\min}_d |a_{yd}| = \min\{|a_{yd}|: d=1,2,...,366\} \tag{8}\]</span></span></p>
+<p>The record low daily average is the <strong>minimum daily average for any given DOY</strong>. It is determined by taking the daily averages from <a href="#eq-tda" class="quarto-xref">Equation 3</a>, grouping them by DOY, and finding the minimum value for each DOY. Given <span class="math inline">\(\textbf{A}\)</span> from <a href="#eq-avgs-d" class="quarto-xref">Equation 5</a> above:</p>
+<p><span id="eq-rlda-d"><span class="math display">\[\text{record low daily average} = \min\{|a_{yd}|: d=1,2,...,366\} \tag{8}\]</span></span></p>
 </section>
 <section id="average-high" class="level3">
 <h3 class="anchored" data-anchor-id="average-high">Average High</h3>
-<p>The average high is the <strong>average of all daily highs for any given DOY</strong>. It is determined by taking the daily highs calculated using <a href="#eq-dh" class="quarto-xref">Equation 1</a>, grouping them by DOY, and calculating the average for each DOY.</p>
+<p>The average high is the <strong>average of all daily highs for any given DOY</strong>. It is determined by taking the daily highs from <a href="#eq-dh" class="quarto-xref">Equation 1</a>, grouping them by DOY, and calculating the average for each DOY.</p>
 <p>Let <span class="math inline">\(\textbf{H}\)</span> be a matrix of daily highs from <a href="#eq-dh" class="quarto-xref">Equation 1</a> arranged with years in rows and DOY in columns, and for simplicity, let subscript <span class="math inline">\(y\)</span> indicate year and <span class="math inline">\(d\)</span> indicate DOY:</p>
 <p><span id="eq-highs-d"><span class="math display">\[\textbf{H} = (h_{yd}) = \left( \begin{array}{cccc}
-h_{1,1} &amp; h_{1,2} &amp; ... &amp; h_{1,d} \\
-h_{2,1} &amp; h_{2,2} &amp; ... &amp; h_{2,d} \\
+h_{1,1} &amp; h_{1,2} &amp; ... &amp; h_{1,366} \\
+h_{2,1} &amp; h_{2,2} &amp; ... &amp; h_{2,366} \\
 \vdotswithin{=} &amp; \vdotswithin{=} &amp;  &amp; \vdotswithin{=} \\
-h_{y,1} &amp; h_{y,2} &amp; ... &amp; h_{y,d} \end{array} \right) \tag{9}\]</span></span></p>
+h_{y,1} &amp; h_{y,2} &amp; ... &amp; h_{y,366} \end{array} \right) \tag{9}\]</span></span></p>
 <p>The average high is the average over each column:</p>
 <p><span id="eq-ah-d"><span class="math display">\[\text{average high} = \frac{1}{Y}\sum_{y=1}^Y h_{yd} \tag{10}\]</span></span></p>
 <p>where <span class="math inline">\(Y\)</span> is the number of years in the observational time series.</p>
 </section>
 <section id="record-high" class="level3">
 <h3 class="anchored" data-anchor-id="record-high">Record High</h3>
-<p>The record high is the <strong>maximum daily high for any given DOY</strong>. It is determined by taking the daily highs calculated using <a href="#eq-dh" class="quarto-xref">Equation 1</a>, grouping them by DOY, and finding the maximum value for each DOY. Given <span class="math inline">\(\textbf{H}\)</span> from <a href="#eq-highs-d" class="quarto-xref">Equation 9</a> above:</p>
-<p><span id="eq-rh-d"><span class="math display">\[\text{record high} = {\max}_d |h_{yd}| = \max\{|h_{yd}|: d=1,2,...,366\} \tag{11}\]</span></span></p>
+<p>The record high is the <strong>maximum daily high for any given DOY</strong>. It is determined by taking the daily highs from <a href="#eq-dh" class="quarto-xref">Equation 1</a>, grouping them by DOY, and finding the maximum value for each DOY. Given <span class="math inline">\(\textbf{H}\)</span> from <a href="#eq-highs-d" class="quarto-xref">Equation 9</a> above:</p>
+<p><span id="eq-rh-d"><span class="math display">\[\text{record high} = \max\{|h_{yd}|: d=1,2,...,366\} \tag{11}\]</span></span></p>
 </section>
 <section id="lowest-high" class="level3">
 <h3 class="anchored" data-anchor-id="lowest-high">Lowest High</h3>
-<p>The lowest high is the <strong>minimum daily high for any given DOY</strong>. It is determined by taking the daily highs calculated using <a href="#eq-dh" class="quarto-xref">Equation 1</a>, grouping them by DOY, and finding the minimum value for each DOY. Given <span class="math inline">\(\textbf{H}\)</span> from <a href="#eq-highs-d" class="quarto-xref">Equation 9</a> above:</p>
-<p><span id="eq-lh-d"><span class="math display">\[\text{lowest high} = {\min}_d |h_{yd}| = \min\{|h_{yd}|: d=1,2,...,366\} \tag{12}\]</span></span></p>
+<p>The lowest high is the <strong>minimum daily high for any given DOY</strong>. It is determined by taking the daily highs from <a href="#eq-dh" class="quarto-xref">Equation 1</a>, grouping them by DOY, and finding the minimum value for each DOY. Given <span class="math inline">\(\textbf{H}\)</span> from <a href="#eq-highs-d" class="quarto-xref">Equation 9</a> above:</p>
+<p><span id="eq-lh-d"><span class="math display">\[\text{lowest high} = \min\{|h_{yd}|: d=1,2,...,366\} \tag{12}\]</span></span></p>
 </section>
 <section id="average-low" class="level3">
 <h3 class="anchored" data-anchor-id="average-low">Average Low</h3>
-<p>The average low is the <strong>average of all daily lows for any given DOY</strong>. It is determined by taking the daily lows calculated using <a href="#eq-dl" class="quarto-xref">Equation 2</a>, grouping them by DOY, and calculating the average for each DOY.</p>
+<p>The average low is the <strong>average of all daily lows for any given DOY</strong>. It is determined by taking the daily lows from <a href="#eq-dl" class="quarto-xref">Equation 2</a>, grouping them by DOY, and calculating the average for each DOY.</p>
 <p>Let <span class="math inline">\(\textbf{L}\)</span> be a matrix of daily lows from <a href="#eq-dl" class="quarto-xref">Equation 2</a> arranged with years in rows and DOY in columns, and for simplicity, let subscript <span class="math inline">\(y\)</span> indicate year and <span class="math inline">\(d\)</span> indicate DOY:</p>
 <p><span id="eq-lows-d"><span class="math display">\[\textbf{L} = (l_{yd}) = \left( \begin{array}{cccc}
-l_{1,1} &amp; l_{1,2} &amp; ... &amp; l_{1,d} \\
-l_{2,1} &amp; l_{2,2} &amp; ... &amp; l_{2,d} \\
+l_{1,1} &amp; l_{1,2} &amp; ... &amp; l_{1,366} \\
+l_{2,1} &amp; l_{2,2} &amp; ... &amp; l_{2,366} \\
 \vdotswithin{=} &amp; \vdotswithin{=} &amp;  &amp; \vdotswithin{=} \\
-l_{y,1} &amp; l_{y,2} &amp; ... &amp; l_{y,d} \end{array} \right) \tag{13}\]</span></span></p>
+l_{y,1} &amp; l_{y,2} &amp; ... &amp; l_{y,366} \end{array} \right) \tag{13}\]</span></span></p>
 <p>The average low is the average over each column:</p>
 <p><span id="eq-al-d"><span class="math display">\[\text{average low} = \frac{1}{Y}\sum_{y=1}^Y l_{yd} \tag{14}\]</span></span></p>
 <p>where <span class="math inline">\(Y\)</span> is the number of years in the observational time series.</p>
 </section>
 <section id="highest-low" class="level3">
 <h3 class="anchored" data-anchor-id="highest-low">Highest Low</h3>
-<p>The highest low is the <strong>maximum daily low for any given DOY</strong>. It is determined by taking the daily lows calculated using <a href="#eq-dl" class="quarto-xref">Equation 2</a>, grouping them by DOY, and finding the maximum value for each DOY. Given <span class="math inline">\(\textbf{L}\)</span> from <a href="#eq-lows-d" class="quarto-xref">Equation 13</a> above:</p>
-<p><span id="eq-hl-d"><span class="math display">\[\text{highest low} = {\max}_d |l_{yd}| = \max\{|l_{yd}|: d=1,2,...,366\} \tag{15}\]</span></span></p>
+<p>The highest low is the <strong>maximum daily low for any given DOY</strong>. It is determined by taking the daily lows from <a href="#eq-dl" class="quarto-xref">Equation 2</a>, grouping them by DOY, and finding the maximum value for each DOY. Given <span class="math inline">\(\textbf{L}\)</span> from <a href="#eq-lows-d" class="quarto-xref">Equation 13</a> above:</p>
+<p><span id="eq-hl-d"><span class="math display">\[\text{highest low} = \max\{|l_{yd}|: d=1,2,...,366\} \tag{15}\]</span></span></p>
 </section>
 <section id="record-low" class="level3">
 <h3 class="anchored" data-anchor-id="record-low">Record Low</h3>
-<p>The record low is the <strong>minimum daily low for any given DOY</strong>. It is determined by taking the daily lows calculated using <a href="#eq-dl" class="quarto-xref">Equation 2</a>, grouping them by DOY, and finding the minimum value for each DOY. Given <span class="math inline">\(\textbf{L}\)</span> from <a href="#eq-lows-d" class="quarto-xref">Equation 13</a> above:</p>
-<p><span id="eq-rl-d"><span class="math display">\[\text{record low} = {\min}_d |l_{yd}| = \min\{|l_{yd}|: d=1,2,...,366\} \tag{16}\]</span></span></p>
+<p>The record low is the <strong>minimum daily low for any given DOY</strong>. It is determined by taking the daily lows from <a href="#eq-dl" class="quarto-xref">Equation 2</a>, grouping them by DOY, and finding the minimum value for each DOY. Given <span class="math inline">\(\textbf{L}\)</span> from <a href="#eq-lows-d" class="quarto-xref">Equation 13</a> above:</p>
+<p><span id="eq-rl-d"><span class="math display">\[\text{record low} = \min\{|l_{yd}|: d=1,2,...,366\} \tag{16}\]</span></span></p>
 </section>
 <section id="number-of-years-in-record" class="level3">
 <h3 class="anchored" data-anchor-id="number-of-years-in-record">Number of Years in Record</h3>
-<p>The number of years of data available varies from day to day and between variables due to sensor availability, gaps in the observational record, or bad data being filtered out. Years are tallied by grouping the entire time series by DOY and counting the number of years for each day. For example, given <span class="math inline">\(\textbf{A}\)</span> from <a href="#eq-avgs-d" class="quarto-xref">Equation 5</a> above, the number of years is the total number of unique years in each column.</p>
+<p>The number of years of data available varies from day to day and between variables due to sensor availability, gaps in the observational record, or bad data being filtered out. Years are tallied by grouping the entire time series by DOY and counting the number of years for each day. For example, given <span class="math inline">\(\textbf{A}\)</span> from <a href="#eq-avgs-d" class="quarto-xref">Equation 5</a> above, the number of years available for each DOY is the total number of unique years in each column.</p>
 </section>
 </section>
-<section id="monthly-climatologies" class="level2">
-<h2 class="anchored" data-anchor-id="monthly-climatologies">Monthly Climatologies</h2>
-<p>Monthly climatologies are calculated in the same way as daily climatologies except daily highs, lows, and averages are grouped by calendar month instead of DOY.</p>
+<section id="monthly-climatology-and-records" class="level2">
+<h2 class="anchored" data-anchor-id="monthly-climatology-and-records">Monthly Climatology and Records</h2>
+<p>Monthly climatology and records are calculated in the same way as daily climatology and records except that daily highs, lows, and averages are grouped by calendar month instead of DOY.</p>
 <section id="monthly-average" class="level3">
 <h3 class="anchored" data-anchor-id="monthly-average">Monthly Average</h3>
-<p>The monthly average is the <strong>average of all daily averages for any given month</strong>. It is calculated by taking the daily averages calculated using <a href="#eq-tda" class="quarto-xref">Equation 3</a>, grouping them by calendar month, and calculating the average for each month.</p>
+<p>The monthly average is the <strong>average of all daily averages for any given month</strong>. It is calculated by taking the daily averages from <a href="#eq-tda" class="quarto-xref">Equation 3</a>, grouping them by calendar month, and calculating the average for each month.</p>
 <p>Let <span class="math inline">\(\textbf{A}\)</span> now be a matrix of daily averages from <a href="#eq-tda" class="quarto-xref">Equation 3</a> arranged with years in rows and months in columns, and for simplicity, let subscript <span class="math inline">\(y\)</span> indicate year and <span class="math inline">\(m\)</span> indicate month:</p>
 <p><span id="eq-avgs-m"><span class="math display">\[\textbf{A} = (a_{ym}) = \left( \begin{array}{cccc}
 a_{1,1} &amp; a_{1,2} &amp; ... &amp; a_{1,12} \\
@@ -5168,17 +5179,17 @@ a_{y,1} &amp; a_{y,2} &amp; ... &amp; a_{y,12} \end{array} \right) \tag{17}\]</s
 </section>
 <section id="record-high-monthly-average" class="level3">
 <h3 class="anchored" data-anchor-id="record-high-monthly-average">Record High Monthly Average</h3>
-<p>The record high monthly average is the <strong>maximum daily average for any given calendar month</strong>. It is determined by taking the daily averages calculated using <a href="#eq-tda" class="quarto-xref">Equation 3</a>, grouping them by calendar month, and finding the maximum value for each month. Given <span class="math inline">\(\textbf{A}\)</span> from <a href="#eq-avgs-m" class="quarto-xref">Equation 17</a> above:</p>
-<p><span id="eq-rhda-m"><span class="math display">\[\text{record high monthly average} = {\max}_m |a_{ym}| = \max\{|a_{ym}|: m=1,2,...,12\} \tag{19}\]</span></span></p>
+<p>The record high monthly average is the <strong>maximum daily average for any given calendar month</strong>. It is determined by taking the daily averages from <a href="#eq-tda" class="quarto-xref">Equation 3</a>, grouping them by calendar month, and finding the maximum value for each month. Given <span class="math inline">\(\textbf{A}\)</span> from <a href="#eq-avgs-m" class="quarto-xref">Equation 17</a> above:</p>
+<p><span id="eq-rhda-m"><span class="math display">\[\text{record high monthly average} = \max\{|a_{ym}|: m=1,2,...,12\} \tag{19}\]</span></span></p>
 </section>
 <section id="record-low-monthly-average" class="level3">
 <h3 class="anchored" data-anchor-id="record-low-monthly-average">Record Low Monthly Average</h3>
-<p>The record low monthly average is the <strong>minimum daily average for any given calendar month</strong>. It is determined by taking the daily averages calculated using <a href="#eq-tda" class="quarto-xref">Equation 3</a>, grouping them by calendar month, and finding the minimum value for each month. Given <span class="math inline">\(\textbf{A}\)</span> from <a href="#eq-avgs-m" class="quarto-xref">Equation 17</a> above:</p>
-<p><span id="eq-rhda-m"><span class="math display">\[\text{record low monthly average} = {\min}_m |a_{ym}| = \min\{|a_{ym}|: m=1,2,...,12\} \tag{20}\]</span></span></p>
+<p>The record low monthly average is the <strong>minimum daily average for any given calendar month</strong>. It is determined by taking the daily averages from <a href="#eq-tda" class="quarto-xref">Equation 3</a>, grouping them by calendar month, and finding the minimum value for each month. Given <span class="math inline">\(\textbf{A}\)</span> from <a href="#eq-avgs-m" class="quarto-xref">Equation 17</a> above:</p>
+<p><span id="eq-rhda-m"><span class="math display">\[\text{record low monthly average} = \min\{|a_{ym}|: m=1,2,...,12\} \tag{20}\]</span></span></p>
 </section>
 <section id="average-high-1" class="level3">
 <h3 class="anchored" data-anchor-id="average-high-1">Average High</h3>
-<p>The average high is the <strong>average of all daily highs for any given calendar month</strong>. It is determined by taking the daily highs calculated using <a href="#eq-dh" class="quarto-xref">Equation 1</a>, grouping them by calendar month, and calculating the average for each month.</p>
+<p>The average high is the <strong>average of all daily highs for any given calendar month</strong>. It is determined by taking the daily highs from <a href="#eq-dh" class="quarto-xref">Equation 1</a>, grouping them by calendar month, and calculating the average for each month.</p>
 <p>Let <span class="math inline">\(\textbf{H}\)</span> now be a matrix of daily highs from <a href="#eq-dh" class="quarto-xref">Equation 1</a> arranged with years in rows and months in columns, and for simplicity, let subscript <span class="math inline">\(y\)</span> indicate year and <span class="math inline">\(m\)</span> indicate month:</p>
 <p><span id="eq-highs-m"><span class="math display">\[\textbf{H} = (h_{ym}) = \left( \begin{array}{cccc}
 h_{1,1} &amp; h_{1,2} &amp; ... &amp; h_{1,12} \\
@@ -5191,17 +5202,17 @@ h_{y,1} &amp; h_{y,2} &amp; ... &amp; h_{y,12} \end{array} \right) \tag{21}\]</s
 </section>
 <section id="record-high-1" class="level3">
 <h3 class="anchored" data-anchor-id="record-high-1">Record High</h3>
-<p>The record high is the <strong>maximum daily high for any given calendar month</strong>. It is determined by taking the daily highs calculated using <a href="#eq-dh" class="quarto-xref">Equation 1</a>, grouping them by calendar month, and finding the maximum value for each month. Given <span class="math inline">\(\textbf{H}\)</span> from <a href="#eq-highs-m" class="quarto-xref">Equation 21</a> above:</p>
+<p>The record high is the <strong>maximum daily high for any given calendar month</strong>. It is determined by taking the daily highs from <a href="#eq-dh" class="quarto-xref">Equation 1</a>, grouping them by calendar month, and finding the maximum value for each month. Given <span class="math inline">\(\textbf{H}\)</span> from <a href="#eq-highs-m" class="quarto-xref">Equation 21</a> above:</p>
 <p><span id="eq-rh-m"><span class="math display">\[\text{record high} = {\max}_m |h_{ym}| = \max\{|h_{ym}|: m=1,2,...,12\} \tag{23}\]</span></span></p>
 </section>
 <section id="lowest-high-1" class="level3">
 <h3 class="anchored" data-anchor-id="lowest-high-1">Lowest High</h3>
-<p>The lowest high is the <strong>minimum daily high for any given calendar month</strong>. It is determined by taking the daily highs calculated using <a href="#eq-dh" class="quarto-xref">Equation 1</a>, grouping them by calendar month, and finding the minimum value for each month. Given <span class="math inline">\(\textbf{H}\)</span> from <a href="#eq-highs-m" class="quarto-xref">Equation 21</a> above:</p>
+<p>The lowest high is the <strong>minimum daily high for any given calendar month</strong>. It is determined by taking the daily highs from <a href="#eq-dh" class="quarto-xref">Equation 1</a>, grouping them by calendar month, and finding the minimum value for each month. Given <span class="math inline">\(\textbf{H}\)</span> from <a href="#eq-highs-m" class="quarto-xref">Equation 21</a> above:</p>
 <p><span id="eq-lh-m"><span class="math display">\[\text{lowest high} = {\min}_m |h_{ym}| = \min\{|h_{ym}|: m=1,2,...,12\} \tag{24}\]</span></span></p>
 </section>
 <section id="average-low-1" class="level3">
 <h3 class="anchored" data-anchor-id="average-low-1">Average Low</h3>
-<p>The average low is the <strong>average of all daily lows for any given calendar month</strong>. It is determined by taking the daily lows calculated using <a href="#eq-dl" class="quarto-xref">Equation 2</a>, grouping them by calendar month, and calculating the average for each month.</p>
+<p>The average low is the <strong>average of all daily lows for any given calendar month</strong>. It is determined by taking the daily lows from <a href="#eq-dl" class="quarto-xref">Equation 2</a>, grouping them by calendar month, and calculating the average for each month.</p>
 <p>Let <span class="math inline">\(\textbf{L}\)</span> now be a matrix of daily lows from <a href="#eq-dl" class="quarto-xref">Equation 2</a> arranged with years in rows and months in columns, and for simplicity, let subscript <span class="math inline">\(y\)</span> indicate year and <span class="math inline">\(m\)</span> indicate month:</p>
 <p><span id="eq-lows-m"><span class="math display">\[\textbf{L} = (l_{ym}) = \left( \begin{array}{cccc}
 l_{1,1} &amp; l_{1,2} &amp; ... &amp; l_{1,12} \\
@@ -5214,17 +5225,17 @@ l_{y,1} &amp; l_{y,2} &amp; ... &amp; l_{y,12} \end{array} \right) \tag{25}\]</s
 </section>
 <section id="highest-low-1" class="level3">
 <h3 class="anchored" data-anchor-id="highest-low-1">Highest Low</h3>
-<p>The highest low is the <strong>maximum daily low for any given calendar month</strong>. It is determined by taking the daily lows calculated using <a href="#eq-dl" class="quarto-xref">Equation 2</a>, grouping them by calendar month, and finding the maximum value for each month. Given <span class="math inline">\(\textbf{L}\)</span> from <a href="#eq-lows-m" class="quarto-xref">Equation 25</a> above:</p>
-<p><span id="eq-hl-m"><span class="math display">\[\text{highest low} = {\max}_m |l_{ym}| = \max\{|l_{ym}|: m=1,2,...,12\} \tag{27}\]</span></span></p>
+<p>The highest low is the <strong>maximum daily low for any given calendar month</strong>. It is determined by taking the daily lows from <a href="#eq-dl" class="quarto-xref">Equation 2</a>, grouping them by calendar month, and finding the maximum value for each month. Given <span class="math inline">\(\textbf{L}\)</span> from <a href="#eq-lows-m" class="quarto-xref">Equation 25</a> above:</p>
+<p><span id="eq-hl-m"><span class="math display">\[\text{highest low} = \max\{|l_{ym}|: m=1,2,...,12\} \tag{27}\]</span></span></p>
 </section>
 <section id="record-low-1" class="level3">
 <h3 class="anchored" data-anchor-id="record-low-1">Record Low</h3>
-<p>The record low is the <strong>minimum daily low for any given calendar month</strong>. It is determined by taking the daily lows calculated using <a href="#eq-dl" class="quarto-xref">Equation 2</a>, grouping them by calendar month, and finding the minimum value for each month. Given <span class="math inline">\(\textbf{L}\)</span> from <a href="#eq-lows-m" class="quarto-xref">Equation 25</a> above:</p>
-<p><span id="eq-rl-m"><span class="math display">\[\text{record low} = {\min}_m |l_{ym}| = \min\{|l_{ym}|: m=1,2,...,12\} \tag{28}\]</span></span></p>
+<p>The record low is the <strong>minimum daily low for any given calendar month</strong>. It is determined by taking the daily lows from <a href="#eq-dl" class="quarto-xref">Equation 2</a>, grouping them by calendar month, and finding the minimum value for each month. Given <span class="math inline">\(\textbf{L}\)</span> from <a href="#eq-lows-m" class="quarto-xref">Equation 25</a> above:</p>
+<p><span id="eq-rl-m"><span class="math display">\[\text{record low} = \min\{|l_{ym}|: m=1,2,...,12\} \tag{28}\]</span></span></p>
 </section>
 <section id="number-of-years-in-record-1" class="level3">
 <h3 class="anchored" data-anchor-id="number-of-years-in-record-1">Number of Years in Record</h3>
-<p>The number of years of data available varies from month to month and between variables due to sensor availability, gaps in the observational record, or bad data being filtered out. Years are tallied by grouping the entire time series by calendar month and counting the number of years for each month. For example, given <span class="math inline">\(\textbf{A}\)</span> from <a href="#eq-avgs-m" class="quarto-xref">Equation 17</a> above, the number of years is the total number of unique years in each column.</p>
+<p>The number of years of data available varies from month to month and between variables due to sensor availability, gaps in the observational record, or bad data being filtered out. Years are tallied by grouping the entire time series by calendar month and counting the number of years for each month. For example, given <span class="math inline">\(\textbf{A}\)</span> from <a href="#eq-avgs-m" class="quarto-xref">Equation 17</a> above, the number of years available for each month is the total number of unique years in each column.</p>
 
 
 </section>
