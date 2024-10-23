@@ -5,7 +5,7 @@ order: 1
 
 The [National Oceanographic and Atmospheric Administration (NOAA)](https://noaa.gov) [National Ocean Service](https://oceanservice.noaa.gov) Center for Operational Oceanographic Products and Services (CO-OPS) operates hundreds of water level observation stations along the United States coasts and Great Lakes. This [National Water Level Observation Network (NWLON)](https://tidesandcurrents.noaa.gov/nwlon.html), part of the [Integrating Ocean Observing System (IOOS)](htts://ioos.noaa.gov), provides the data from which official tidal predictions are generated. Most of these observation stations also observe water temperature as well as air temperature, barometric pressure, and wind. All of these data are publically available via the NOAA CO-OPS [Tides and Currents data portal](https://tidesandcurrents.noaa.gov).
 
-The historical time series vary in length among sites and environmental parameters. Water level sensors often came first, with eather stations added later. Data collected since circa 1995 are generally available in 6-minute observations; prior to that, observations are hourly. Data inventories are provided every site:
+The historical time series vary in length among sites and environmental parameters. Water level sensors often came first, with eather stations added later. Data collected since circa 1995 are generally available in 6-minute observations; prior to that, observations are hourly. Data inventories are available for every site:
 
 - [Beaufort, North Carolina](https://tidesandcurrents.noaa.gov/waterlevels.html?id=8656483)
 - [Woods Hole, Massachusetts](https://tidesandcurrents.noaa.gov/waterlevels.html?id=8447930)
