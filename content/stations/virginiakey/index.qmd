@@ -603,37 +603,3 @@ for var in monthly_stats.variable.values:
 display(Markdown(':::'))
 
 ```
-
-# Plotly Problems
-
-## Row {.tabset}
-
-```{python}
-#| output: asis
-#| title: Daily Stats
-
-display(Markdown('::: {.panel-tabset}'))
-
-for var in daily_stats.variable.values:
-    display(Markdown(f'\n### {var}\n\n'))
-    plotlytable(daily_stats, var)
-    display(Markdown(' '))
-
-display(Markdown(':::'))
-
-```
-
-```{python}
-#| output: asis
-#| title: Monthly Stats
-
-display(Markdown('::: {.panel-tabset}'))
-
-for var in monthly_stats.variable.values:
-    display(Markdown(f'\n### {var}\n\n'))
-    plotlytable(monthly_stats, var)
-    display(Markdown(' '))
-
-display(Markdown(':::'))
-
-```
