@@ -1,5 +1,5 @@
+from datetime import datetime as dt
 from noaa_coops import Station
-import datetime as dt
 import pandas as pd
 import xarray as xr
 import numpy as np
@@ -423,7 +423,7 @@ class Data:
 
     def _format_date(self, datestr):
         dtdt = pd.to_datetime(datestr)
-        return dt.datetime.strftime(dtdt, '%Y%m%d')
+        return dt.strftime(dtdt, '%Y%m%d')
     
     def camel(self, text):
         """Convert 'text' to camel case"""
