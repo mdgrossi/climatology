@@ -9,8 +9,8 @@ import os
 
 class Data:
     def __init__(self, stationname, stationid, units='metric', timezone='gmt',
-                datum='MHHW', hr_threshold=3, day_threshold=2,
-                redownload=False, verbose=True):
+                datum='MHHW', hr_threshold=4, day_threshold=2,
+                redownload=False, reprocess=False, verbose=True):
         """Data class for downloading, formatting, and saving to file
         historical atmospheric (air temperature, barometric pressure, wind) and
         oceanographic (water temperature, water level) data from NOAA CO-OPS
@@ -33,7 +33,7 @@ class Data:
                 'MHHW'.
             hr_threshold: int, maximum number of hours of data that can be
                 missing in a given day in order for that day to be included in
-                the historical record. Default is 3.
+                the historical record. Default is 4.
             day_threshold: int, maximum number of days of data that can be
                 missing in a given month in order for that month to be included
                 in the historical record. Default is 2.
@@ -41,6 +41,11 @@ class Data:
                 the class instance will be re-initiated. Defaults to False.
                 WARNING: This may take a while to run depending on the amount
                 of data being retrieved.
+            reprocess: Bool, if True, existing data will be reprocessed using
+                argument variables passed when loading the data and these new
+                settings will be written to file, replacing the previous file.
+                If False, the class variables will be taken from the existing
+                metadata file. Ignored when redownload=True.
             verbose: Bool, print statuses to screen. Defaults to True.
         """
         
@@ -143,13 +148,25 @@ class Data:
         # =====================================================================
         # If historical data for this station already exists:
         else:
-            # Load the metadata from file
+            # Load the existing metadata from file
             if self.verbose:
                 print('Loading metadata from file')
-            with open(os.path.join(self.outdir, 'metadata.yml')) as m:
+            metaOutFile = os.path.join(self.outdir, 'metadata.yml')
+            with open(metaOutFile) as m:
                 self.meta = yaml.safe_load(m)
             self._load_from_yaml(self.meta)
-            
+            # If data are to be reprocessed using different filtering conditions
+            if reprocess:
+                # Save new class variables
+                self.hr_threshold = hr_threshold
+                self.day_threshold = day_threshold
+                self.meta['hr_threshold'] = self.hr_threshold
+                self.meta['day_threshold'] = self.day_threshold
+                with open(metaOutFile, 'w') as fp:
+                    yaml.dump(self.meta, fp)
+                if verbose:
+                    print(f"Saving new class arguments to file {metaOutFile}")
+                                
             # Load the historical data from file
             if self.verbose:
                 print('Loading historical data from file')
@@ -367,7 +384,12 @@ class Data:
             if self.verbose:
                 print("""Daily stats differ. Updating and saving to file. If new records have been set,
                 they will be printed below.\n""")
-                self._compare(old=self.daily_records, new=_new_daily_stats)
+                try:
+                    self._compare(old=self.daily_records, new=_new_daily_stats)
+                except ValueError:
+                    print("""Cannot display new records. Most likely the records have changed but the years
+                    have not, a condition that is not yet supported for printout.""")
+                    pass
             self.daily_records = _new_daily_stats
             # Write to file
             statsOutFile = os.path.join(self.outdir, 'statistics-daily.nc')
@@ -385,8 +407,13 @@ class Data:
             if self.verbose:
                 print("""Monthly stats dicts differ. Updating and saving to file. If new records have
                 been set, they will be printed below.\n""")
-                self._compare(old=self.monthly_records,
-                              new=_new_monthly_stats)
+                try:
+                    self._compare(old=self.monthly_records,
+                                new=_new_monthly_stats)
+                except ValueError:
+                    print("""Cannot display new records. Most likely the records have changed but the years
+                    have not, a condition that is not yet supported for printout.""")
+                    pass                
             self.monthly_records = _new_monthly_stats
             # Write to file
             statsOutFile = os.path.join(self.outdir, 'statistics-monthly.nc')
