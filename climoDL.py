@@ -62,7 +62,7 @@ def parse_args():
     parser.add_argument(
         '--hr',
         metavar='hr_threshold', type=int,
-        default=3,
+        default=4,
         help='Max number of hours of data that can be missing.')
     parser.add_argument(
         '--day',
@@ -73,6 +73,10 @@ def parse_args():
         '-r', '--redownload',
         action='store_true',
         help='Force redownload of historical data.')
+    parser.add_argument(
+        '-p', '--reprocess',
+        action='store_true',
+        help='Reprocess existing data using new parameters.')
     parser.add_argument(
         '-v', '--verbose',
         action='store_true',
@@ -112,6 +116,7 @@ def main():
         hr_threshold=args.hr,
         day_threshold=args.day,
         redownload=args.redownload,
+        reprocess=args.reprocess,
         verbose=args.verbose
         )
     
