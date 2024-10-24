@@ -8,5 +8,5 @@ noaa_coops==0.3.2
 dash==2.17.0
 pyyaml==6.0.1
 jupyter==1.0.0
-bokeh
+bokeh==3.6.0
 great_tables==0.13.0
