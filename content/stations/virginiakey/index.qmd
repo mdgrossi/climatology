@@ -29,7 +29,7 @@ floods = {
 from IPython.display import Markdown
 from scipy.optimize import curve_fit
 from datetime import datetime as dt
-import plotly.graph_objects as go
+# import plotly.graph_objects as go
 import pandas as pd
 import xarray as xr
 import numpy as np
@@ -37,8 +37,9 @@ import bokeh.models as bm
 from bokeh.io import output_notebook
 from bokeh.plotting import figure, show
 from great_tables import GT, loc, style
-import plotly.io as pio
-pio.renderers.default = 'notebook_connected'
+# from polars import selectors as cs
+# import plotly.io as pio
+# pio.renderers.default = 'notebook_connected'
 output_notebook(hide_banner=True)
 
 today = dt.today().strftime('%d-%b')
@@ -139,6 +140,13 @@ deg = u'\N{DEGREE SIGN}'
 
 def colortable(stats, var):
     """Display a great_tables table if the variable 'var' exists in 'stats'. Otherwise, display a message that the data do not exist."""
+    def getrows(record):
+        thisyear = dt.today().year
+        return stats[(stats[record] == thisyear)].index.to_list()
+
+    def getcols(record):
+        return [record.replace(' Year', ''), record]
+    
     freq = 'Monthly' if 'Month' in stats.sizes.keys() else 'Daily'
     try:
         if var == 'Water Level':
@@ -151,12 +159,19 @@ def colortable(stats, var):
         gtbl = GT(stats)
         for column in stats.columns:
             gtbl = gtbl.tab_style(style=[style.fill(color=colors['mg'][column]), style.text(v_align='middle')], locations=loc.body(columns=column))
-
+    
         # Format table
         gtbl = (gtbl
         .cols_align(align='center')
         .tab_style(style=[style.text(color='gainsboro', weight='bold'), style.fill(color='dimgray')], locations=loc.column_header())
         .tab_options(table_font_size='13px', table_body_hlines_color='white'))
+        
+        # Bolden records this year
+        for record in stats.columns[stats.columns.str.endswith('Year')]:
+            gtbl = gtbl.tab_style(
+                style = style.text(weight='bold'),
+                locations = loc.body(columns=getcols(record), rows=getrows(record)))
+
         gtbl.show()
 
     except KeyError:
@@ -517,7 +532,6 @@ def monthly_climo(data, var, scheme='mg'):
 
 ```
 
-<!-- 
 # {.sidebar}
 
 ```{python}
@@ -534,7 +548,7 @@ display(Markdown(f"**{dt.today().strftime('%A, %B %d, %Y')}**<br>"))
 [**Virginia Key**](https://en.wikipedia.org/wiki/Virginia_Key){target="_blank"} is a small barrier island in southeast Florida with a **tropical monsoon climate** characterized by hot, humid summers and warm, dry winters. It is located east of Miami, south of Miami Beach, and north of Key Biscayne in Biscayne Bay. The [NOAA](https://www.noaa.gov){target="_blank"} [weather station](https://tidesandcurrents.noaa.gov/stationhome.html?id=8723214){target="_blank"} has been installed on a pier at the [University of Miami](https://welcome.miami.edu){target="_blank"} [Rosenstiel School of Marine, Atmospheric, and Earth Science](https://earth.miami.edu){target="_blank"} since February 1994.
 
 <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d42461.70157812699!2d-80.17255246551831!3d25.73753395804339!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1704939462365!5m2!1sen!2sus" align="right" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
- -->
+
 
 # Plots
 
