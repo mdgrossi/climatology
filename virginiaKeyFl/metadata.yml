@@ -1,7 +1,7 @@
 datum: MHHW
 day_threshold: 2
 dirname: virginiaKeyFl
-hr_threshold: 3
+hr_threshold: 4
 stationid: '8723214'
 stationname: Virginia Key, FL
 tz: lst
