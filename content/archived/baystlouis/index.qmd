@@ -312,18 +312,17 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
     # Flood thresholds (water level plot only)
     if var=='Water Level':
         for level, threshold in flood_thresholds.items():
-            hline = bm.Span(location=threshold, dimension='width',
-                         line_dash=[20,8], line_alpha=0.75,
-                         line_color='cadetblue', line_width=2)
-            p.renderers.extend([hline])
-            mytext = bm.Label(x=pd.to_datetime('2019-12-15'), y=threshold+0.1,
-                              text=level.upper(), text_color='cadetblue',
-                              text_font_size='8px',
-                              text_font='arial narrow')
-            p.add_layout(mytext)
-            p.y_range.start = -4
-            p.y_range.end = 4
-    
+            if threshold > 0:
+                hline = bm.Span(location=threshold, dimension='width',
+                            line_dash=[20,8], line_alpha=0.75,
+                            line_color='cadetblue', line_width=2)
+                p.renderers.extend([hline])
+                mytext = bm.Label(x=pd.to_datetime('2019-12-15'), y=threshold+0.1,
+                                text=level.upper(), text_color='cadetblue',
+                                text_font_size='8px',
+                                text_font='arial narrow')
+                p.add_layout(mytext)
+                    
     # Tools
     crosshair = bm.CrosshairTool(dimensions='height',
                               line_color='grey', line_alpha=0.5)

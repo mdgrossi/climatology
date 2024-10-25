@@ -321,8 +321,6 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
                               text_font_size='8px',
                               text_font='arial narrow')
             p.add_layout(mytext)
-            p.y_range.start = -4
-            p.y_range.end = 4
     
     # Tools
     crosshair = bm.CrosshairTool(dimensions='height',
