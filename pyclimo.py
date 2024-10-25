@@ -565,8 +565,10 @@ class Data:
         """Filter data to remove days with more than 'hr_threshold' missing
         hours of data.
         """
+        # Filter out fillVals==31.8
+        filtered = data.replace(31.8, np.nan)
         # Filter out days missing more than <hr_threshold> hours
-        filtered = data.groupby(pd.Grouper(freq='1D')).filter(
+        filtered = filtered.groupby(pd.Grouper(freq='1D')).filter(
             lambda x: self._count_missing_hours(group=x, threshold=hr_threshold))
         return filtered
 
@@ -575,8 +577,10 @@ class Data:
         data by first filtering data to remove days with more than 
         'hr_threshold' missing hours of data.
         """
+        # Filter out fillVals==31.8
+        filtered = data.replace(31.8, np.nan)
         # Filter out days missing more than <hr_threshold> hours
-        filtered = self._filter_hours(data, hr_threshold=hr_threshold)
+        filtered = self._filter_hours(filtered, hr_threshold=hr_threshold)
         # Filter out months missing more than <day_threshold> days
         filtered = filtered.groupby(pd.Grouper(freq='1M')).filter(
             lambda x: self._count_missing_days(group=x, threshold=day_threshold))
