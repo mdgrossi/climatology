@@ -8,8 +8,11 @@ project:
     - "methods.qmd"
     - "acknowledgements.qmd"
     - "demos/*"
-    - "content/stations/virginiakey/*.qmd"
     - "content/stations/beaufort/*.qmd"
+    - "content/stations/woodshole/*.qmd"
+    - "content/archived/baystlouis/*.qmd"
+    - "content/archived/lewes/*.qmd"
+    - "content/stations/virginiakey/*.qmd"
     - "!NOAA-CO-OPS-Climatology.ipynb"
 
 theme:
