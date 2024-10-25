@@ -1,0 +1,16 @@
+datum: MHHW
+day_threshold: 2
+dirname: woodsHoleMa
+hr_threshold: 4
+stationid: '8447930'
+stationname: Woods Hole, MA
+tz: lst
+unit_system: english
+units:
+  Air Temperature: "\xB0F"
+  Water Level: ft
+  Water Temperature: "\xB0F"
+variables:
+- Air Temperature
+- Water Temperature
+- Water Level
