@@ -43,7 +43,7 @@ website:
           - text: Woods Hole, MA
             href: content/stations/woodshole/index.qmd
           - text: Bay St. Louis, MS (archived)
-            href: content/archived/
+            href: content/archived/baystlouis/index.qmd
           - text: Lewes, DE (archived)
             href: content/archived/lewes/index.qmd
     # right:
