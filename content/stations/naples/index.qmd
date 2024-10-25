@@ -1,0 +1,57 @@
+---
+title: "Naples, FL"
+image: ../../../images/logo.png
+format:
+  dashboard:
+    logo: ../../../images/logo.png
+    scrolling: false
+---
+
+
+```{python}
+#| include: False
+
+# SET THE DIRECTORY NAME
+dirName = 'naplesFl'
+
+# ENTER THE FLOOD THRESHOLDS FOR THIS SITE
+# https://water.noaa.gov/gauges/nbnf1
+floods = {
+    'Major Flood Threshold': 3.5,
+    'Moderate Flood Threshold': 2.5,
+    'Minor Flood Threshold': 1.5
+    }
+```
+
+```{python}
+#| include: False
+
+from IPython.display import Markdown
+from datetime import datetime as dt
+
+```
+
+# {.sidebar}
+
+```{python}
+
+display(Markdown(f"**{dt.today().strftime('%A, %B %d, %Y')}**<br>"))
+
+```
+
+::: {.card}
+![](../../../images/logo.png){scale="75%"}
+:::
+
+<br>
+[**Naples, FL**](https://en.wikipedia.org/wiki/Naples,_Florida){target="_blank"} is a coastal city in southwest Florida with a **tropical savanna climate** characterized by hot, wet summers and warm, dry winters. It is located on the coast of the Gulf of Mexico with the FLorida Everglades to the east. The current [NOAA](https://www.noaa.gov){target="_blank"} [weather station](https://tidesandcurrents.noaa.gov/waterlevels.html?id=8725114){target="_blank"} is typically installed the Naples Pier but has been temporarily relocated to North Naples Bay while the pier is rebuilt after being severely damaged in several recent hurricanes.
+
+<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d114610.90400720038!2d-81.8769408474603!3d26.144883561987392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1729823805876!5m2!1sen!2sus" align="right" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+# Plots
+
+![](../../../images/coming-soon.png){fig-alt="Coming soon sign" scale="25%"}
+
+# Data
+
+![](../../../images/coming-soon.png){fig-alt="Coming soon sign" scale="25%"}
