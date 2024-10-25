@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://mdgrossi.github.io/climatology/index.html</loc>
-    <lastmod>2024-10-25T13:00:35.313Z</lastmod>
+    <lastmod>2024-10-25T14:36:25.351Z</lastmod>
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/NOAA-CO-OPS-Climatology.html</loc>
@@ -58,11 +58,11 @@
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/demos/NOAA-CO-OPS-plots.html</loc>
-    <lastmod>2024-10-23T17:29:20.103Z</lastmod>
+    <lastmod>2024-10-25T13:24:31.449Z</lastmod>
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/demos/NOAA-CO-OPS-data.html</loc>
-    <lastmod>2024-10-25T13:42:49.018Z</lastmod>
+    <lastmod>2024-10-25T13:53:39.623Z</lastmod>
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/howto.html</loc>
@@ -111,5 +111,9 @@
   <url>
     <loc>https://mdgrossi.github.io/climatology/content/archived/lewes/index.html</loc>
     <lastmod>2024-10-25T03:31:27.019Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mdgrossi.github.io/climatology/content/stations/naples/index.html</loc>
+    <lastmod>2024-10-25T14:52:15.292Z</lastmod>
   </url>
 </urlset>
