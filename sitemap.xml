@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://mdgrossi.github.io/climatology/content/stations/virginiakey/index.html</loc>
-    <lastmod>2024-10-24T19:07:02.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://mdgrossi.github.io/climatology/acknowledgements.html</loc>
-    <lastmod>2024-10-24T19:07:02.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://mdgrossi.github.io/climatology/data.html</loc>
-    <lastmod>2024-10-24T19:07:02.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://mdgrossi.github.io/climatology/demos/NOAA-CO-OPS-records.html</loc>
-    <lastmod>2024-10-24T19:07:02.435Z</lastmod>
-  </url>
-  <url>
-    <loc>https://mdgrossi.github.io/climatology/demos/NOAA-CO-OPS-data.html</loc>
-    <lastmod>2024-10-24T19:07:02.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://mdgrossi.github.io/climatology/demos/NOAA-CO-OPS-plots.html</loc>
-    <lastmod>2024-10-24T19:07:02.435Z</lastmod>
-  </url>
-  <url>
-    <loc>https://mdgrossi.github.io/climatology/index.html</loc>
-    <lastmod>2024-10-24T19:07:02.439Z</lastmod>
-  </url>
-  <url>
-    <loc>https://mdgrossi.github.io/climatology/methods.html</loc>
-    <lastmod>2024-10-24T19:07:02.439Z</lastmod>
+    <loc>https://mdgrossi.github.io/climatology/content/stations/beaufort/index.html</loc>
+    <lastmod>2024-10-25T01:23:38.778Z</lastmod>
   </url>
   <url>
     <loc>https://mdgrossi.github.io/climatology/demos/index.html</loc>
-    <lastmod>2024-10-24T19:07:02.435Z</lastmod>
+    <lastmod>2024-10-25T01:23:38.798Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mdgrossi.github.io/climatology/methods.html</loc>
+    <lastmod>2024-10-25T01:23:38.814Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mdgrossi.github.io/climatology/index.html</loc>
+    <lastmod>2024-10-25T01:23:38.814Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mdgrossi.github.io/climatology/demos/NOAA-CO-OPS-plots.html</loc>
+    <lastmod>2024-10-25T01:23:38.798Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mdgrossi.github.io/climatology/demos/NOAA-CO-OPS-data.html</loc>
+    <lastmod>2024-10-25T01:23:38.778Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mdgrossi.github.io/climatology/demos/NOAA-CO-OPS-records.html</loc>
+    <lastmod>2024-10-25T01:23:38.798Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mdgrossi.github.io/climatology/data.html</loc>
+    <lastmod>2024-10-25T01:23:38.778Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mdgrossi.github.io/climatology/acknowledgements.html</loc>
+    <lastmod>2024-10-25T01:23:38.730Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mdgrossi.github.io/climatology/content/stations/virginiakey/index.html</loc>
+    <lastmod>2024-10-25T01:23:38.778Z</lastmod>
   </url>
 </urlset>
