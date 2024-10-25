@@ -83,7 +83,7 @@ website:
         href: acknowledgements.qmd
   page-navigation: true
   back-to-top-navigation: true
-  repo-actions: [source, issue]
+  # repo-actions: [source, issue]
   repo-branch: main
   page-footer:
     left: "Copyright 2024, M.D. Grossi"
