@@ -427,7 +427,7 @@ class Data:
     
     def camel(self, text):
         """Convert 'text' to camel case"""
-        s = text.replace(',', '').replace("-", " ").replace("_", " ")
+        s = text.replace(',', '').replace('.', '').replace("-", " ").replace("_", " ")
         s = s.split()
         if len(text) == 0:
             return text
