@@ -1,6 +1,6 @@
 
 ---
-title: "Bay St. Louis, MS"
+title: "Naples, FL"
 image: ../../../images/logo.png
 format:
   dashboard:
@@ -12,14 +12,14 @@ format:
 #| include: False
 
 # SET THE DIRECTORY NAME
-dirName = 'bayStLouisMs'
+dirName = 'naplesFl'
 
 # ENTER THE FLOOD THRESHOLDS FOR THIS SITE
-# https://water.noaa.gov/gauges/wycm6
+# https://water.noaa.gov/gauges/nbnf1
 floods = {
-    'Major Flood Threshold': 0,
-    'Moderate Flood Threshold': 0,
-    'Minor Flood Threshold': 0
+    'Major Flood Threshold': 3.5,
+    'Moderate Flood Threshold': 2.5,
+    'Minor Flood Threshold': 1.5
     }
 ```
 
@@ -545,9 +545,9 @@ display(Markdown(f"**{dt.today().strftime('%A, %B %d, %Y')}**<br>"))
 :::
 
 <br>
-[**Bay St. Louis, MS**](https://en.wikipedia.org/wiki/Bay_St._Louis%2C_Mississippi){target="_blank"} is a city along the Mississippi Gulf Coast with a **humid subtropical climate** characterized by hot, humid summers and mild to cool, humid winters. It is located on the western shore of the Bay of St. Louis with the Gulf of Mexico to its south. The current [NOAA](https://www.noaa.gov){target="_blank"} [weather station](https://tidesandcurrents.noaa.gov/stationhome.html?id=8747437#available){target="_blank"} has been installed on a piling just offshore of the Waveland CLub since November 2005.
+[**Naples, FL**](https://en.wikipedia.org/wiki/Naples,_Florida){target="_blank"} is a coastal city in southwest Florida with a **tropical savanna climate** characterized by hot, wet summers and warm, dry winters. It is located on the coast of the Gulf of Mexico with the FLorida Everglades to the east. The current [NOAA](https://www.noaa.gov){target="_blank"} [weather station](https://tidesandcurrents.noaa.gov/waterlevels.html?id=8725114){target="_blank"} is typically installed the Naples Pier but has been temporarily relocated to North Naples Bay while the pier is rebuilt after being severely damaged in several recent hurricanes.
 
-<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d50704.305080791!2d-89.33111226499642!3d30.32583916225275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1729825346566!5m2!1sen!2sus" align="right" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d114610.90400720038!2d-81.8769408474603!3d26.144883561987392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1729823805876!5m2!1sen!2sus" align="right" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
 # Plots
 

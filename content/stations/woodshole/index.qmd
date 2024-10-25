@@ -1,10 +1,10 @@
 
 ---
-title: "Bay St. Louis, MS"
-image: ../../../images/logo.png
+title: "Woods Hole, MA"
+image: ../../../images/falma.JPG
 format:
   dashboard:
-    logo: ../../../images/logo.png
+    logo: ../../../images/falma.JPG
     scrolling: false
 ---
 
@@ -12,14 +12,14 @@ format:
 #| include: False
 
 # SET THE DIRECTORY NAME
-dirName = 'bayStLouisMs'
+dirName = 'woodsHoleMa'
 
 # ENTER THE FLOOD THRESHOLDS FOR THIS SITE
-# https://water.noaa.gov/gauges/wycm6
+# https://water.noaa.gov/gauges/bzbm3
 floods = {
-    'Major Flood Threshold': 0,
-    'Moderate Flood Threshold': 0,
-    'Minor Flood Threshold': 0
+    'Major Flood Threshold': 8.5,
+    'Moderate Flood Threshold': 7.0,
+    'Minor Flood Threshold': 5.5
     }
 ```
 
@@ -541,13 +541,13 @@ display(Markdown(f"**{dt.today().strftime('%A, %B %d, %Y')}**<br>"))
 ```
 
 ::: {.card}
-![](../../../images/logo.png){scale="75%"}
+![](../../../images/falma.JPG){scale="75%"}
 :::
 
 <br>
-[**Bay St. Louis, MS**](https://en.wikipedia.org/wiki/Bay_St._Louis%2C_Mississippi){target="_blank"} is a city along the Mississippi Gulf Coast with a **humid subtropical climate** characterized by hot, humid summers and mild to cool, humid winters. It is located on the western shore of the Bay of St. Louis with the Gulf of Mexico to its south. The current [NOAA](https://www.noaa.gov){target="_blank"} [weather station](https://tidesandcurrents.noaa.gov/stationhome.html?id=8747437#available){target="_blank"} has been installed on a piling just offshore of the Waveland CLub since November 2005.
+[**Woods Hole, MA**](https://en.wikipedia.org/wiki/Woods_Hole%2C_Massachusetts){target="_blank"} is a coastal community in southeastern Massachusetts with a **warm-summer humid continental climate** with both summer and winter temperatures being moderated by the adjacent ocean waters. It is located extreme southwestern corner of Cape Cod with Martha's Vineyard and the Elizabeth Islands to its south. The current [NOAA](https://www.noaa.gov){target="_blank"} [weather station](https://tidesandcurrents.noaa.gov/stationhome.html?id=8447930){target="_blank"} has been installed at the [Woods Hole Oceanographic Institute Marine Facility](https://www.whoi.edu/){target="_blank"} since November 1988.
 
-<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d50704.305080791!2d-89.33111226499642!3d30.32583916225275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1729825346566!5m2!1sen!2sus" align="right" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d23894.50825594117!2d-70.68927649357778!3d41.52997961202817!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1729821867768!5m2!1sen!2sus" align="right" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
 # Plots
 
