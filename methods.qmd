@@ -6,7 +6,9 @@ toc: true
 
 All data from the beginning of each time series to the present are retrieved from the NOAA CO-OPS [Tides and Currents](https://tidesandcurrents.noaa.gov/faq.html) data portal and saved to file to avoid having to repeatedly re-download the historical data. Subsequent data updates retrieve from the most recently saved timestamp onward and append these new data to the saved historical record.
 
-Six-minute data are used whenever possible and hourly data otherwise. Any observations flagged by NOAA as being suspect for any reason (flag > 0) are discarded. Examples of flagged data are a minimum or maximum value or a rate of change exceeding an acceptable tolerance. A day is allowed to have up to three hours of missing data to be counted in the daily climatology, and a month is allowed up to two days of missing data to be counted in the monthly climatology. Data gaps are acceptable (averages omit NAs) as long as they do not collectively exceed these thresholds.
+Six-minute data are used whenever possible and hourly data otherwise. Any observations flagged by NOAA as being suspect for any reason (flag > 0) are discarded. Examples of flagged data are a minimum or maximum value or a rate of change exceeding an acceptable tolerance. Air and water temperatures equal to 31.8&deg;F are also removed, as this is a fill value signifying bad data.
+
+A day is allowed to have up to four hours of missing data to be counted in the daily climatology, and a month is allowed up to two days of missing data to be counted in the monthly climatology. Data gaps are acceptable (averages omit NAs) as long as they do not collectively exceed these thresholds.
 
 All of the statistics and records herein start with one of three quantities: daily highs, daily lows, or daily averages. Each of these is first calculated for each environmental variable (*i.e.*, air temperature, water temperature, water level) and for every day in the data time series as follows. 
 
@@ -45,6 +47,8 @@ $$\text{meteorological daily average} = \frac{\max(X) + \min(X)}{2}$$ {#eq-mda}
 This project uses the true average (@eq-tda) for all calculations.
 
 Daily statistics are calculated next, followed by monthly statistics.
+
+Cosine regression curves are fit to daily averages, average highs, and average lows for plotting purposes.
 
 ## Daily Climatology and Records
 
