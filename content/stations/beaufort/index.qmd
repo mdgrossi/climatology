@@ -19,8 +19,7 @@ dirName = 'beaufortNc'
 floods = {
     'Major Flood Threshold': 6.5,
     'Moderate Flood Threshold': 5.5,
-    'Minor Flood Threshold': 5,
-    'Action': 4.5
+    'Minor Flood Threshold': 5.0
     }
 ```
 
@@ -30,7 +29,7 @@ floods = {
 from IPython.display import Markdown
 from scipy.optimize import curve_fit
 from datetime import datetime as dt
-import plotly.graph_objects as go
+# import plotly.graph_objects as go
 import pandas as pd
 import xarray as xr
 import numpy as np
@@ -38,8 +37,9 @@ import bokeh.models as bm
 from bokeh.io import output_notebook
 from bokeh.plotting import figure, show
 from great_tables import GT, loc, style
-import plotly.io as pio
-pio.renderers.default = 'notebook_connected'
+# from polars import selectors as cs
+# import plotly.io as pio
+# pio.renderers.default = 'notebook_connected'
 output_notebook(hide_banner=True)
 
 today = dt.today().strftime('%d-%b')
@@ -140,6 +140,13 @@ deg = u'\N{DEGREE SIGN}'
 
 def colortable(stats, var):
     """Display a great_tables table if the variable 'var' exists in 'stats'. Otherwise, display a message that the data do not exist."""
+    def getrows(record):
+        thisyear = dt.today().year
+        return stats[(stats[record] == thisyear)].index.to_list()
+
+    def getcols(record):
+        return [record.replace(' Year', ''), record]
+    
     freq = 'Monthly' if 'Month' in stats.sizes.keys() else 'Daily'
     try:
         if var == 'Water Level':
@@ -152,12 +159,19 @@ def colortable(stats, var):
         gtbl = GT(stats)
         for column in stats.columns:
             gtbl = gtbl.tab_style(style=[style.fill(color=colors['mg'][column]), style.text(v_align='middle')], locations=loc.body(columns=column))
-
+    
         # Format table
         gtbl = (gtbl
         .cols_align(align='center')
         .tab_style(style=[style.text(color='gainsboro', weight='bold'), style.fill(color='dimgray')], locations=loc.column_header())
         .tab_options(table_font_size='13px', table_body_hlines_color='white'))
+        
+        # Bolden records this year
+        for record in stats.columns[stats.columns.str.endswith('Year')]:
+            gtbl = gtbl.tab_style(
+                style = style.text(weight='bold'),
+                locations = loc.body(columns=getcols(record), rows=getrows(record)))
+
         gtbl.show()
 
     except KeyError:
@@ -531,10 +545,9 @@ display(Markdown(f"**{dt.today().strftime('%A, %B %d, %Y')}**<br>"))
 :::
 
 <br>
-[**Virginia Key**](https://en.wikipedia.org/wiki/Virginia_Key){target="_blank"} is a small barrier island in southeast Florida with a **tropical monsoon climate** characterized by hot, humid summers and warm, dry winters. It is located east of Miami, south of Miami Beach, and north of Key Biscayne in Biscayne Bay. The [NOAA](https://www.noaa.gov){target="_blank"} [weather station](https://tidesandcurrents.noaa.gov/stationhome.html?id=8723214){target="_blank"} has been installed on a pier at the [University of Miami](https://welcome.miami.edu){target="_blank"} [Rosenstiel School of Marine, Atmospheric, and Earth Science](https://earth.miami.edu){target="_blank"} since February 1994.
+[**Beaufort, NC**](https://en.wikipedia.org/wiki/Beaufort%2C_North_Carolina){target="_blank"} is a coastal town in eastern North Carolina with a **humid subtropical climate** characterized by long, hot summers and short, cool winters. It is located on the Beaufort Inlet with the barrier islands and the Atlantic Ocean to its south, the southern end of the North Carolina Outer Banks to the east, and the tidal Newport River to its west. The current [NOAA](https://www.noaa.gov){target="_blank"} [weather station](https://tidesandcurrents.noaa.gov/stationhome.html?id=8656483){target="_blank"} has been installed on a pier at the [Duke University Marine Laboratory](https://nicholas.duke.edu/marinelab){target="_blank"} on Pivers Island since June 1990.
 
-<iframe src="https://www.google.com/maps/place/Pivers+Island/@34.7176608,-76.6824519,15z/data=!3m1!4b1!4m6!3m5!1s0x89a890e9084dc34d:0x19406a7afd42b0ae!8m2!3d34.7176617!4d-76.6721522!16s%2Fg%2F1tngr4gz?entry=ttu&g_ep=EgoyMDI0MTAyMC4xIKXMDSoASAFQAw%3D%3D" align="right" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-
+<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d38009.402948076386!2d-76.67961167413992!3d34.72877006773139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1729819005833!5m2!1sen!2sus" align="right" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
 # Plots
 
