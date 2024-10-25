@@ -28,6 +28,20 @@ website:
         href: index.qmd
       - text: Learn more
         href: data.qmd
+      - text: Stations
+        menu:
+          - text: Beaufort, NC
+            href: content/stations/beaufort/index.qmd
+          - text: Naples, FL
+            href: content/stations/naples/index.qmd
+          - text: Virginia Key, FL
+            href: content/stations/virginiakey/index.qmd
+          - text: Woods Hole, MA
+            href: content/stations/woodshole/index.qmd
+          - text: Bay St. Louis, MS (archived)
+            href: content/archived/
+          - text: Lewes, DE (archived)
+            href: content/archived/lewes/index.qmd
     # right:
     #   - text: "More"
     #     menu:
