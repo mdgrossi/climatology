@@ -13,6 +13,7 @@ project:
     - "content/archived/baystlouis/*.qmd"
     - "content/archived/lewes/*.qmd"
     - "content/stations/virginiakey/*.qmd"
+    - "!content/station/naples/*.qmd"
     - "!NOAA-CO-OPS-Climatology.ipynb"
 
 theme:
@@ -36,7 +37,7 @@ website:
           - text: Beaufort, NC
             href: content/stations/beaufort/index.qmd
           - text: Naples, FL
-            href: content/stations/naples/index.qmd
+            # href: content/stations/naples/index.qmd
           - text: Virginia Key, FL
             href: content/stations/virginiakey/index.qmd
           - text: Woods Hole, MA
