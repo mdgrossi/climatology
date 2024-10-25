@@ -50,8 +50,8 @@ display(Markdown(f"**{dt.today().strftime('%A, %B %d, %Y')}**<br>"))
 
 # Plots
 
-![](../../../images/coming-soon.png){fig-alt="Coming soon sign" scale="25%"}
+![](../../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
 
 # Data
 
-![](../../../images/coming-soon.png){fig-alt="Coming soon sign" scale="25%"}
+![](../../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
