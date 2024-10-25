@@ -1,5 +1,8 @@
 ---
 title: "What are these data?"
+format:
+  html:
+    include-after-body: footer.html
 order: 1
 ---
 

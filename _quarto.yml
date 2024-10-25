@@ -85,16 +85,16 @@ website:
   back-to-top-navigation: true
   # repo-actions: [source, issue]
   repo-branch: main
-  page-footer:
-    left: "Copyright 2024, M.D. Grossi"
-    right:
-      - href: https://www.github.com/mdgrossi
-        icon: github
-      - href: https://www.linkedin.com/in/matthewgrossi
-        icon: linkedin
-      - href: https://www.youtube.com/@seaswellsnippets
-        icon: youtube
-    # background: light
+  # page-footer:
+  #   left: "Copyright 2024, M.D. Grossi"
+  #   right:
+  #     - href: https://www.github.com/mdgrossi
+  #       icon: github
+  #     - href: https://www.linkedin.com/in/matthewgrossi
+  #       icon: linkedin
+  #     - href: https://www.youtube.com/@seaswellsnippets
+  #       icon: youtube
+  #   background: light
 
 format:
   html:

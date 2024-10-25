@@ -1,5 +1,8 @@
 ---
 title: How are these records calculated?
+format:
+  html:
+    include-after-body: footer.html
 order: 1
 toc: true
 ---

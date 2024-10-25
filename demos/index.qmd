@@ -1,5 +1,8 @@
 ---
 title: Demonstrations
+format:
+  html:
+    include-after-body: ../footer.html
 order: 2
 ---
 

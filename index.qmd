@@ -20,6 +20,10 @@ listing:
     fields: [image, title]
     grid-item-border: false
     grid-item-align: center
+
+format:
+  html:
+    include-after-body: footer.html
 ---
 
 ::: {#hero-heading style="text-align: center"}

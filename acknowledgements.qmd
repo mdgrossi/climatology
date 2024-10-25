@@ -1,5 +1,8 @@
 ---
 title: Giving credit where credit is due
+format:
+  html:
+    include-after-body: footer.html
 order: 1
 ---
 
