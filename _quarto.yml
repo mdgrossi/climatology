@@ -9,7 +9,7 @@ project:
     - "acknowledgements.qmd"
     - "demos/*"
     - "content/stations/virginiakey/*.qmd"
-    - "!content/stations/beaufort/*.qmd"
+    - "content/stations/beaufort/*.qmd"
     - "!NOAA-CO-OPS-Climatology.ipynb"
 
 theme:
