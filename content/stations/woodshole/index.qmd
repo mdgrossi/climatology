@@ -385,7 +385,7 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
     # Fonts
     p.title.text_font = 'arial narrow'
     p.title.text_font_size = '16px'
-    p.title.text_color = colors[scheme]['Plot Light Color']
+    p.title.text_color = 'darkgray'
     p.xaxis.major_label_text_font = 'arial narrow'
     p.xaxis.major_label_text_color = colors[scheme]['Plot Light Color']
     p.xaxis.major_label_text_font_size = "14px"
@@ -525,7 +525,7 @@ def monthly_climo(data, var, scheme='mg'):
     # Fonts
     p.title.text_font = 'arial narrow'
     p.title.text_font_size = '16px'
-    p.title.text_color = colors[scheme]['Plot Light Color']
+    p.title.text_color = 'darkgray'
     p.xaxis.major_label_text_font = 'arial narrow'
     p.xaxis.major_label_text_color = colors[scheme]['Plot Light Color']
     p.xaxis.major_label_text_font_size = "14px"

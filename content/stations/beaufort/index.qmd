@@ -142,7 +142,7 @@ def colortable(stats, var):
     """Display a great_tables table if the variable 'var' exists in 'stats'. Otherwise, display a message that the data do not exist."""
     def getrows(record):
         thisyear = dt.today().year
-        return stats[(stats[record] == thisyear)].index.to_list()
+        return df[(df[record] == thisyear)].index.to_list()
 
     def getcols(record):
         return [record.replace(' Year', ''), record]
@@ -150,24 +150,42 @@ def colortable(stats, var):
     freq = 'Monthly' if 'Month' in stats.sizes.keys() else 'Daily'
     try:
         if var == 'Water Level':
-            stats = stats.sel(variable=var.title()).to_dataframe()\
+            df = stats.sel(variable=var.title()).to_dataframe()\
                         .drop('variable', axis=1).round(2).reset_index()
         else:
-            stats = stats.sel(variable=var.title()).to_dataframe()\
+            df = stats.sel(variable=var.title()).to_dataframe()\
                         .drop('variable', axis=1).round(1).reset_index()
+        
+        # # Data record
+        ts_start = dt.strptime(stats.attrs[f'{var} data range'][0], '%Y-%m-%d').strftime('%-m/%-d/%Y')
+        ts_end = dt.strptime(stats.attrs[f'{var} data range'][1], '%Y-%m-%d').strftime('%-m/%-d/%Y')
+ 
+        # # Records this year
+        thisYear = pd.to_datetime('today').year
+        cols = df.columns[df.columns.str.endswith('Year')]
+        thisYearRecords = (df==thisYear)[cols].sum().sum()
+        lastYearRecords = (df==thisYear-1)[cols].sum().sum()
+
         # Add columns
-        gtbl = GT(stats)
-        for column in stats.columns:
+        gtbl = GT(df)
+        for column in df.columns:
             gtbl = gtbl.tab_style(style=[style.fill(color=colors['mg'][column]), style.text(v_align='middle')], locations=loc.body(columns=column))
     
         # Format table
         gtbl = (gtbl
         .cols_align(align='center')
         .tab_style(style=[style.text(color='gainsboro', weight='bold'), style.fill(color='dimgray')], locations=loc.column_header())
-        .tab_options(table_font_size='13px', table_body_hlines_color='white'))
+        .tab_options(table_font_size='13px', 
+                     table_body_hlines_color='white',
+                     heading_align='left',
+                     heading_title_font_weight='bold',
+                     heading_background_color='gainsboro')
+        .tab_header(title="""As of today, {} {} record observations have been reported this year. Last year, {} records were reported.""".format(thisYearRecords, var.lower(), lastYearRecords),
+                    subtitle='DATA RECORD: {} - {}'.format(ts_start, ts_end))
+        )
         
         # Bolden records this year
-        for record in stats.columns[stats.columns.str.endswith('Year')]:
+        for record in df.columns[df.columns.str.endswith('Year')]:
             gtbl = gtbl.tab_style(
                 style = style.text(weight='bold'),
                 locations = loc.body(columns=getcols(record), rows=getrows(record)))
@@ -259,10 +277,8 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
     df['Daily Average Curve'] = cos_fit(df['Daily Average'])
     df['Average Low Curve'] = cos_fit(df['Average Low'])
     
-    # Record this year
+    # Records this year
     thisYear = pd.to_datetime('today').year
-    thisYearRecords = (df==thisYear)[['Record High Year', 'Record Low Year']].sum().sum()
-    lastYearRecords = (df==thisYear-1)[['Record High Year', 'Record Low Year']].sum().sum()
     df['High Records'] = df['Record High'].where(df['Record High Year'] == thisYear)
     df['Low Records'] = df['Record Low'].where(df['Record Low Year'] == thisYear)
     source = bm.ColumnDataSource(df)
@@ -270,9 +286,7 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
     # Create a new plot
     ts_start = dt.strptime(data.attrs[f'{var} data range'][0], '%Y-%m-%d').strftime('%-m/%-d/%Y')
     ts_end = dt.strptime(data.attrs[f'{var} data range'][1], '%Y-%m-%d').strftime('%-m/%-d/%Y')
-    p = figure(title='Daily {} records  |  {} - {}\n'.format(var.lower(), ts_start, ts_end).upper()+
-                     'As of today, {} {} record highs/lows have been set. '.format(thisYearRecords, var.lower())+
-                     'Last year, {} records were set.'.format(lastYearRecords),
+    p = figure(title=f'DATA RECORD: {ts_start} - {ts_end}',
                background_fill_color='#404040', border_fill_color='#404040',
                width=1000, height=600, x_axis_type='datetime',
                y_range=(round_down(df['Record Low'].min(), 10), round_up(df['Record High'].max(), 10)),
@@ -327,28 +341,29 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
                               line_color='grey', line_alpha=0.5)
     hover = bm.HoverTool(mode='vline', renderers=[da],
                       formatters={'@xdates': 'datetime'})
+    units = data.attrs[f"{var} units"]
     if var=='Water Level':
         hover.tooltips = """
             <b> @xdates{{%b %d}} </b> <br>
-            Record High: @{{Record High}}{{0.00}} <br>
-            Average High: @{{Average High Curve}}{{0.00}} <br>
-            Daily Average: @{{Daily Average Curve}}{{0.00}} <br>
-            Average Low: @{{Average Low Curve}}{{0.00}} <br>
-            Record Low: @{{Record Low}}{{0.00}} <br>
-            {} High Record: @{{High Records}}{{0.00}} <br>
-            {} Low Record: @{{Low Records}}{{0.00}}
-            """.format(thisYear, thisYear)
+            Record High: @{{Record High}}{{0.00}} {u}<br>
+            Average High: @{{Average High Curve}}{{0.00}} {u}<br>
+            Daily Average: @{{Daily Average Curve}}{{0.00}} {u}<br>
+            Average Low: @{{Average Low Curve}}{{0.00}} {u}<br>
+            Record Low: @{{Record Low}}{{0.00}} {u}<br>
+            {y} High Record: @{{High Records}}{{0.00}} {u}<br>
+            {y} Low Record: @{{Low Records}}{{0.00}} {u}
+            """.format(u=units, y=thisYear)
     else:
         hover.tooltips = """
             <b> @xdates{{%b %d}} </b> <br>
-            Record High: @{{Record High}}{{0.0}} <br>
-            Average High: @{{Average High Curve}}{{0.0}} <br>
-            Daily Average: @{{Daily Average Curve}}{{0.0}} <br>
-            Average Low: @{{Average Low Curve}}{{0.0}} <br>
-            Record Low: @{{Record Low}}{{0.0}} <br>
-            {} High Record: @{{High Records}}{{0.0}} <br>
-            {} Low Record: @{{Low Records}}{{0.0}}
-            """.format(thisYear, thisYear)
+            Record High: @{{Record High}}{{0.0}} {u}<br>
+            Average High: @{{Average High Curve}}{{0.0}} {u}<br>
+            Daily Average: @{{Daily Average Curve}}{{0.0}} {u}<br>
+            Average Low: @{{Average Low Curve}}{{0.0}} {u}<br>
+            Record Low: @{{Record Low}}{{0.0}} {u}<br>
+            {y} High Record: @{{High Records}}{{0.0}} {u}<br>
+            {y} Low Record: @{{Low Records}}{{0.0}} {u}
+            """.format(u=units, y=thisYear)
     p.add_tools(hover, crosshair)
     p.toolbar.autohide = True
 
@@ -370,7 +385,7 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
     # Fonts
     p.title.text_font = 'arial narrow'
     p.title.text_font_size = '16px'
-    p.title.text_color = colors[scheme]['Plot Light Color']
+    p.title.text_color = 'darkgray'
     p.xaxis.major_label_text_font = 'arial narrow'
     p.xaxis.major_label_text_color = colors[scheme]['Plot Light Color']
     p.xaxis.major_label_text_font_size = "14px"
@@ -417,8 +432,6 @@ def monthly_climo(data, var, scheme='mg'):
     
     # Record this year
     thisYear = pd.to_datetime('today').year
-    thisYearRecords = (df==thisYear)[['Record High Year', 'Record Low Year']].sum().sum()
-    lastYearRecords = (df==thisYear-1)[['Record High Year', 'Record Low Year']].sum().sum()
     df['High Records'] = df['Record High'].where(df['Record High Year'] == thisYear)
     df['Low Records'] = df['Record Low'].where(df['Record Low Year'] == thisYear)
     source = bm.ColumnDataSource(df)
@@ -426,9 +439,7 @@ def monthly_climo(data, var, scheme='mg'):
     # Create a new plot
     ts_start = dt.strptime(data.attrs[f'{var} data range'][0], '%Y-%m-%d').strftime('%-m/%-d/%Y')
     ts_end = dt.strptime(data.attrs[f'{var} data range'][1], '%Y-%m-%d').strftime('%-m/%-d/%Y')
-    p = figure(title='Monthly {} records  |  {} - {}\n'.format(var.lower(), ts_start, ts_end).upper()+
-                     'As of today, {} {} record highs/lows have been set. '.format(thisYearRecords, var.lower())+
-                     'Last year, {} records were set.'.format(lastYearRecords),
+    p = figure(title=f'DATA RECORD: {ts_start} - {ts_end}',
                background_fill_color='#404040', border_fill_color='#404040',
                width=1000, height=600,
                x_range=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -472,16 +483,29 @@ def monthly_climo(data, var, scheme='mg'):
                               line_color='grey', line_alpha=0.5)
     hover = bm.HoverTool(mode='vline', renderers=[ma],
                       formatters={'@xdates': 'datetime'})
-    hover.tooltips = """
-        <b> @Month </b> <br>
-        Record High: @{{Record High}}{{0.0}} <br>
-        Average High: @{{Average High Curve}}{{0.0}} <br>
-        Monthly Average: @{{Monthly Average Curve}}{{0.0}} <br>
-        Average Low: @{{Average Low Curve}}{{0.0}} <br>
-        Record Low: @{{Record Low}}{{0.0}} <br>
-        {} High Record: @{{High Records}}{{0.0}} <br>
-        {} Low Record: @{{Low Records}}{{0.0}}
-        """.format(thisYear, thisYear)
+    units = data.attrs[f"{var} units"]
+    if var=='Water Level':
+        hover.tooltips = """
+            <b> @Month </b> <br>
+            Record High: @{{Record High}}{{0.00}} {u}<br>
+            Average High: @{{Average High Curve}}{{0.00}} {u}<br>
+            Monthly Average: @{{Monthly Average Curve}}{{0.00}} {u}<br>
+            Average Low: @{{Average Low Curve}}{{0.00}} {u}<br>
+            Record Low: @{{Record Low}}{{0.00}} {u}<br>
+            {y} High Record: @{{High Records}}{{0.00}} {u}<br>
+            {y} Low Record: @{{Low Records}}{{0.00}} {u}
+            """.format(u=units, y=thisYear)
+    else:
+        hover.tooltips = """
+            <b> @Month </b> <br>
+            Record High: @{{Record High}}{{0.0}} {u}<br>
+            Average High: @{{Average High Curve}}{{0.0}} {u}<br>
+            Monthly Average: @{{Monthly Average Curve}}{{0.0}} {u}<br>
+            Average Low: @{{Average Low Curve}}{{0.0}} {u}<br>
+            Record Low: @{{Record Low}}{{0.0}} {u}<br>
+            {y} High Record: @{{High Records}}{{0.0}} {u}<br>
+            {y} Low Record: @{{Low Records}}{{0.0}} {u}
+            """.format(u=units, y=thisYear)
     p.add_tools(hover, crosshair)
     p.toolbar.autohide = True
 
@@ -501,7 +525,7 @@ def monthly_climo(data, var, scheme='mg'):
     # Fonts
     p.title.text_font = 'arial narrow'
     p.title.text_font_size = '16px'
-    p.title.text_color = colors[scheme]['Plot Light Color']
+    p.title.text_color = 'darkgray'
     p.xaxis.major_label_text_font = 'arial narrow'
     p.xaxis.major_label_text_color = colors[scheme]['Plot Light Color']
     p.xaxis.major_label_text_font_size = "14px"
