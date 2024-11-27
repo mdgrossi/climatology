@@ -10,6 +10,7 @@ import os
 class Data:
     def __init__(self, stationname, stationid, units='metric', timezone='gmt',
                 datum='MHHW', hr_threshold=4, day_threshold=2,
+                start_date=None, end_date=None,
                 redownload=False, reprocess=False, verbose=True):
         """Data class for downloading, formatting, and saving to file
         historical atmospheric (air temperature, barometric pressure, wind) and
@@ -37,6 +38,13 @@ class Data:
             day_threshold: int, maximum number of days of data that can be
                 missing in a given month in order for that month to be included
                 in the historical record. Default is 2.
+            start_date: str, "YYYY-MM-DD" from which to start downloading data.
+                If omitted, data will be downloaded from either the beginning
+                of the time series (if no data have previously been downloaded)
+                or from the most recent timestamp in the existing data. 
+                Defaults to None.
+            end_date: str, "YYYY-MM-DD" indicating the last date from which to
+                download data. If omitted, "today" is used. Defaults to None.
             redownload: Bool, if True, historical data will be redownloaded and
                 the class instance will be re-initiated. Defaults to False.
                 WARNING: This may take a while to run depending on the amount
@@ -81,7 +89,7 @@ class Data:
                 os.makedirs(self.outdir)
         
             # Download all data and save to file
-            self.download_data(start_date=None, end_date=None)
+            self.download_data(start_date=start_date, end_date=end_date)
             outFile = os.path.join(self.outdir,
                                    'observational_data_record.csv.gz')
             self.data.to_csv(outFile, compression='infer')
@@ -172,8 +180,11 @@ class Data:
                 print('Loading historical data from file')
             dataInFile = os.path.join(self.outdir,
                                     'observational_data_record.csv.gz')
+            dtypeDict = {k: float for k in self.variables}
+            dtypeDict['Water Level QC'] = str
             self.data = pd.read_csv(dataInFile, index_col=f'time_{self.tz}',
-                                        parse_dates=True, compression='infer')
+                                    parse_dates=True, compression='infer',
+                                    dtype=dtypeDict)
                 
             # Load daily statistics from file
             if self.verbose:
@@ -190,6 +201,8 @@ class Data:
                 self.monthly_records = mds.load()
             
             # Clean and format
+            if self.verbose:
+                print('Filtering observational data')
             self.filtered_hours = \
                 pd.concat([self._filter_hours(
                                 self.data[var],
@@ -219,71 +232,101 @@ class Data:
         datasets = []
 
         # If no 'end_date' is passed, download through current day
-        if not end_date:
-            end_date = self._format_date(
+        if end_date is None:
+            end = self._format_date(
                             pd.to_datetime('today') + pd.Timedelta(days=1))
+        else:
+            end = self._format_date(end_date)
 
         # Air temperature
         if 'Air Temperature' in self.station.data_inventory:
             self.variables.append('Air Temperature')
-            if not start_date:
-                start_date = self._format_date(
+            if start_date is None:
+                start = self._format_date(
                     self.station.data_inventory['Air Temperature']['start_date'])
-            self._load_atemp(start_date=start_date, end_date=end_date)
+            else:
+                start = self._format_date(start_date)
+            self._load_atemp(start_date=start, end_date=end)
             self.air_temp['atemp_flag'] = self.air_temp['atemp_flag'].str\
                                               .split(',', expand=True)\
                                               .astype(int)\
                                               .sum(axis=1)
-            self.air_temp.loc[self.air_temp['atemp_flag']>0, 'atemp'] = np.nan
+            self.air_temp.loc[self.air_temp['atemp_flag'] > 0, 'atemp'] = np.nan
             datasets.append(self.air_temp['atemp'])
 
         # Water temperature
         if 'Water Temperature' in self.station.data_inventory:
             self.variables.append('Water Temperature')
-            if not start_date:
-                start_date = self._format_date(
+            if start_date is None:
+                start = self._format_date(
                     self.station.data_inventory['Water Temperature']['start_date'])
-            self._load_water_temp(start_date=start_date, end_date=end_date)
+            else:
+                start = self._format_date(start_date)
+            self._load_water_temp(start_date=start, end_date=end)
             self.water_temp['wtemp_flag'] = self.water_temp['wtemp_flag'].str\
                                                 .split(',', expand=True)\
                                                 .astype(int)\
                                                 .sum(axis=1)
-            self.water_temp.loc[self.water_temp['wtemp_flag']>0, 'wtemp'] = np.nan
+            self.water_temp.loc[self.water_temp['wtemp_flag'] > 0, 'wtemp'] = np.nan
             datasets.append(self.water_temp['wtemp'])
 
         # Water level (tides)
         if 'Verified 6-Minute Water Level' in self.station.data_inventory:
             self.variables.append('Water Level')
-            if not start_date:
-                start_date = self._format_date(
+            if start_date is None:
+                start = self._format_date(
                     self.station.data_inventory['Verified 6-Minute Water Level']['start_date'])
-            self._load_water_level(start_date=start_date, end_date=end_date)
-            self.water_levels['wlevel_flag'] = self.water_levels['wlevel_flag']\
-                                                   .str.split(',', expand=True)\
-                                                   .astype(int).sum(axis=1)
+            else:
+                start = self._format_date(start_date)
+            self._load_water_level(start_date=start, end_date=end)
+            self.water_levels['wlevel_flag'] = \
+                self.water_levels['wlevel_flag'].str.split(',', expand=True)\
+                                                .astype(int).sum(axis=1)
             self.water_levels.loc[self.water_levels['wlevel_flag'] > 0, 'wlevel'] = np.nan
-            datasets.append(self.water_levels['wlevel'])
 
+            # Hourly water heights (historical product)
+            if start_date is None:
+                if 'Verified Hourly Height Water Level' in self.station.data_inventory:
+                    start = self._format_date(
+                        self.station.data_inventory['Verified Hourly Height Water Level']['start_date'])
+                    end = self._format_date(
+                        self.water_levels.index[0] + pd.Timedelta(days=1))
+                    self._load_hourly_height(
+                        start_date=start, end_date=end)
+                    self.hourly_heights['wlevel_flag'] = \
+                        self.hourly_heights['wlevel_flag'].str\
+                            .split(',', expand=True).astype(int).sum(axis=1)
+                    self.hourly_heights.loc[self.hourly_heights['wlevel_flag'] > 0] = np.nan
+                    self.water_levels = pd.concat(
+                        (self.hourly_heights[['wlevel', 'wlevel_flag', 'wlevel_qc']][:-1], 
+                         self.water_levels[['wlevel', 'wlevel_flag', 'wlevel_qc']]), axis=0)
+                    self.water_levels = self.water_levels[~self.water_levels.index.duplicated(keep='first')]
+            datasets.append(self.water_levels[['wlevel', 'wlevel_qc']])
+            
         # # Barometric pressure
         # if 'Barometric Pressure' in self.station.data_inventory:
         #     self.variables.append('Barometric Pressure')
-        #     if not start_date:
-        #         start_date = self._format_date(
+        #     if start_date is None:
+        #         start = self._format_date(
         #             self.station.data_inventory['Barometric Pressure']['start_date'])
-        #     self._load_atm_pres(start_date=start_date, end_date=end_date)
+        #     else:
+        #         start = self._format_date(start_date)
+        #     self._load_atm_pres(start_date=start, end_date=end)
         #     self.pressure['apres_flag'] = self.pressure['apres_flag'].str\
         #                                       .split(',', expand=True)\
         #                                       .astype(int).sum(axis=1)
-        #     self.pressure.loc[self.pressure['apres_flag']>0, 'apres'] = np.nan
+        #     self.pressure.loc[self.pressure['apres_flag'] > 0, 'apres'] = np.nan
         #     datasets.append(self.pressure['apres'])
 
         # # Wind
         # if 'Wind' in self.station.data_inventory:
         #     self.variables.extend(['Wind Speed', 'Wind Gust'])
-        #     if not start_date:
-        #         start_date = self._format_date(
+        #     if start_date is None:
+        #         start = self._format_date(
         #             self.station.data_inventory['Wind']['start_date'])
-        #     self._load_wind(start_date=start_date, end_date=end_date)
+        #     else:
+        #         start = self._format_date(start_date)
+        #     self._load_wind(start_date=start, end_date=end)
         #     self.wind['windflag'] = self.wind['wind_flag'].str\
         #                                 .split(',', expand=True).astype(int)\
         #                                 .sum(axis=1)
@@ -295,7 +338,7 @@ class Data:
             print('Compiling data')
         self.data = pd.concat(datasets, axis=1)
         self.data.index.name = f'time_{self.tz}'
-        self.data.columns = [i for i in self.variables]
+        self.data.columns = [i for i in self.variables+['Water Level QC']]
 
     def update_data(self, start_date=None, end_date=None):
         """Download data from NOAA CO-OPS"""
@@ -309,37 +352,80 @@ class Data:
         datasets = []
         
         # If no 'start_date' is passed, pick up from the last observation time
-        if not start_date:
-            start_date = self._format_date(self.data.index.max())
+        if start_date is None:
+            start = self._format_date(self.data.index.max())
+        else:
+            start = self._format_date(start_date)
             
         # If no 'end_date' is passed, download through end of current date
-        if not end_date:
-            end_date = self._format_date(
+        if end_date is None:
+            end = self._format_date(
                             pd.to_datetime('today') + pd.Timedelta(days=1))
+        else:
+            end = self._format_date(end_date)
         
         # Air temperature
         if 'Air Temperature' in self.variables:
-            self._load_atemp(start_date=start_date, end_date=end_date)
+            self._load_atemp(start_date=start, end_date=end)
+            self.air_temp['atemp_flag'] = self.air_temp['atemp_flag'].str\
+                                              .split(',', expand=True)\
+                                              .astype(int)\
+                                              .sum(axis=1)
+            self.air_temp.loc[self.air_temp['atemp_flag'] > 0, 'atemp'] = np.nan
             datasets.append(self.air_temp['atemp'])
 
         # Water temperature
         if 'Water Temperature' in self.variables:
-            self._load_water_temp(start_date=start_date, end_date=end_date)
+            self._load_water_temp(start_date=start, end_date=end)
+            self.water_temp['wtemp_flag'] = self.water_temp['wtemp_flag'].str\
+                                                .split(',', expand=True)\
+                                                .astype(int)\
+                                                .sum(axis=1)
+            self.water_temp.loc[self.water_temp['wtemp_flag'] > 0, 'wtemp'] = np.nan
             datasets.append(self.water_temp['wtemp'])
 
         # Water level (tides)
         if 'Water Level' in self.variables:
-            self._load_water_level(start_date=start_date, end_date=end_date)
-            datasets.append(self.water_levels['wlevel'])
+            # Check for verified data where preliminary data were previously downloaded
+            if self.verbose:
+                print('Checking for new verified water level tide data')
+            p_start = self.data[self.data['Water Level QC'] == 'p'].index.min()
+            p_end = self.data[self.data['Water Level QC'] == 'p'].index.max() + pd.Timedelta(days=1)
+            self._load_water_level(start_date=self._format_date(p_start),
+                                   end_date=self._format_date(p_end))
+            self.water_levels.index.name = self.data.index.name
+            self.water_levels.columns = ['Water Level', 's', 'wlevel_flag', 'Water Level QC']
+            self.water_levels['wlevel_flag'] = \
+                self.water_levels['wlevel_flag'].str.split(',', expand=True)\
+                                                .astype(int).sum(axis=1)
+            self.water_levels.loc[self.water_levels['wlevel_flag'] > 0, 'Water Level'] = np.nan
+            data = self.data.copy()
+            data.update(self.water_levels)
+            self.data = data
+            # Get latest data
+            self._load_water_level(start_date=start, end_date=end)
+            self.water_levels['wlevel_flag'] = \
+                self.water_levels['wlevel_flag'].str.split(',', expand=True)\
+                                                .astype(int).sum(axis=1)
+            self.water_levels.loc[self.water_levels['wlevel_flag'] > 0, 'wlevel'] = np.nan
+            datasets.append(self.water_levels[['wlevel', 'wlevel_qc']])
 
         # Barometric pressure
         if 'Barometric Pressure' in self.variables:
-            self._load_atm_pres(start_date=start_date, end_date=end_date)
+            self._load_atm_pres(start_date=start, end_date=end)
+            self.pressure['apres_flag'] = self.pressure['apres_flag'].str\
+                                              .split(',', expand=True)\
+                                              .astype(int).sum(axis=1)
+            self.pressure.loc[self.pressure['apres_flag'] > 0, 'apres'] = np.nan
             datasets.append(self.pressure['apres'])
 
         # Wind
         if 'Wind Speed' in self.variables:
-            self._load_wind(start_date=start_date, end_date=end_date)
+            self._load_wind(start_date=start, end_date=end)
+            self.wind['windflag'] = self.wind['wind_flag'].str\
+                                        .split(',', expand=True).astype(int)\
+                                        .sum(axis=1)
+            self.wind.loc[self.wind['wind_flag'] > 0, ['windspeed', 'windgust']] = np.nan
             datasets.append(self.wind[['windspeed', 'windgust']])
 
         # Merge into single dataframe
@@ -348,7 +434,7 @@ class Data:
             print('No new data available.')
         else:
             data.index.name = f'time_{self.tz}'
-            data.columns = [i for i in self.variables]
+            data.columns = [i for i in self.data.columns]
             data = pd.concat([self.data,
                               data[data.index.isin(self.data.index) == False]],
                              axis=0)
@@ -457,7 +543,7 @@ class Data:
         
     def _load_atemp(self, start_date, end_date):
         """Download air temperature data from NOAA CO-OPS from 'start_date'
-        through current day.
+        through 'end_date'.
         """
         if self.verbose:
             print('Retrieving air temperature data')
@@ -471,7 +557,7 @@ class Data:
     
     def _load_wind(self, start_date, end_date):
         """Download wind data from NOAA CO-OPS from 'start_date' through
-        current day.
+        'end_date'.
         """
         if self.verbose:
             print('Retrieving wind data')
@@ -486,7 +572,7 @@ class Data:
     
     def _load_atm_pres(self, start_date, end_date):
         """Download barometric pressure data from NOAA CO-OPS from 'start_date'
-        through current day.
+        through 'end_date'.
         """
         if self.verbose:
             print('Retrieving barometric pressure data')
@@ -500,7 +586,7 @@ class Data:
     
     def _load_water_temp(self, start_date, end_date):
         """Download water temperature data from NOAA CO-OPS from 'start_date'
-       through current day.
+       through 'end_date'.
         """
         if self.verbose:
             print('Retrieving water temperature data')
@@ -514,7 +600,7 @@ class Data:
 
     def _load_water_level(self, start_date, end_date):
         """Download water level tide data from NOAA CO-OPS from 'start_date'
-        through current day.
+        through 'end_date'.
         """
         if self.verbose:
             print('Retrieving water level tide data')
@@ -527,6 +613,21 @@ class Data:
             time_zone=self.tz)
         self.water_levels.columns = ['wlevel', 's', 'wlevel_flag', 'wlevel_qc']
 
+    def _load_hourly_height(self, start_date, end_date):
+        """Download verified hourly height data, the predecessor to the water level product, from NOAA CO-OPS from 'start_date' through 'end_date'."""
+        if self.verbose:
+            print('Retrieving hourly height data')
+        self.hourly_heights = self.station.get_data(
+            begin_date=start_date,
+            end_date=end_date,
+            product='hourly_height',
+            datum=self.datum,
+            units=self.unit_system,
+            time_zone=self.tz)
+        self.hourly_heights.columns = ['wlevel', 's', 'wlevel_flag']
+        # Add QC column for comparing to water level product
+        self.hourly_heights['wlevel_qc'] = 'v'
+        
     def _DOY(self, df):
         """Calculate year day out of 366"""
         # Day of year as integer
@@ -540,24 +641,25 @@ class Data:
         return df
 
     def _count_missing_hours(self, group, threshold=3):
-        """Return True if the number of hours in a day with missing data is 
-        less than or equal to 'threshold' and False otherwise.
+        """Return True if the number of hours in a day with good data is 
+        greater than or equal to 24-'threshold' (i.e., a 'good' day) and False 
+        otherwise.
         """
-        missing_hours = group.resample('1h').mean().isna().sum()
-        return missing_hours <= threshold
+        num_obs = (~group.resample('1h').mean().isna()).sum()
+        good_threshold = 24 - threshold
+        return num_obs >= good_threshold
 
     def _count_missing_days(self, group, threshold=2):
-        """Return True if the number of days in a month with missing data 
-        is less than or equal to 'theshold' and False otherwise. Two tests 
-        are performed: missing data (NaN) and compare to the number of days in
-        the given month.
+        """Return True if the number of days in a month with good data 
+        is greater than or equal to the number of days in the month minus 'theshold' (i.e., a 'good' month) and False
+        otherwise.
         """
         try:
             days_in_month = pd.Period(group.index[0].strftime(format='%Y-%m-%d')).days_in_month
-            missing_days = group.resample('1D').mean().isna().sum()
-            missing_days_flag = missing_days <= threshold
-            days_in_month_flag = days_in_month - group.resample('1D').mean().size <= threshold
-            return min(missing_days_flag, days_in_month_flag)
+            good_days = (~group.resample('1D').mean().isna()).sum()
+            good_threshold = days_in_month - threshold
+            missing_days_flag = good_days > good_threshold
+            return good_days >= good_threshold
         except IndexError:
             pass
 
@@ -614,6 +716,34 @@ class Data:
             results = (dailyHighs + dailyLows) / 2
             return results
 
+    def mon_daily_highs(self):
+        """Daily highs using data filtered by days"""
+        return self.filtered_days.groupby(
+            pd.Grouper(freq='1D', closed='left', label='left', dropna=True))\
+              .max(numeric_only=True)
+    
+    def mon_daily_lows(self):
+        """Daily lows using data filtered by days"""
+        return self.filtered_days.groupby(
+            pd.Grouper(freq='1D', closed='left', label='left', dropna=True))\
+              .min(numeric_only=True)
+
+    def mon_daily_avgs(self, true_average=False):
+        """Daily averages by calendar day using data filtered by day. If
+        'true_average' is True, all measurements from each 24-hour day will be
+        used to calculate the average. Otherwise, only the maximum and minimum
+        observations are used. Defaults to False (meteorological standard).
+        """
+        if true_average:
+            return self.filtered_days.groupby(
+                pd.Grouper(freq='1D', closed='left', label='left', dropna=True))\
+                  .mean(numeric_only=True)
+        else:
+            dailyHighs = self.mon_daily_highs()
+            dailyLows = self.mon_daily_lows()
+            results = (dailyHighs + dailyLows) / 2
+            return results
+
     def daily_avg(self, true_average=False):
         """Daily averages. If 'true_average' is True, all measurements from
         each 24-hour day will be used to calculate the daily average.
@@ -634,7 +764,7 @@ class Data:
         only the maximum and minimum observations are used. Defaults to False
         (meteorological standard).
         """
-        dailyAvgs = self.daily_avgs(true_average=true_average)
+        dailyAvgs = self.mon_daily_avgs(true_average=true_average)
         monthHighs = dailyAvgs.groupby(pd.Grouper(freq='M'))\
                               .max(numeric_only=True)
         return monthHighs
@@ -645,7 +775,7 @@ class Data:
         only the maximum and minimum observations are used. Defaults to False
         (meteorological standard).
         """
-        dailyAvgs = self.daily_avgs(true_average=true_average)
+        dailyAvgs = self.mon_daily_avgs(true_average=true_average)
         monthLows = dailyAvgs.groupby(pd.Grouper(freq='M'))\
                              .min(numeric_only=True)
         return monthLows
@@ -656,7 +786,7 @@ class Data:
         Otherwise, only the maximum and minimum observations are used. Defaults
         to False (meteorological standard).
         """
-        dailyAvgs = self.daily_avgs(true_average=true_average)
+        dailyAvgs = self.mon_daily_avgs(true_average=true_average)
         monthlyMeans = dailyAvgs.groupby(pd.Grouper(freq='M'))\
                                 .mean(numeric_only=True)
         monthlyMeans.drop('YearDay', axis=1, inplace=True)
@@ -699,7 +829,7 @@ class Data:
         Defaults to False (meteorological standard).
         """
         # Calculate the records
-        dailyAvgs = self.daily_avgs(true_average=true_average)
+        dailyAvgs = self.mon_daily_avgs(true_average=true_average)
         monthlyAvgs = dailyAvgs.groupby(pd.Grouper(freq='M'))\
                                .mean(numeric_only=True)
         monthlyAvgs.drop('YearDay', axis=1, inplace=True)
@@ -751,7 +881,7 @@ class Data:
         Defaults to False (meteorological standard).
         """
         # Calculate the records
-        dailyAvgs = self.daily_avgs(true_average=true_average)
+        dailyAvgs = self.mon_daily_avgs(true_average=true_average)
         monthlyAvgs = dailyAvgs.groupby(pd.Grouper(freq='M'))\
                                .mean(numeric_only=True)
         monthlyAvgs.drop('YearDay', axis=1, inplace=True)
