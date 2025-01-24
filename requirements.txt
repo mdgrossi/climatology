@@ -10,3 +10,4 @@ pyyaml==6.0.1
 jupyter==1.0.0
 bokeh
 great_tables==0.13.0
+statsmodels
