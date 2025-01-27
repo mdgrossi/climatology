@@ -583,7 +583,7 @@ output_notebook(hide_banner=True)
 display(Markdown('::: {.panel-tabset}'))
 
 for var in daily_stats.variable.values:
-    display(Markdown(f'\n## {var}\n\n'))
+    display(Markdown(f'\n## {var} ({daily_stats.attrs[f"{var} units"]})\n\n'))
     daily_climo(data=daily_stats, var=var, flood_thresholds=floods,
     scheme='cb')
     display(Markdown(' '))
@@ -598,8 +598,8 @@ display(Markdown(':::'))
 
 display(Markdown('::: {.panel-tabset}'))
 
-for var in daily_stats.variable.values:
-    display(Markdown(f'\n## {var}\n\n'))
+for var in monthly_stats.variable.values:
+    display(Markdown(f'\n## {var} ({monthly_stats.attrs[f"{var} units"]})\n\n'))
     monthly_climo(data=monthly_stats, var=var, scheme='cb')
     display(Markdown(' '))
 
@@ -618,7 +618,7 @@ display(Markdown(':::'))
 display(Markdown('::: {.panel-tabset}'))
 
 for var in daily_stats.variable.values:
-    display(Markdown(f'\n### {var}\n\n'))
+    display(Markdown(f'\n### {var} ({daily_stats.attrs[f"{var} units"]})\n\n'))
     colortable(daily_stats, var)
     display(Markdown(' '))
 
@@ -633,7 +633,7 @@ display(Markdown(':::'))
 display(Markdown('::: {.panel-tabset}'))
 
 for var in monthly_stats.variable.values:
-    display(Markdown(f'\n### {var}\n\n'))
+    display(Markdown(f'\n### {var} ({monthly_stats.attrs[f"{var} units"]})\n\n'))
     colortable(monthly_stats, var)
     display(Markdown(' '))
 
