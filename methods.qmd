@@ -87,7 +87,7 @@ $$\text{DOY daily average} = \frac{1}{Y}\sum_{y=1}^Y a_{yd}$$ {#eq-ddy-d}
 where $Y$ is the number of years in the observational time series.
 
 ::: {.callout-note}
-Note: The Daily Average reported in the statistics dashboard are DOY daily averages from @eq-ddy-d, not to be confused with @eq-tda or [-@eq-mda].
+Note: The Daily Average reported in the statistics dashboard are DOY daily averages from @eq-ddy-d, not to be confused with @eq-tda or [-@eq-mda]. For the sake of visualization, a cosine regression is fit to these data and shown on the plots.
 :::
 
 ### Record High Daily Average
@@ -120,6 +120,8 @@ $$\text{average high} = \frac{1}{Y}\sum_{y=1}^Y h_{yd}$$ {#eq-ah-d}
 
 where $Y$ is the number of years in the observational time series.
 
+Plots illustrate a cosine regression fit to these data for the sake of visualization.
+
 ### Record High
 
 The record high is the **maximum daily high for any given DOY**. It is determined by taking the daily highs from @eq-dh, grouping them by DOY, and finding the maximum value for each DOY. Given $\textbf{H}$ from @eq-highs-d above:
@@ -149,6 +151,8 @@ The average low is the average over each column:
 $$\text{average low} = \frac{1}{Y}\sum_{y=1}^Y l_{yd}$$ {#eq-al-d}
 
 where $Y$ is the number of years in the observational time series.
+
+Plots illustrate a cosine regression fit to these data for the sake of visualization.
 
 ### Highest Low
 
@@ -189,6 +193,8 @@ $$\text{monthly average} = \frac{1}{Y}\sum_{y=1}^Y a_{ym}$$ {#eq-ddy-m}
 
 where $Y$ is the number of years in the observational time series.
 
+Plots illustrate a cosine regression fit to these data for the sake of visualization.
+
 ### Record High Monthly Average
 
 The record high monthly average is the **maximum daily average for any given calendar month**. It is determined by taking the daily averages from @eq-tda, grouping them by calendar month, and finding the maximum value for each month. Given $\textbf{A}$ from @eq-avgs-m above:
@@ -219,6 +225,8 @@ $$\text{average high} = \frac{1}{Y}\sum_{y=1}^Y h_{ym}$$ {#eq-ah-m}
 
 where $Y$ is the number of years in the observational time series.
 
+Plots illustrate a cosine regression fit to these data for the sake of visualization.
+
 ### Record High
 
 The record high is the **maximum daily high for any given calendar month**. It is determined by taking the daily highs from @eq-dh, grouping them by calendar month, and finding the maximum value for each month. Given $\textbf{H}$ from @eq-highs-m above:
@@ -248,6 +256,8 @@ The average low is the average over each column:
 $$\text{average low} = \frac{1}{Y}\sum_{y=1}^Y l_{ym}$$ {#eq-al-m}
 
 where $Y$ is the number of years in the observational time series.
+
+Plots illustrate a cosine regression fit to these data for the sake of visualization.
 
 ### Highest Low
 
