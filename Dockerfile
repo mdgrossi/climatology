@@ -50,9 +50,14 @@ RUN gdebi --non-interactive quarto-linux-amd64.deb
 # Copy requirements into container
 COPY requirements.txt .
 
+# Copy custom package
+# ADD clipy/dist/clipy-2025.0.1-py3-none-any.whl .
+ADD clipy/. clipy/
+
 # Update pip and install Python package dependencies
 RUN pip install --upgrade pip setuptools wheel && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install clipy/dist/clipy-2025.0.1-py3-none-any.whl
 RUN jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
 USER $USERNAME
