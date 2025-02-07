@@ -20,8 +20,9 @@
 # =============================================================================
 # PACKAGES
 
-from pyclimo import Data
+from clipy import climo, plot
 import argparse
+import json
 import os
 
 # -----------------------------------------------------------------------------
@@ -41,7 +42,7 @@ def parse_args():
     parser.add_argument(
         '-i', '--id',
         metavar='stationid', type=str,
-        default=None,
+        default='auto',
         help='Tide station number from which to retrieve data.')
     parser.add_argument(
         '-u', '--units',
@@ -91,23 +92,24 @@ def main():
     args = parse_args()
     
     # Dictionary of station IDs
-    stationids = {
-        'Beaufort, NC': '8656483',
-        'Woods Hole, MA': '8447930',
-        'Naples, FL': '8725114',
-        'Bay St. Louis, MS': '8747437',
-        'Virginia Key, FL': '8723214',
-        'Lewes, DE': '8557380'
-    }
+    # stationids = {
+    #     'Beaufort, NC': '8656483',
+    #     'Woods Hole, MA': '8447930',
+    #     'Naples, FL': '8725114',
+    #     'Bay St. Louis, MS': '8747437',
+    #     'Virginia Key, FL': '8723214',
+    #     'Lewes, DE': '8557380'
+    # }
+    with open('stations.json', 'r') as sf:
+        json.dump(stationids, jf)
     if args.id == 'auto':
         try:
             args.id = stationids[args.station]
         except KeyError:
             print('No station ID was passed and unable to automatically determine one using "station". Pass a valid "station" or specify station ID and try again.')
 
-
     # Download data and update stats
-    data = Data(
+    data = climo.Data(
         stationname=args.station,
         stationid=args.id,
         units=args.units,
@@ -119,9 +121,13 @@ def main():
         reprocess=args.reprocess,
         verbose=args.verbose
         )
-    
     data.update_data()
     data.update_stats()
+
+    # Water Level trend plot
+    if 'Water Level' in data.variables:
+        plot.trend(data=data, var='Water Level',
+                   fname=os.path.join(data.outdir, 'trend-waterlevel.html'))
 
 if __name__ == "__main__":
     """Main program"""
