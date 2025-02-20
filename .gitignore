@@ -3,5 +3,6 @@
 .RHistory
 
 /_site/
+/_freeze/
 /.quarto/
 __pycache__/
