@@ -101,7 +101,7 @@ def main():
     #     'Lewes, DE': '8557380'
     # }
     with open('stations.json', 'r') as sf:
-        json.dump(stationids, jf)
+        stationids = json.load(sf)
     if args.id == 'auto':
         try:
             args.id = stationids[args.station]
