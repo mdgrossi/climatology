@@ -49,18 +49,18 @@ display(Markdown(f"**{dt.today().strftime('%A, %B %d, %Y')}**<br>"))
 #| include: False
 import os
 import sys
-import yaml
 import xarray as xr
 from bokeh.io import output_notebook
 sys.path.append('/workspaces/climatology')
 from clipy import plot
 
-# HOME DIR
+# DIRECTORY
 HOME = '../../../'
+dirName = os.path.join(HOME, dirName)
 
 # READ IN STATS
-daily_stats = xr.load_dataset(os.path.join(HOME, dirName, 'statistics-daily.nc'))
-monthly_stats = xr.load_dataset(os.path.join(HOME, dirName, 'statistics-monthly.nc'))
+daily_stats = xr.load_dataset(os.path.join(dirName, 'statistics-daily.nc'))
+monthly_stats = xr.load_dataset(os.path.join(dirName, 'statistics-monthly.nc'))
 
 ```
 
@@ -75,7 +75,7 @@ display(Markdown('::: {.panel-tabset}'))
 for var in daily_stats.variable.values:
     display(Markdown(f'\n## {var} ({daily_stats.attrs[f"{var} units"]})\n\n'))
     plot.daily_climo(data=daily_stats, var=var, scheme='mg',
-                     flood_thresholds=flood_thresholds)
+                    flood_thresholds=flood_thresholds)
     display(Markdown(' '))
 
 display(Markdown(':::'))
