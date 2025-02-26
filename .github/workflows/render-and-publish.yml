@@ -16,9 +16,9 @@ jobs:
       with:
         python-version: '3.9'
         cache: 'pip' # caching pip dependencies
-    - run: |
-        pip install -r requirements.txt
-        pip install clipy/dist/clipy-2025.0.1-py3-none-any.whl
+    - run: pip install -r requirements.txt
+    - run: pip install --upgrade pip setuptools wheel
+    - run: pip install clipy/dist/clipy-2025.0.1-py3-none-any.whl
     
     - name: Set up Quarto
       uses: quarto-dev/quarto-actions/setup@v2
