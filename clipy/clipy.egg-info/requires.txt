@@ -1,0 +1,7 @@
+pandas==1.5.3
+numpy==1.24.4
+xarray[io]==2024.3.0
+great_tables==0.13.0
+statsmodels==0.14.4
+scipy==1.13.1
+bokeh

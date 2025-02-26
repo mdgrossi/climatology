@@ -1,0 +1,8 @@
+README.md
+climo.py
+pyproject.toml
+clipy.egg-info/PKG-INFO
+clipy.egg-info/SOURCES.txt
+clipy.egg-info/dependency_links.txt
+clipy.egg-info/requires.txt
+clipy.egg-info/top_level.txt

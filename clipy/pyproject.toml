@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clipy"
+version = "2025.0.1"
+description = "Makeshift Python library for climatology plots"
+authors = [
+    { name = "mdgrossi" }
+]
+readme = "README.md"
+dependencies = [
+    "pandas==1.5.3",
+    "numpy==1.24.4",
+    "xarray[io]==2024.3.0",
+    "great_tables==0.13.0",
+    "statsmodels==0.14.4",
+    "scipy==1.13.1",
+    "bokeh"
+]
+
+[tool.setuptools.packages.find]
+include = ["climo", "plot"]

@@ -1,0 +1,17 @@
+Metadata-Version: 2.2
+Name: clipy
+Version: 2025.0.1
+Summary: Makeshift Python library for climatology plots
+Author: mdgrossi
+Description-Content-Type: text/markdown
+Requires-Dist: pandas==1.5.3
+Requires-Dist: numpy==1.24.4
+Requires-Dist: xarray[io]==2024.3.0
+Requires-Dist: great_tables==0.13.0
+Requires-Dist: statsmodels==0.14.4
+Requires-Dist: scipy==1.13.1
+Requires-Dist: bokeh
+
+### clipy
+
+A makeshift Python library for calculating and plotting climatology records
