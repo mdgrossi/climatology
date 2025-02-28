@@ -20,5 +20,5 @@ dependencies = [
     "bokeh"
 ]
 
-[tool.setuptools.packages.find]
-include = ["climo", "plot"]
+[tool.setuptools.packages]
+find = {}
