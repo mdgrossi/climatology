@@ -52,7 +52,7 @@ import sys
 import xarray as xr
 from bokeh.io import output_notebook
 # sys.path.append('/workspaces/climatology')
-sys.path.append('.')
+sys.path.append('/home/runner/work/climatology/climatology')
 from clipy import plot
 
 # DIRECTORY
