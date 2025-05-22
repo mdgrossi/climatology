@@ -11,3 +11,4 @@ jupyter==1.0.0
 bokeh
 great_tables==0.13.0
 statsmodels
+pytz==2025.2
