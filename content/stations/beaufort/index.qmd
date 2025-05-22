@@ -6,6 +6,7 @@ format:
   dashboard:
     logo: ../../../images/bftnc.JPG
     scrolling: false
+dirname: beaufortnc
 ---
 
 ```{python}
@@ -132,7 +133,7 @@ display(Markdown(':::'))
 ### Water Level Trend
 
 ```{=html}
-{{< include ../../../beaufortNc/trend-waterlevel.html >}}
+{{< include ../../../{{< meta dirname>}}/trend-waterlevel.html >}}
 ```
 
 # Data
