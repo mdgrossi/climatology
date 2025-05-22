@@ -27,10 +27,12 @@ flood_thresholds = {
 # {.sidebar}
 
 ```{python}
+from datetime import pytz
 from datetime import datetime as dt
 from IPython.display import Markdown
 
-display(Markdown(f"**{dt.today().strftime('%A, %B %d, %Y')}**<br>"))
+est = pytz.timezone('US/Eastern')
+display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 
 ```
 
