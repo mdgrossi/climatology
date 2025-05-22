@@ -27,7 +27,7 @@ flood_thresholds = {
 # {.sidebar}
 
 ```{python}
-from datetime import pytz
+import pytz
 from datetime import datetime as dt
 from IPython.display import Markdown
 
