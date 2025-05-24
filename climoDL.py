@@ -5,8 +5,8 @@
 # Modified: Oct 11, 2024
 #
 # This script retrieves NOAA CO-OPS observational data, both atmospheric and
-# oceanic, for the specified station. If historical data already exists
-# locally, it is updated with the most recently available observations.
+# oceanic, for the specified station. If historical data already exist
+# locally, they are updated with the most recently available observations.
 #
 # To execute for a new station:
 # python3 climoDL.py -s "Virginia Key, FL" -i "8723214" -u "english" -t "lst" -d "MHHW" --hr 3 --day 2 
