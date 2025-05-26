@@ -14,7 +14,7 @@ dirName = 'lewesDe'
 
 # ENTER THE FLOOD THRESHOLDS FOR THIS SITE
 # https://water.noaa.gov/gauges/lwsd1
-floods = {
+flood_thresholds = {
     'Major Flood Threshold': 8.0,
     'Moderate Flood Threshold': 7.0,
     'Minor Flood Threshold': 6.0
