@@ -1,3 +1,4 @@
+---
 title: "Lewes, DE"
 image: ../../../images/logo.png
 format:
