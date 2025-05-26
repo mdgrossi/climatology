@@ -11,6 +11,6 @@ units:
   Water Level: ft
   Water Temperature: "\xB0F"
 variables:
-  # - Air Temperature
-  - Water Temperature
-  - Water Level
+- Air Temperature
+- Water Temperature
+- Water Level
