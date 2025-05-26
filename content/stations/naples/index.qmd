@@ -128,12 +128,6 @@ display(Markdown(':::'))
 
 ```
 
-### Water Level Trend
-
-```{=html}
-{{< include ../../../naplesFl/trend-waterlevel.html >}}
-```
-
 # Data
 
 ## Row {.tabset}
