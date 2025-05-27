@@ -13,7 +13,7 @@ project:
     - "content/stations/woodshole/*.qmd"
     - "content/archived/baystlouis/*.qmd"
     - "content/archived/lewes/*.qmd"
-    - "content/stations/naples/index.qmd"
+    - "content/archived/naples/index.qmd"
     - "!NOAA-CO-OPS-Climatology.ipynb"
 
 theme:
@@ -45,7 +45,7 @@ website:
           - text: Lewes, DE (archived)
             href: content/archived/lewes/index.qmd
           - text: Naples, FL (archived)
-            href: content/stations/naples/index.qmd
+            href: content/archived/naples/index.qmd
     # right:
     #   - text: "More"
     #     menu:
