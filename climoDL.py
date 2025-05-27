@@ -121,8 +121,11 @@ def main():
         reprocess=args.reprocess,
         verbose=args.verbose
         )
-    data.update_data()
-    data.update_stats()
+    try:
+        data.update_data()
+        data.update_stats()
+    except COOPSAPIError:
+        print('No new data available.')
 
     # Water Level trend plot
     if 'Water Level' in data.variables:
