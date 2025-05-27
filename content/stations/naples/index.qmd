@@ -45,8 +45,12 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 
 # Plots
 
+## Dashboard (.tabset)
+
 ![](../../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
 
 # Data
+
+## Row {.tabset}
 
 ![](../../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
