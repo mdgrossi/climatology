@@ -1,3 +1,4 @@
+
 ---
 title: "Naples, FL"
 image: ../../../images/logo.png
@@ -45,8 +46,118 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 
 # Plots
 
-![](../../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
+```{python}
+#| include: False
+import os
+import sys
+import xarray as xr
+from bokeh.io import output_notebook
+sys.path.append('/home/runner/work/climatology/climatology')
+from clipy import plot
+
+# DIRECTORY
+HOME = '../../../'
+dirName = os.path.join(HOME, dirName)
+
+# READ IN STATS
+daily_stats = xr.load_dataset(os.path.join(dirName, 'statistics-daily.nc'))
+monthly_stats = xr.load_dataset(os.path.join(dirName, 'statistics-monthly.nc'))
+
+```
+
+## Dashboard {.tabset}
+
+```{python}
+#| output: asis
+#| title: Daily Stats
+output_notebook(hide_banner=True)
+display(Markdown('::: {.panel-tabset}'))
+
+for var in daily_stats.variable.values:
+    display(Markdown(f'\n## {var} ({daily_stats.attrs[f"{var} units"]})\n\n'))
+    plot.daily_climo(data=daily_stats, var=var, scheme='mg',
+                    flood_thresholds=flood_thresholds)
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
+
+```{python}
+#| output: asis
+#| title: Monthly Stats
+
+display(Markdown('::: {.panel-tabset}'))
+
+for var in monthly_stats.variable.values:
+    display(Markdown(f'\n## {var} ({monthly_stats.attrs[f"{var} units"]})\n\n'))
+    plot.monthly_climo(data=monthly_stats, var=var, scheme='mg')
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
+
+```{python}
+#| output: asis
+#| title: Daily Records Set By Year 
+
+display(Markdown('::: {.panel-tabset}'))
+
+for var in daily_stats.variable.values:
+    display(Markdown(f'\n## {var} ({daily_stats.attrs[f"{var} units"]})\n\n'))
+    plot.histograms(stats=daily_stats, var=var, scheme='mg')
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
+
+```{python}
+#| output: asis
+#| title: Monthly Records Set By Year 
+
+display(Markdown('::: {.panel-tabset}'))
+
+for var in monthly_stats.variable.values:
+    display(Markdown(f'\n## {var} ({monthly_stats.attrs[f"{var} units"]})\n\n'))
+    plot.histograms(stats=monthly_stats, var=var, scheme='mg')
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
 
 # Data
 
-![](../../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
+## Row {.tabset}
+
+```{python}
+#| output: asis
+#| title: Daily Stats
+
+display(Markdown('::: {.panel-tabset}'))
+
+for var in daily_stats.variable.values:
+    display(Markdown(f'\n### {var} ({daily_stats.attrs[f"{var} units"]})\n\n'))
+    plot.gtable(daily_stats, var)
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
+
+```{python}
+#| output: asis
+#| title: Monthly Stats
+
+display(Markdown('::: {.panel-tabset}'))
+
+for var in monthly_stats.variable.values:
+    display(Markdown(f'\n### {var} ({monthly_stats.attrs[f"{var} units"]})\n\n'))
+    plot.gtable(monthly_stats, var)
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
