@@ -47,10 +47,31 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 
 ## Dashboard (.tabset)
 
+### Daily Stats
+
 ![](../../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
+
+### Monthly Stats
+
+![](../../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
+
+### Daily Records Set By Year
+
+![](../../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
+
+### Monthly Records Set By Year
+
+![](../../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
+
 
 # Data
 
 ## Row {.tabset}
+
+### Daily Stats
+
+![](../../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
+
+### Monthly Stats
 
 ![](../../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
