@@ -303,7 +303,7 @@ The **total number of the monthly records set each year** are tallied up by year
 
 ## Water Level Trend
 
-This plot shows the **full water level time series with any long term trend** observed at the site. Water level data are the only data that are quality controlled and, in many locations, the time series span several decades, making it possible to discern trends. Let $L$ be the full time series of water levels observed at a given site, sampled either hourly or every six minutes, for a total of $n$ observations:
+This plot shows the **full water level time series with any long term trend** observed at the site. Water level data are the only data that are quality controlled and, in many locations, the time series span several decades, making it possible to discern trends. Let $L$ be the full time series of water levels observed at a given site, sampled either hourly or every six minutes, containing a total of $n$ observations:
 
 $$L = \{l_1, l_2,...,l_n\}$$
 
@@ -313,7 +313,7 @@ $$D = \frac{L - \min(L)}{\max(L) - \min(L)}$$ {#eq-norm}
 
 where $\min(L)$ and $\max(L)$ are the minimum and maximum of the entire time series, respectively. The seasonal signal is then removed from the normalized time series using an [additive model](https://www.statsmodels.org/stable/generated/statsmodels.tsa.seasonal.seasonal_decompose.html#statsmodels.tsa.seasonal.seasonal_decompose) from the Python package [statsmodels](https://www.statsmodels.org/stable/index.html) with a quarterly period (4 seasons per year.) The de-seasonalized time series is then un-normalized using the inverse of @eq-norm:
 
-$$D * (\max(L) - \min(L)) + \min(L)$$ {#eq-norm}
+$$D * \big(\max(L) - \min(L)\big) + \min(L)$$ {#eq-norm}
 
 Finally, a linear regression is applied to the de-seasonalized time series to discern any long term trend.
 
