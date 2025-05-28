@@ -87,7 +87,7 @@ $$\text{DOY daily average} = \frac{1}{Y}\sum_{y=1}^Y a_{yd}$$ {#eq-ddy-d}
 where $Y$ is the number of years in the observational time series.
 
 ::: {.callout-note}
-Note: The Daily Average reported in the statistics dashboard are DOY daily averages from @eq-ddy-d, not to be confused with @eq-tda or [-@eq-mda]. For the sake of visualization, a cosine regression is fit to these data and shown on the plots.
+The Daily Average reported in the statistics dashboard are DOY daily averages from @eq-ddy-d, not to be confused with @eq-tda or [-@eq-mda]. For the sake of visualization, a cosine regression is fit to these data and shown on the plots.
 :::
 
 ### Record High Daily Average
@@ -274,3 +274,49 @@ $$\text{record low} = \min\{|l_{ym}|: m=1,2,...,12\}$$ {#eq-rl-m}
 ### Number of Years in Record
 
 The number of years of data available varies from month to month and between variables due to sensor availability, gaps in the observational record, or bad data being filtered out. Years are tallied by grouping the entire time series by calendar month and counting the number of years for each month. For example, given $\textbf{A}$ from @eq-avgs-m above, the number of years available for each month is the total number of unique years in each column.
+
+
+## Record Counts
+
+### Daily Records Set By Year
+
+The **total number of the daily records set each year** are tallied up by year. Daily records include all of the following:
+
+- Record high daily average
+- Record low daily average
+- Lowest high
+- Record high
+- Highest low
+- Record low
+
+### Monthly Records Set By Year
+
+The **total number of the monthly records set each year** are tallied up by year. Monthly records include all of the following:
+
+- Record high monthly average
+- Record low monthly average
+- Lowest high
+- Record high
+- Highest low
+- Record low
+
+
+## Water Level Trend
+
+This plot shows the **full water level time series with any long term trend** observed at the site. Water level data are the only data that are quality controlled and, in many locations, the time series span several decades, making it possible to discern long term trends. Let $L$ be the full time series of water levels observed at a given site, sampled either hourly or every six minutes, for a total of $n$ observations:
+
+$$L = \{l_1, l_2,...,l_n\}$$
+
+Monthly average water levels are calculated from daily averaged calculated from @eq-mda over the entire time series and a simple linear interpretation model is applied to fill missing data. The time series is then normalized to the interval $[0,1]$:
+
+$$\frac{L - \min{L}}{\max{L} - \min{L}}$$ {#eq-norm}
+
+where $\min{L}$ and $\max{L}$ are the minimum and maximum of the entire time series. The normalized time series is then de-seasonalized (*i.e.*, the seasonal signal is removed) using an [additive model](https://www.statsmodels.org/stable/generated/statsmodels.tsa.seasonal.seasonal_decompose.html#statsmodels.tsa.seasonal.seasonal_decompose) from the Python package [statsmodels](https://www.statsmodels.org/stable/index.html) with period of 4 seasons per year. The de-seasonalized time series (call it $D$) is then un-normalized using the inverse of @eq-norm:
+
+$$(D * (\max{L} - \min{L})) + \min{L}$$ {#eq-norm}
+
+Finally, a linear regression is applied to the de-seasonalized time series to discern any long term trend.
+
+::: {.callout-note}
+This plot is only available for sites containing full time series of water level obervations. Some time series have been interrupted by storms or other logistical challenges.
+:::
