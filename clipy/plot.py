@@ -91,8 +91,7 @@ colors = dict(
 
 # Helper functions
 def record_counts(data, var):
-    """Count the number of records held each month of each year for variable
-    `var`
+    """Count the number of records set each year for variable `var`
 
     Parameters
     ----------
@@ -113,9 +112,9 @@ def record_counts(data, var):
 
     # Value counts for each year
     counts = stats.stack().groupby(level=[1]).value_counts().unstack().T.fillna(0)
+    
+    # Resort rows and columns after unstack
     counts = counts.reindex(range(min(counts.index), max(counts.index)+1), fill_value=0)
-
-    # Resort columns after unstack
     counts = counts[stats.columns[stats.columns.str.endswith('Year')]]
 
     # Restructure for Bokeh plotting
