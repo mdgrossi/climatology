@@ -122,7 +122,9 @@ class Data:
                 'hr_threshold': self.hr_threshold,
                 'day_threshold': self.day_threshold,
                 'variables': self.variables,
-                'units': self.units})
+                'units': self.units,
+                'last_obs': {i:self.data[i].last_valid_index().strftime('%Y-%m-%d %X') for i in self.variables}
+                })
             with open(os.path.join(self.outdir, 'metadata.yml'), 'w') as fp:
                 yaml.dump(self.meta, fp) 
                     
@@ -455,6 +457,10 @@ class Data:
             statsOutFile = os.path.join(self.outdir,
                                         'observational_data_record.csv.gz')
             self.data.to_csv(statsOutFile, compression='infer')
+            self.meta['last_obs'] = {i:self.data[i].last_valid_index().strftime('%Y-%m-%d %X') \
+                        for i in self.variables}
+            with open(os.path.join(self.outdir, 'metadata.yml'), 'w') as fp:
+                yaml.dump(self.meta, fp)
             if self.verbose:
                 print(f"Updated observational data written to file '{statsOutFile}'.")
                 print("Done! Run Data.update_stats() to update statistics.")
@@ -508,6 +514,7 @@ class Data:
                 print(f"Updated monthly observational statistics written to '{statsOutFile}'")
 
     def _format_date(self, datestr):
+        """Format date strings into YYYMMDD format"""
         dtdt = pd.to_datetime(datestr)
         return dt.strftime(dtdt, '%Y%m%d')
     
@@ -1132,7 +1139,6 @@ class Data:
         numYears = pd.concat(
             [self.filtered_hours[[v, 'YearDay']]\
                 .dropna().groupby('YearDay').apply(
-                # .groupby('YearDay').apply(
                     lambda x: len(x.index.year.unique())) \
              for v in self.filtered_hours.columns if v != 'YearDay'], axis=1)
         numYears.columns = [v for v in self.filtered_hours.columns \
@@ -1146,7 +1152,6 @@ class Data:
         numYears = pd.concat(
             [self.filtered_days[v]\
                  .dropna().groupby(self.filtered_days[v].dropna().index.month).apply(
-                #  .groupby(self.filtered_days[v].index.month).apply(
                     lambda x: len(x.index.year.unique())) \
                 for v in self.filtered_days if v != 'YearDay'], axis=1)
         numYears.columns = [v for v in self.filtered_days.columns \
@@ -1184,8 +1189,8 @@ class Data:
         for var in daily_records.coords['variable'].values:
             if 'Year' not in var:
                 daily_records.attrs[var+' data range'] = \
-                    (self.filtered_hours[var].dropna().index.min().strftime('%Y-%m-%d'),
-                     self.filtered_hours[var].dropna().index.max().strftime('%Y-%m-%d'))
+                    (self.filtered_hours[var].first_valid_index().strftime('%Y-%m-%d'),
+                     self.filtered_hours[var].last_valid_index().strftime('%Y-%m-%d'))
         
         # Rearrange array coordinates and variables: separate records and 
         # years into smaller arrays
@@ -1248,8 +1253,8 @@ class Data:
         for var in monthly_records.coords['variable'].values:
             if 'Year' not in var:
                 monthly_records.attrs[var+' data range'] = \
-                    (self.filtered_days[var].dropna().index.min().strftime('%Y-%m-%d'),
-                     self.filtered_days[var].dropna().index.max().strftime('%Y-%m-%d'))
+                    (self.filtered_days[var].first_valid_index().strftime('%Y-%m-%d'),
+                     self.filtered_days[var].last_valid_index().strftime('%Y-%m-%d'))
         
         # Rearrange array coordinates and variables: separate records and 
         # years into smaller arrays
