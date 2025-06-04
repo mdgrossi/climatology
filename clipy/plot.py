@@ -10,7 +10,10 @@ import pandas as pd
 import numpy as np
 import os
 
-# Colors for plotting
+# Colors for plotting:
+# mg = my colors
+# bm = B. McNoldy's colors
+# cb = colorblind friendly colors (from https://www.nceas.ucsb.edu/sites/default/files/2022-06/Colorblind%20Safe%20Color%20Schemes.pdf)
 colors = dict(
     mg=dict({
         'Date': 'white',
@@ -63,30 +66,30 @@ colors = dict(
         'Years': 'white',
         'Plot Light Color': 'white'}),
     cb=dict({
-        'Date': 'white',
-        'Month': 'white',
+        'Date': '#f9f9f9',
+        'Month': '#f9f9f9',
         'Daily Average': '#F5F5F5',
         'Monthly Average': '#F5F5F5',
-        'Record High Daily Average': '#',
-        'Record High Daily Average Year': '#',
-        'Record High Monthly Average': '#',
-        'Record High Monthly Average Year': '#',
-        'Record Low Daily Average': '#',
-        'Record Low Daily Average Year': '#',
-        'Record Low Monthly Average': '#',
-        'Record Low Monthly Average Year': '#',
-        'Average High': '#dc8d8d',
-        'Lowest High': '#',
-        'Lowest High Year': '#',        
-        'Record High': '#d26c6c',
-        'Record High Year': '#d26c6c',
-        'Average Low': '#a2bff4',
-        'Highest Low': '#',
-        'Highest Low Year': '#',
-        'Record Low': '#74a0ef',
-        'Record Low Year': '#74a0ef',
-        'Years': 'white',
-        'Plot Light Color': 'white'})
+        'Record High Daily Average': '#d75f4c',
+        'Record High Daily Average Year': '#d75f4c',
+        'Record High Monthly Average': '#d75f4c',
+        'Record High Monthly Average Year': '#d75f4c',
+        'Record Low Daily Average': '#3a93c3',
+        'Record Low Daily Average Year': '#3a93c3',
+        'Record Low Monthly Average': '#3a93c3',
+        'Record Low Monthly Average Year': '#3a93c3',
+        'Average High': '#f6a482',
+        'Lowest High': '#fedbc7',
+        'Lowest High Year': '#fedbc7',        
+        'Record High': '#b31529',
+        'Record High Year': '#b31529',
+        'Average Low': '#8ec4de',
+        'Highest Low': '#d1e5f0',
+        'Highest Low Year': '#d1e5f0',
+        'Record Low': '#1065ab',
+        'Record Low Year': '#1065ab',
+        'Years': '#f9f9f9',
+        'Plot Light Color': '#f9f9f9'})
     )
 
 # Helper functions
@@ -238,7 +241,7 @@ def getval(stats, var, record):
     return str(val)+f' {deg}F'
 
 # Bokeh plots
-def config_plot(p, scheme='mg'):
+def config_plot(p, scheme='cb'):
     """Configure Bokeh plot for website
 
     Parameters
@@ -246,7 +249,7 @@ def config_plot(p, scheme='mg'):
     p : Bokeh Figure class
     scheme : {'mg', 'bm', 'cb}
         Specifies which color scheme to use: 'mg' for M. Grossi's, 'bm' for
-        B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'mg'.
+        B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'cb'.
     """
 
     # Plot properties
@@ -283,7 +286,7 @@ def config_plot(p, scheme='mg'):
     p.yaxis.major_label_text_font_size = '14px'
     p.yaxis.axis_label_text_font_size = '14px'
 
-def histograms(stats, var, y_range=None, scheme='mg'):
+def histograms(stats, var, y_range=None, scheme='cb'):
     """Plot histograms of record counts per year
 
     Paramaters
@@ -297,7 +300,7 @@ def histograms(stats, var, y_range=None, scheme='mg'):
         List of tuple containing the lower and upper bounds of the y-axis to be displayed. These are create scroll limits for interactivity.
     scheme : {'mg', 'bm', 'cb}
         Specifies which color scheme to use: 'mg' for M. Grossi's, 'bm' for
-        B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'mg'.
+        B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'cb'.
     """
     data = record_counts(data=stats, var=var)
     # Create histogram for each record
@@ -326,7 +329,7 @@ def histograms(stats, var, y_range=None, scheme='mg'):
                                        bounds=(min(y_range), max(y_range)))
             show(p)
 
-def annual_histograms(stats, var, y_range=None, scheme='mg'):
+def annual_histograms(stats, var, y_range=None, scheme='cb'):
     """Plot histograms of record counts set each year
 
     Paramaters
@@ -340,7 +343,7 @@ def annual_histograms(stats, var, y_range=None, scheme='mg'):
         List of tuple containing the lower and upper bounds of the y-axis to be displayed. These are create scroll limits for interactivity.
     scheme : {'mg', 'bm', 'cb}
         Specifies which color scheme to use: 'mg' for M. Grossi's, 'bm' for
-        B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'mg'.
+        B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'cb'.
     """
 
     # Dataframe
@@ -377,7 +380,7 @@ def annual_histograms(stats, var, y_range=None, scheme='mg'):
                                        bounds=(min(y_range), max(y_range)))
             show(p)
 
-def gtable(stats, var):
+def gtable(stats, vars, scheme='cb'):
     """Display a great_tables table if the variable 'var' exists in 'stats'. Otherwise, display a message that the data do not exist.
     
     Parameters
@@ -386,6 +389,9 @@ def gtable(stats, var):
         Data array containing daily or monthly stats
     var : str
         Variable to retrieve. Must be in `stats`
+    scheme : {'mg', 'bm', 'cb}
+        Specifies which color scheme to use: 'mg' for M. Grossi's, 'bm' for
+        B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'cb'.
     
     Returns
     -------
@@ -408,11 +414,11 @@ def gtable(stats, var):
             df = stats.sel(variable=var.title()).to_dataframe()\
                       .drop('variable', axis=1).round(1).reset_index()
         
-        # # Data record
+        # Data record
         ts_start = dt.strptime(stats.attrs[f'{var} data range'][0], '%Y-%m-%d').strftime('%-m/%-d/%Y')
         ts_end = dt.strptime(stats.attrs[f'{var} data range'][1], '%Y-%m-%d').strftime('%-m/%-d/%Y')
  
-        # # Records this year
+        # Records this year
         thisYear = pd.to_datetime('today').year
         cols = df.columns[df.columns.str.endswith('Year')]
         thisYearRecords = (df==thisYear)[cols].sum().sum()
@@ -421,7 +427,7 @@ def gtable(stats, var):
         # Add columns
         gtbl = GT(df)
         for column in df.columns:
-            gtbl = gtbl.tab_style(style=[style.fill(color=colors['mg'][column]), style.text(v_align='middle')], locations=loc.body(columns=column))
+            gtbl = gtbl.tab_style(style=[style.fill(color=colors[scheme][column]), style.text(v_align='middle')], locations=loc.body(columns=column))
     
         # Format table
         gtbl = (gtbl
@@ -447,7 +453,7 @@ def gtable(stats, var):
     except KeyError:
         print(f'{freq} {var.lower()} data are not available for this station.')
 
-def daily_climo(data, var, flood_thresholds, scheme='mg'):
+def daily_climo(data, var, flood_thresholds, scheme='cb'):
     """Create a daily climatology plot for environmental variable `var`
     from `data`.
     
@@ -461,7 +467,7 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
             Flood thresholds to add to water level plot
         scheme : {'mg', 'bm', 'cb}
             Specifies which color scheme to use: 'mg' for M. Grossi's, 'bm' for
-            B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'mg'.
+            B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'cb'.
     """
 
     # Dates for x axis
@@ -588,7 +594,7 @@ def daily_climo(data, var, flood_thresholds, scheme='mg'):
     p.add_layout(legend, 'right')
     show(p)
 
-def monthly_climo(data, var, scheme='mg'):
+def monthly_climo(data, var, scheme='cb'):
     """Create a monthly climatology plot for environmental variable `var`
     from `data`.
     
@@ -602,7 +608,7 @@ def monthly_climo(data, var, scheme='mg'):
             Flood thresholds to add to water level plot
         scheme : {'mg', 'bm', 'cb}
             Specifies which color scheme to use: 'mg' for M. Grossi's, 'bm' for
-            B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'mg'.
+            B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'cb'.
     """
 
     # Dates for x axis
@@ -708,7 +714,7 @@ def monthly_climo(data, var, scheme='mg'):
     p.add_layout(legend, 'right')
     show(p)
 
-def trend(data, var, scheme='mg', true_average=False, fname=None):
+def trend(data, var, scheme='cb', true_average=False, fname=None):
     """Plot time series trend
 
     Parameters
