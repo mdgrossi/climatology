@@ -380,7 +380,7 @@ def annual_histograms(stats, var, y_range=None, scheme='cb'):
                                        bounds=(min(y_range), max(y_range)))
             show(p)
 
-def gtable(stats, vars, scheme='cb'):
+def gtable(stats, var, scheme='cb'):
     """Display a great_tables table if the variable 'var' exists in 'stats'. Otherwise, display a message that the data do not exist.
     
     Parameters
