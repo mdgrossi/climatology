@@ -249,7 +249,7 @@ def config_plot(p, scheme='cb'):
     p : Bokeh Figure class
     scheme : {'mg', 'bm', 'cb}
         Specifies which color scheme to use: 'mg' for M. Grossi's, 'bm' for
-        B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'mg'.
+        B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'cb'.
     """
 
     # Plot properties
@@ -300,7 +300,7 @@ def histograms(stats, var, y_range=None, scheme='cb'):
         List of tuple containing the lower and upper bounds of the y-axis to be displayed. These are create scroll limits for interactivity.
     scheme : {'mg', 'bm', 'cb}
         Specifies which color scheme to use: 'mg' for M. Grossi's, 'bm' for
-        B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'mg'.
+        B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'cb'.
     """
     data = record_counts(data=stats, var=var)
     # Create histogram for each record
@@ -343,7 +343,7 @@ def annual_histograms(stats, var, y_range=None, scheme='cb'):
         List of tuple containing the lower and upper bounds of the y-axis to be displayed. These are create scroll limits for interactivity.
     scheme : {'mg', 'bm', 'cb}
         Specifies which color scheme to use: 'mg' for M. Grossi's, 'bm' for
-        B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'mg'.
+        B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'cb'.
     """
 
     # Dataframe
@@ -380,7 +380,7 @@ def annual_histograms(stats, var, y_range=None, scheme='cb'):
                                        bounds=(min(y_range), max(y_range)))
             show(p)
 
-def gtable(stats, var):
+def gtable(stats, vars, scheme='cb'):
     """Display a great_tables table if the variable 'var' exists in 'stats'. Otherwise, display a message that the data do not exist.
     
     Parameters
@@ -389,6 +389,9 @@ def gtable(stats, var):
         Data array containing daily or monthly stats
     var : str
         Variable to retrieve. Must be in `stats`
+    scheme : {'mg', 'bm', 'cb}
+        Specifies which color scheme to use: 'mg' for M. Grossi's, 'bm' for
+        B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'cb'.
     
     Returns
     -------
@@ -411,11 +414,11 @@ def gtable(stats, var):
             df = stats.sel(variable=var.title()).to_dataframe()\
                       .drop('variable', axis=1).round(1).reset_index()
         
-        # # Data record
+        # Data record
         ts_start = dt.strptime(stats.attrs[f'{var} data range'][0], '%Y-%m-%d').strftime('%-m/%-d/%Y')
         ts_end = dt.strptime(stats.attrs[f'{var} data range'][1], '%Y-%m-%d').strftime('%-m/%-d/%Y')
  
-        # # Records this year
+        # Records this year
         thisYear = pd.to_datetime('today').year
         cols = df.columns[df.columns.str.endswith('Year')]
         thisYearRecords = (df==thisYear)[cols].sum().sum()
@@ -424,7 +427,7 @@ def gtable(stats, var):
         # Add columns
         gtbl = GT(df)
         for column in df.columns:
-            gtbl = gtbl.tab_style(style=[style.fill(color=colors['mg'][column]), style.text(v_align='middle')], locations=loc.body(columns=column))
+            gtbl = gtbl.tab_style(style=[style.fill(color=colors[scheme][column]), style.text(v_align='middle')], locations=loc.body(columns=column))
     
         # Format table
         gtbl = (gtbl
@@ -464,7 +467,7 @@ def daily_climo(data, var, flood_thresholds, scheme='cb'):
             Flood thresholds to add to water level plot
         scheme : {'mg', 'bm', 'cb}
             Specifies which color scheme to use: 'mg' for M. Grossi's, 'bm' for
-            B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'mg'.
+            B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'cb'.
     """
 
     # Dates for x axis
@@ -605,7 +608,7 @@ def monthly_climo(data, var, scheme='cb'):
             Flood thresholds to add to water level plot
         scheme : {'mg', 'bm', 'cb}
             Specifies which color scheme to use: 'mg' for M. Grossi's, 'bm' for
-            B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'mg'.
+            B. McNoldy's, or 'cb' to use a colorblind scheme. Defaults to 'cb'.
     """
 
     # Dates for x axis
