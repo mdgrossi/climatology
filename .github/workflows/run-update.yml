@@ -1,0 +1,42 @@
+name: Update data
+on:
+  schedule:
+    - cron: "0 0 * * *" # runs at 00:00 UTC everyday
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v3 # checkout the repository content to github runner.
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8 #install Python
+      - name: execute data download script # run climoDL.py to get the latest data
+        run: |
+          python climoDL.py -s "Beaufort, NC"
+        env:
+          key: ${{ secrets.key }} # if run.py requires passwords..etc, set it as secrets
+      - name: execute data download script # run climoDL.py to get the latest data
+        run: |
+          python climoDL.py -s "Virginia Key, FL"
+        env:
+          key: ${{ secrets.key }} # if run.py requires passwords..etc, set it as secrets
+      - name: execute data download script # run climoDL.py to get the latest data
+        run: |
+          python climoDL.py -s "Woods Hole, MA"
+        env:
+          key: ${{ secrets.key }} # if climoDL.py requires passwords..etc, set it as secrets
+      - name: export index
+        .... # use corresponding script or actions to help export.
+      - name: Run the Action
+        uses: devops-infra/action-commit-push@master
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          add_timestamp: true
+          commit_prefix: "[AUTO]"
+          commit_message: "Daily automatic update"
+          force: false
+          target_branch: main
