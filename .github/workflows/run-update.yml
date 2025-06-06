@@ -1,35 +1,40 @@
-name: Update data
+name: Daily-update
 on:
   schedule:
-    - cron: "0 11 * * *" # runs at 00:00 UTC everyday
+    - cron: "1 50 * * *" # runs at 00:00 UTC everyday
 
 jobs:
-  build:
+  update-data:
     runs-on: ubuntu-latest
-
     steps:
-      - name: checkout repo content
+      - name: Checkout repo content
         uses: actions/checkout@v3 # checkout the repository content to github runner.
-      - name: setup python
+
+      - name: Setup python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8 #install Python
-      - name: execute data download script # run climoDL.py to get the latest data
+          python-version: 3.9 #install Python
+          cache: 'pip' # caching pip dependencies
+      
+      - name: Update Beaufort # run climoDL.py to get the latest data
         run: |
           python climoDL.py -s "Beaufort, NC"
         env:
           key: ${{ secrets.key }} # if run.py requires passwords..etc, set it as secrets
-      - name: execute data download script # run climoDL.py to get the latest data
+
+      - name: Update Virginia Key # run climoDL.py to get the latest data
         run: |
           python climoDL.py -s "Virginia Key, FL"
         env:
           key: ${{ secrets.key }} # if run.py requires passwords..etc, set it as secrets
-      - name: execute data download script # run climoDL.py to get the latest data
+
+      - name: Update Woods Hole # run climoDL.py to get the latest data
         run: |
           python climoDL.py -s "Woods Hole, MA"
         env:
           key: ${{ secrets.key }} # if climoDL.py requires passwords..etc, set it as secrets
-      - name: commit changes
+
+      - name: Commit changes
         uses: devops-infra/action-commit-push@master
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -38,3 +43,25 @@ jobs:
           commit_message: "Daily automatic update"
           force: false
           target_branch: main
+
+      - name: Set current date as env variable
+        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+          pip install clipy/dist/clipy-2025.0.1-py3-none-any.whl
+      
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Publish to GitHub Pages and render
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # this secret is always available for github actions
+      
+      - name: Status
+        run: echo "Daily update for $(date) successful"
