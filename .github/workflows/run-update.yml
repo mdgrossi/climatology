@@ -1,7 +1,7 @@
 name: Update data
 on:
   schedule:
-    - cron: "0 0 * * *" # runs at 00:00 UTC everyday
+    - cron: "0 11 * * *" # runs at 00:00 UTC everyday
 
 jobs:
   build:
@@ -29,9 +29,7 @@ jobs:
           python climoDL.py -s "Woods Hole, MA"
         env:
           key: ${{ secrets.key }} # if climoDL.py requires passwords..etc, set it as secrets
-      - name: export index
-        .... # use corresponding script or actions to help export.
-      - name: Run the Action
+      - name: commit changes
         uses: devops-infra/action-commit-push@master
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
