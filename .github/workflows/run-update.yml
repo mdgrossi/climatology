@@ -1,7 +1,7 @@
 name: Daily-update
 on:
   schedule:
-    - cron: "0 3 * * *" # runs at 03:00 UTC everyday
+    - cron: "15 5 * * *" # runs at 05:15 UTC (00:15 EDT / 01:15 EDT) every day
 
 jobs:
   update-data:
@@ -23,21 +23,15 @@ jobs:
       - name: Update Beaufort # run climoDL.py to get the latest data
         run: |
           python climoDL.py -s "Beaufort, NC"
-        env:
-          key: ${{ secrets.key }} # if run.py requires passwords..etc, set it as secrets
-
+        
       - name: Update Virginia Key # run climoDL.py to get the latest data
         run: |
           python climoDL.py -s "Virginia Key, FL"
-        env:
-          key: ${{ secrets.key }} # if run.py requires passwords..etc, set it as secrets
-
+        
       - name: Update Woods Hole # run climoDL.py to get the latest data
         run: |
           python climoDL.py -s "Woods Hole, MA"
-        env:
-          key: ${{ secrets.key }} # if climoDL.py requires passwords..etc, set it as secrets
-
+        
       - name: Commit changes
         uses: devops-infra/action-commit-push@master
         with:
@@ -62,4 +56,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # this secret is always available for github actions
       
       - name: Status
-        run: echo "Daily update for $(date) successful"
+        run: echo "Successfully updated on $(date)."
