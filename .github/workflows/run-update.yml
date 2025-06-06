@@ -1,7 +1,7 @@
 name: Daily-update
 on:
   schedule:
-    - cron: "1 50 * * *" # runs at 00:00 UTC everyday
+    - cron: "2 0 * * *" # runs at 00:00 UTC everyday
 
 jobs:
   update-data:
@@ -15,6 +15,10 @@ jobs:
         with:
           python-version: 3.9 #install Python
           cache: 'pip' # caching pip dependencies
+        run: |
+          pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+          pip install clipy/dist/clipy-2025.0.1-py3-none-any.whl
       
       - name: Update Beaufort # run climoDL.py to get the latest data
         run: |
@@ -46,12 +50,6 @@ jobs:
 
       - name: Set current date as env variable
         run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
-
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip setuptools wheel
-          pip install -r requirements.txt
-          pip install clipy/dist/clipy-2025.0.1-py3-none-any.whl
       
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
