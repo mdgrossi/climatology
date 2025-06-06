@@ -1,7 +1,7 @@
 name: Daily-update
 on:
   schedule:
-    - cron: "50 3 * * *" # runs at 03:00 UTC everyday
+    - cron: "0 3 * * *" # runs at 03:00 UTC everyday
 
 jobs:
   update-data:
