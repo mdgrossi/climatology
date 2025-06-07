@@ -20,7 +20,7 @@ jobs:
           pip install -r requirements.txt
           pip install clipy/dist/clipy-2025.0.1-py3-none-any.whl
       
-      - name: Update Lewes # run climoDL.py to get the latest data
+      - name: Update data
         run: |
           python climoDL.py -s "Lewes, DE"
                         
@@ -31,7 +31,6 @@ jobs:
           commit_prefix: "[AUTO] "
           commit_message: "Monthly update"
           force: false
-          target_branch: main
 
       - name: Set current date as env variable
         run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
