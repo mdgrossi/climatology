@@ -1,0 +1,12 @@
+datum: MHHW
+day_threshold: 2
+dirname: naplesFl
+hr_threshold: 4
+stationid: '8725114'
+stationname: Naples, FL
+tz: lst
+unit_system: english
+units:
+  Water Level: ft
+variables:
+- Water Level
