@@ -28,9 +28,8 @@ jobs:
         uses: devops-infra/action-commit-push@master
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
-          add_timestamp: true
-          commit_prefix: "[AUTO]"
-          commit_message: "Monthly automatic update"
+          commit_prefix: "[AUTO] "
+          commit_message: "Monthly update"
           force: false
           target_branch: main
 
