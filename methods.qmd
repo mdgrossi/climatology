@@ -7,6 +7,25 @@ order: 1
 toc: true
 ---
 
+::: {.callout-important title='SAVE NOAA!'}
+
+:::: {.columns}
+:::: {.column width="20%"}
+
+<br>
+![](https://cdn.oceanservice.noaa.gov/oceanserviceprod/facts/noaa-emblem-rgb-2022.png){fig-alt="NOAA meatball"}
+
+::::
+:::: {.column width="80%"}
+
+<br>
+The products on this page rely on data from the [National Oceanic and Atmospheric Administration](https://www.noaa.gov) (NOAA). NOAA is a critical tax-funded federal agency whose data collection, modeling and science capabilities, and personnel expertise keep the country safer and more prosperous---all at a cost of 6&cent; per day per taxpayer. If you are visiting this page and reading this, you have an interest in NOAA's science, service, and stewardship to the nation. **Contact your representatives in Congress today** to demand that NOAA employees are restored, facilities are maintained, and budget is preserved.
+
+::::
+::::
+
+:::
+
 All data from the beginning of each time series to the present are retrieved from the NOAA CO-OPS [Tides and Currents](https://tidesandcurrents.noaa.gov/faq.html) data portal and saved to file to avoid having to repeatedly re-download the historical data. Subsequent data updates retrieve from the most recently saved timestamp onward and append these new data to the saved historical record.
 
 Six-minute data are used whenever possible and hourly data otherwise. Any observations flagged by NOAA as being suspect for any reason (flag > 0) are discarded. Examples of flagged data are a minimum or maximum value or a rate of change exceeding an acceptable tolerance. Air and water temperatures equal to 31.8&deg;F are also removed, as this is a fill value signifying bad data.

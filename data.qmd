@@ -6,6 +6,25 @@ format:
 order: 1
 ---
 
+::: {.callout-important title='SAVE NOAA!'}
+
+:::: {.columns}
+:::: {.column width="20%"}
+
+<br>
+![](https://cdn.oceanservice.noaa.gov/oceanserviceprod/facts/noaa-emblem-rgb-2022.png){fig-alt="NOAA meatball"}
+
+::::
+:::: {.column width="80%"}
+
+<br>
+The products on this page rely on data from the [National Oceanic and Atmospheric Administration](https://www.noaa.gov) (NOAA). NOAA is a critical tax-funded federal agency whose data collection, modeling and science capabilities, and personnel expertise keep the country safer and more prosperous---all at a cost of 6&cent; per day per taxpayer. If you are visiting this page and reading this, you have an interest in NOAA's science, service, and stewardship to the nation. **Contact your representatives in Congress today** to demand that NOAA employees are restored, facilities are maintained, and budget is preserved.
+
+::::
+::::
+
+:::
+
 The [National Oceanographic and Atmospheric Administration (NOAA)](https://noaa.gov) [National Ocean Service](https://oceanservice.noaa.gov) Center for Operational Oceanographic Products and Services (CO-OPS) operates hundreds of water level observation stations along the United States coasts and Great Lakes. This [National Water Level Observation Network (NWLON)](https://tidesandcurrents.noaa.gov/nwlon.html), part of the [Integrating Ocean Observing System (IOOS)](htts://ioos.noaa.gov), provides the data from which official tidal predictions are generated. Most of these observation stations also observe water temperature as well as air temperature, barometric pressure, and wind. All of these data are publically available via the NOAA CO-OPS [Tides and Currents data portal](https://tidesandcurrents.noaa.gov).
 
 The historical time series vary in length among sites and environmental parameters. Water level sensors often came first, with weather stations added later. Data collected since circa 1995 are generally available in 6-minute observations; prior to that, observations are hourly. Climatology dashboards are provided here for a number of locations along the east coast to which I have some degree of connection. Data inventories are available for every site:
