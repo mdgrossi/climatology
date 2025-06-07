@@ -1,7 +1,7 @@
 name: Daily-update
 on:
   schedule:
-    - cron: "15 19 * * *" # runs at 05:15 UTC (00:15 EDT / 01:15 EDT) every day
+    - cron: "15 5 * * *" # runs at 05:15 UTC (00:15 EDT / 01:15 EDT) every day
 
 jobs:
   update-data:
@@ -20,16 +20,10 @@ jobs:
           pip install -r requirements.txt
           pip install clipy/dist/clipy-2025.0.1-py3-none-any.whl
       
-      # - name: Update Beaufort # run climoDL.py to get the latest data
-      #   run: |
-      #     python climoDL.py -s "Beaufort, NC"
-        
-      # - name: Update Virginia Key # run climoDL.py to get the latest data
-      #   run: |
-      #     python climoDL.py -s "Virginia Key, FL"
-        
-      - name: Update Woods Hole # run climoDL.py to get the latest data
+      - name: Update data
         run: |
+          python climoDL.py -s "Beaufort, NC"
+          python climoDL.py -s "Virginia Key, FL"
           python climoDL.py -s "Woods Hole, MA"
         
       - name: Commit changes
