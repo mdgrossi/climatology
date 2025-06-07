@@ -1,0 +1,51 @@
+name: Daily-update
+on:
+  schedule:
+    - cron: "15 6 1 * *" # runs at 06:15 UTC (01:15 EDT / 02:15 EDT) on the first of every month
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo content
+        uses: actions/checkout@v3 # checkout the repository content to github runner.
+
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9 #install Python
+          cache: 'pip' # caching pip dependencies
+      - run: |
+          pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+          pip install clipy/dist/clipy-2025.0.1-py3-none-any.whl
+      
+      - name: Update Lewes # run climoDL.py to get the latest data
+        run: |
+          python climoDL.py -s "Lewes, DE"
+                        
+      - name: Commit changes
+        uses: devops-infra/action-commit-push@master
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          add_timestamp: true
+          commit_prefix: "[AUTO]"
+          commit_message: "Monthly automatic update"
+          force: false
+          target_branch: main
+
+      - name: Set current date as env variable
+        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+      
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Publish to GitHub Pages and render
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # this secret is always available for github actions
+      
+      - name: Status
+        run: echo "Successfully updated on $(date)."
