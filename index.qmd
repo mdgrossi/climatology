@@ -26,6 +26,12 @@ format:
     include-after-body: footer.html
 ---
 
+::: {.callout-important title='SAVE NOAA!'}
+
+The products on this page rely on data from the National Oceanic and Atmospheric Administration (NOAA). NOAA is a critical tax-funded federal agency whose data collection, modeling capabilities, and personnel expertise keep the country safer and more prosperous. If you are visiting this page and reading this, you have an interest in what they do and provide. Contact your representatives in Congress today to demand that NOAA employees and facilities are restored and maintained.
+
+:::
+
 ::: {#hero-heading style="text-align: center"}
 Daily and monthly averages and records of NOAA CO-OPS weather and \
 tide observations at different locations along the U.S. East Coast
