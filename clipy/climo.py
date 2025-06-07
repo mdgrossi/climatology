@@ -1178,7 +1178,7 @@ class Data:
              'Record Low': self.record_daily_low(),
              'Years': self.number_of_years_byday()},
             attrs = {k:v for k, v in self.meta.items() \
-                     if k not in ['outdir', 'variables', 'units']})
+                     if k not in ['outdir', 'variables', 'units', 'last_obs']})
         
         # Add data units for each variable to the array as metadata attributes
         for k, v in self.meta['units'].items():
@@ -1242,7 +1242,7 @@ class Data:
              'Record Low': self.record_monthly_low(),
              'Years': self.number_of_years_bymonth()},
             attrs = {k:v for k, v in self.meta.items() \
-                     if k not in ['outdir', 'variables', 'units']})
+                     if k not in ['outdir', 'variables', 'units', 'last_obs']})
 
         # Add data units for each variable to the array as metadata attributes
         for k, v in self.meta['units'].items():
