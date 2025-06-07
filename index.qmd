@@ -26,11 +26,22 @@ format:
     include-after-body: footer.html
 ---
 
-::: {.callout-important title='SAVE NOAA!'}
+:::: {.callout-important title='SAVE NOAA!'}
 
-The products on this page rely on data from the National Oceanic and Atmospheric Administration (NOAA). NOAA is a critical tax-funded federal agency whose data collection, modeling capabilities, and personnel expertise keep the country safer and more prosperous. If you are visiting this page and reading this, you have an interest in what they do and provide. Contact your representatives in Congress today to demand that NOAA employees and facilities are restored and maintained.
+::: {.columns}
+::: {.column width="25%"}
+
+![NOAA meatball](https://www.noaa.gov/sites/default/files/2022-03/noaa_emblem_logo-2022.png)
 
 :::
+::: {.column}
+
+The products on this page rely on data from the National Oceanic and Atmospheric Administration (NOAA). NOAA is a critical tax-funded federal agency whose data collection, modeling capabilities, and personnel expertise keep the country safer and more prosperous -- all at a cost of 6&#x00A2 per day per taxpayer. If you are visiting this page and reading this, you have an interest in NOAA's service to the nation. **Contact your representatives in Congress today** to demand that NOAA employees are restored, facilities are maintained, and budget is preserved.
+
+:::
+::: <!-- end columns -->
+
+::::
 
 ::: {#hero-heading style="text-align: center"}
 Daily and monthly averages and records of NOAA CO-OPS weather and \
