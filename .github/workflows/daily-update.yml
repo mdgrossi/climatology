@@ -40,6 +40,8 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
+      - run: sudo chmod -R ugo+rwX .
+
       - name: Publish to GitHub Pages and render
         uses: quarto-dev/quarto-actions/publish@v2
         with:
