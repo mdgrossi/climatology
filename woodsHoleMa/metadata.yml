@@ -3,9 +3,9 @@ day_threshold: 2
 dirname: woodsHoleMa
 hr_threshold: 4
 last_obs:
-  Air Temperature: '2025-06-21 00:36:00'
-  Water Level: '2025-06-21 00:24:00'
-  Water Temperature: '2025-06-21 00:36:00'
+  Air Temperature: '2025-06-22 00:42:00'
+  Water Level: '2025-06-21 22:24:00'
+  Water Temperature: '2025-06-22 00:42:00'
 stationid: '8447930'
 stationname: Woods Hole, MA
 tz: lst
