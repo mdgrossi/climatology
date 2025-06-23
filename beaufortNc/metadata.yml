@@ -3,9 +3,9 @@ day_threshold: 2
 dirname: beaufortNc
 hr_threshold: 4
 last_obs:
-  Air Temperature: '2025-06-22 00:30:00'
-  Water Level: '2025-06-22 00:30:00'
-  Water Temperature: '2025-06-22 00:30:00'
+  Air Temperature: '2025-06-23 00:30:00'
+  Water Level: '2025-06-23 00:24:00'
+  Water Temperature: '2025-06-23 00:30:00'
 stationid: '8656483'
 stationname: Beaufort, NC
 tz: lst
