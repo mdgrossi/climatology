@@ -1336,7 +1336,7 @@ class Data:
                                           Month=row[0][0])[record+' Year'].values
                     units = self.units[var]
                     print(f"{record.capitalize()} {var.lower()} set {row[0][0]} {newYear}:\n\t"\
-                        f"{newRecord} {units} (previously {oldRecord} {units} in {oldYear})")
+                        f"{np.round(newRecord, 3)} {units} (previously {np.round(oldRecord, 3)} {units} in {oldYear})")
     
     def get_daily_stats(self, var=None):
         """Return the daily statistics for variable 'var'"""
