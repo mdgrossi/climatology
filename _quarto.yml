@@ -4,17 +4,16 @@ project:
     port: 4000
   render:
     - "index.qmd"
-    - "data.qmd"
-    - "methods.qmd"
-    - "acknowledgements.qmd"
-    - "demos/*"
+    # - "data.qmd"
+    # - "methods.qmd"
+    # - "acknowledgements.qmd"
+    # - "demos/*"
     - "content/stations/beaufort/*.qmd"
-    - "content/stations/virginiakey/*.qmd"
-    - "content/stations/woodshole/*.qmd"
-    - "content/archived/baystlouis/*.qmd"
-    - "content/archived/lewes/*.qmd"
-    - "content/archived/naples/index.qmd"
-    - "!NOAA-CO-OPS-Climatology.ipynb"
+    # - "content/stations/virginiakey/*.qmd"
+    # - "content/stations/woodshole/*.qmd"
+    # - "content/archived/baystlouis/*.qmd"
+    # - "content/archived/lewes/*.qmd"
+    # - "content/archived/naples/index.qmd"
 
 theme:
   # dark: sandstone
