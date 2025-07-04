@@ -224,7 +224,7 @@ def round_up(num, divisor):
     """
     return num + (divisor - (num%divisor))
 
-def getval(stats, var, record):
+def getval(stats, var, record, decimals=1):
     """Retrieve `var` `record` from xarray `stats` for use in valueboxes
     
     Parameters
@@ -237,7 +237,7 @@ def getval(stats, var, record):
         Record to be retrieved. Must be in `stats`.
     """
     val = float(stats[record].sel(variable=var,
-                                  Date=dt.today().strftime('%d-%b')))
+                                  Date=dt.today().strftime('%d-%b')).round(decimals))
     unit = stats.attrs[f'{var} units']
     return str(val)+f' {unit}'
 
