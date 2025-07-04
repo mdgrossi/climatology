@@ -45,7 +45,7 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 
 <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d38009.402948076386!2d-76.67961167413992!3d34.72877006773139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1729819005833!5m2!1sen!2sus" align="right" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
-# Plots
+# Today's Stats
 
 ```{python}
 #| include: False
@@ -54,6 +54,7 @@ import sys
 import xarray as xr
 from bokeh.io import output_notebook
 sys.path.append('/home/runner/work/climatology/climatology')
+sys.path.append('/workspaces/climatology')
 from clipy import plot
 
 # DIRECTORY
@@ -65,6 +66,251 @@ daily_stats = xr.load_dataset(os.path.join(dirName, 'statistics-daily.nc'))
 monthly_stats = xr.load_dataset(os.path.join(dirName, 'statistics-monthly.nc'))
 
 ```
+
+## Air Temperature {height=30%}
+
+###
+
+```{python}
+#| output: asis
+var = 'Air Temperature'
+print(var.upper())
+```
+
+### 
+```{python}
+#| content: valuebox
+#| title: "Record High"
+dict(
+  icon = "thermometer-sun",
+  color = plot.colors['cb']['Record High'],
+  value = plot.getval(stats=daily_stats, var=var, record='Record High')
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average High"
+dict(
+  icon = "thermometer-high",
+  color = plot.colors['cb']['Average High'],
+  value = plot.getval(stats=daily_stats, var=var, record='Average High')
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Lowest High"
+dict(
+  icon = "thermometer-half",
+  color = plot.colors['cb']['Lowest High'],
+  value = plot.getval(daily_stats, var=var, record='Lowest High')
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Highest Low"
+dict(
+  icon = "thermometer-half",
+  color = plot.colors['cb']['Highest Low'],
+  value = plot.getval(daily_stats, var=var, record='Highest Low')
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average Low"
+dict(
+  icon = "thermometer-low",
+  color = plot.colors['cb']['Average Low'],
+  value = plot.getval(daily_stats, var=var, record='Average Low')
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Record Low"
+dict(
+  icon = "thermometer-snow",
+  color = plot.colors['cb']['Record Low'],
+  value = plot.getval(daily_stats, var=var, record='Record Low')
+)
+```
+
+## Water Level {height=30%}
+
+###
+
+```{python}
+#| output: asis
+var = 'Water Level'
+print(var.upper())
+```
+
+### 
+```{python}
+#| content: valuebox
+#| title: "Record High"
+dict(
+  icon = "droplet-fill",
+  color = plot.colors['cb']['Record High'],
+  value = plot.getval(stats=daily_stats, var=var, record='Record High', decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average High"
+dict(
+  icon = "droplet-half",
+  color = plot.colors['cb']['Average High'],
+  value = plot.getval(stats=daily_stats, var=var, record='Average High', decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Lowest High"
+dict(
+  icon = "moisture",
+  color = plot.colors['cb']['Lowest High'],
+  value = plot.getval(daily_stats, var=var, record='Lowest High', decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Highest Low"
+dict(
+  icon = "moisture",
+  color = plot.colors['cb']['Highest Low'],
+  value = plot.getval(daily_stats, var=var, record='Highest Low', decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average Low"
+dict(
+  icon = "droplet-half",
+  color = plot.colors['cb']['Average Low'],
+  value = plot.getval(daily_stats, var=var, record='Average Low', decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Record Low"
+dict(
+  icon = "droplet",
+  color = plot.colors['cb']['Record Low'],
+  value = plot.getval(daily_stats, var=var, record='Record Low', decimals=2)
+)
+```
+
+## Water Temperature {height=30%}
+
+###
+
+```{python}
+#| output: asis
+var = 'Water Temperature'
+print(var.upper())
+```
+
+### 
+```{python}
+#| content: valuebox
+#| title: "Record High"
+dict(
+  icon = "thermometer-sun",
+  color = plot.colors['cb']['Record High'],
+  value = plot.getval(stats=daily_stats, var=var, record='Record High')
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average High"
+dict(
+  icon = "thermometer-high",
+  color = plot.colors['cb']['Average High'],
+  value = plot.getval(stats=daily_stats, var=var, record='Average High')
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Lowest High"
+dict(
+  icon = "thermometer-half",
+  color = plot.colors['cb']['Lowest High'],
+  value = plot.getval(daily_stats, var=var, record='Lowest High')
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Highest Low"
+dict(
+  icon = "thermometer-half",
+  color = plot.colors['cb']['Highest Low'],
+  value = plot.getval(daily_stats, var=var, record='Highest Low')
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average Low"
+dict(
+  icon = "thermometer-low",
+  color = plot.colors['cb']['Average Low'],
+  value = plot.getval(daily_stats, var=var, record='Average Low')
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Record Low"
+dict(
+  icon = "thermometer-snow",
+  color = plot.colors['cb']['Record Low'],
+  value = plot.getval(daily_stats, var=var, record='Record Low')
+)
+```
+
+# Plots
 
 ## Dashboard {.tabset}
 
