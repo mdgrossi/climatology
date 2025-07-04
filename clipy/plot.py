@@ -737,7 +737,7 @@ def trend(data, var, scheme='cb', true_average=False, fname=None):
     dailyAvgs = data.mon_daily_avgs(true_average=true_average)[var]
     monthlyAvgs = dailyAvgs.groupby(pd.Grouper(freq='M')).mean(numeric_only=True)
     df = pd.DataFrame(monthlyAvgs)
-    df = df.loc[df.first_valid_index():]
+    df = df.loc[df.first_valid_index():df.last_valid_index()]
     
     # Linearly interpret missing data
     df['rownum'] = np.arange(df.shape[0])
