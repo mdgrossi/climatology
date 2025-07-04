@@ -238,7 +238,7 @@ def getval(stats, var, record):
     """
     val = float(stats[record].sel(variable=var,
                                   Date=dt.today().strftime('%d-%b')))
-    unit = stats..attrs[f'{var} units']
+    unit = stats.attrs[f'{var} units']
     return str(val)+f' {unit}'
 
 # Bokeh plots
