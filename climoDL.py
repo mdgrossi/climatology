@@ -12,11 +12,7 @@
 # python3 climoDL.py -s "Virginia Key, FL" -i "8723214" -u "english" -t "lst" -d "MHHW" --hr 3 --day 2 
 #
 #  NEED TO IMPLEMENT:
-#  - Commit and push new data to GitHub to trigger gh-pages
-#      OR
-#  - Figure out how to run this script daily on GitHub
-#    (will need to be able to write data to file)
-# 
+#  - Capture output and send email
 # =============================================================================
 # PACKAGES
 

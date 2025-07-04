@@ -20,7 +20,7 @@ jobs:
           pip install -r requirements.txt
           pip install clipy/dist/clipy-2025.0.1-py3-none-any.whl
       
-      - name: Update Lewes # run climoDL.py to get the latest data
+      - name: Update data
         run: |
           python climoDL.py -s "Lewes, DE"
                         
@@ -28,17 +28,18 @@ jobs:
         uses: devops-infra/action-commit-push@master
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
-          add_timestamp: true
-          commit_prefix: "[AUTO]"
-          commit_message: "Monthly automatic update"
+          commit_prefix: "[AUTO] "
+          commit_message: "Monthly update"
           force: false
-          target_branch: main
 
       - name: Set current date as env variable
         run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
       
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Set container permissions # (from https://github.com/actions/checkout/issues/164)
+        run: sudo chmod -R ugo+rwX .
 
       - name: Publish to GitHub Pages and render
         uses: quarto-dev/quarto-actions/publish@v2

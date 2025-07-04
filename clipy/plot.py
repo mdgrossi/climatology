@@ -225,7 +225,7 @@ def round_up(num, divisor):
     return num + (divisor - (num%divisor))
 
 def getval(stats, var, record):
-    """Retrieve `var` `record` from xarraya `stats` for use in valueboxes
+    """Retrieve `var` `record` from xarray `stats` for use in valueboxes
     
     Parameters
     ----------
@@ -236,9 +236,10 @@ def getval(stats, var, record):
     record : str
         Record to be retrieved. Must be in `stats`.
     """
-    deg = u'\N{DEGREE SIGN}'
-    val = stats[record].sel(variable=var, Date=dt.today()).values
-    return str(val)+f' {deg}F'
+    val = float(stats[record].sel(variable=var,
+                                  Date=dt.today().strftime('%d-%b')))
+    unit = stats.attrs[f'{var} units']
+    return str(val)+f' {unit}'
 
 # Bokeh plots
 def config_plot(p, scheme='cb'):
@@ -737,7 +738,7 @@ def trend(data, var, scheme='cb', true_average=False, fname=None):
     dailyAvgs = data.mon_daily_avgs(true_average=true_average)[var]
     monthlyAvgs = dailyAvgs.groupby(pd.Grouper(freq='M')).mean(numeric_only=True)
     df = pd.DataFrame(monthlyAvgs)
-    df = df.loc[df.first_valid_index():]
+    df = df.loc[df.first_valid_index():df.last_valid_index()]
     
     # Linearly interpret missing data
     df['rownum'] = np.arange(df.shape[0])
