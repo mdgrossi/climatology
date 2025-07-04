@@ -3,9 +3,9 @@ day_threshold: 2
 dirname: virginiaKeyFl
 hr_threshold: 4
 last_obs:
-  Air Temperature: '2025-07-03 21:42:00'
-  Water Level: '2025-07-03 21:36:00'
-  Water Temperature: '2025-07-03 21:42:00'
+  Air Temperature: '2025-07-04 00:36:00'
+  Water Level: '2025-07-04 00:42:00'
+  Water Temperature: '2025-07-04 00:36:00'
 stationid: '8723214'
 stationname: Virginia Key, FL
 tz: lst
