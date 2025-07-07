@@ -18,7 +18,7 @@ project:
 
 theme:
   light: default
-  dark: default
+  dark: darkly
 
 website:
   title: "Climatology"
