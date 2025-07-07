@@ -17,8 +17,7 @@ project:
     - "!NOAA-CO-OPS-Climatology.ipynb"
 
 theme:
-  # dark: sandstone
-  # light: sandstone
+  light: sandstone
   dark: darkly
 
 website:
@@ -40,11 +39,11 @@ website:
             href: stations/virginiakey/index.qmd
           - text: Woods Hole, MA
             href: stations/woodshole/index.qmd
-          - text: Bay St. Louis, MS (archived)
-            href: archived/baystlouis/index.qmd
-          - text: Lewes, DE (archived)
+          - text: Lewes, DE
             href: archived/lewes/index.qmd
-          - text: Naples, FL (archived)
+          - text: Bay St. Louis, MS (semi-active)
+            href: archived/baystlouis/index.qmd
+          - text: Naples, FL (coming soon)
             href: archived/naples/index.qmd
     # right:
     #   - text: "More"
