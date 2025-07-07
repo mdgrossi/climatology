@@ -368,6 +368,12 @@ class Data:
         
         # Air temperature
         if 'Air Temperature' in self.variables:
+            # If no 'start_date' is passed, pick up from the last non-NA observation time
+            if start_date is None:
+                start = self._format_date(self.data['Air Temperature'].last_valid_index())
+            else:
+                start = self._format_date(start_date)
+            # Download data
             self._load_atemp(start_date=start, end_date=end)
             self.air_temp['atemp_flag'] = self.air_temp['atemp_flag'].str\
                                               .split(',', expand=True)\
@@ -378,6 +384,12 @@ class Data:
 
         # Water temperature
         if 'Water Temperature' in self.variables:
+            # If no 'start_date' is passed, pick up from the last non-NA observation time
+            if start_date is None:
+                start = self._format_date(self.data['Water Temperature'].last_valid_index())
+            else:
+                start = self._format_date(start_date)
+            # Download data
             self._load_water_temp(start_date=start, end_date=end)
             self.water_temp['wtemp_flag'] = self.water_temp['wtemp_flag'].str\
                                                 .split(',', expand=True)\
@@ -404,6 +416,11 @@ class Data:
             data = self.data.copy()
             data.update(self.water_levels)
             self.data = data
+            # If no 'start_date' is passed, pick up from the last non-NA observation time
+            if start_date is None:
+                start = self._format_date(self.data['Water Level'].last_valid_index())
+            else:
+                start = self._format_date(start_date)
             # Get latest data
             self._load_water_level(start_date=start, end_date=end)
             self.water_levels['wlevel_flag'] = \
@@ -414,6 +431,12 @@ class Data:
 
         # Barometric pressure
         if 'Barometric Pressure' in self.variables:
+            # If no 'start_date' is passed, pick up from the last non-NA observation time
+            if start_date is None:
+                start = self._format_date(self.data['Barometric Pressure'].last_valid_index())
+            else:
+                start = self._format_date(start_date)
+            # Download data
             self._load_atm_pres(start_date=start, end_date=end)
             self.pressure['apres_flag'] = self.pressure['apres_flag'].str\
                                               .split(',', expand=True)\
@@ -423,6 +446,12 @@ class Data:
 
         # Wind
         if 'Wind Speed' in self.variables:
+            # If no 'start_date' is passed, pick up from the last non-NA observation time
+            if start_date is None:
+                start = self._format_date(self.data['Wind Speed'].last_valid_index())
+            else:
+                start = self._format_date(start_date)
+            # Download data
             self._load_wind(start_date=start, end_date=end)
             self.wind['windflag'] = self.wind['wind_flag'].str\
                                         .split(',', expand=True).astype(int)\
