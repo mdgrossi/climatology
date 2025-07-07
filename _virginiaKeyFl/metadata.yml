@@ -1,13 +1,13 @@
 datum: MHHW
 day_threshold: 2
-dirname: lewesDe
+dirname: _virginiaKeyFl
 hr_threshold: 4
 last_obs:
-  Air Temperature: '2025-07-07 12:18:00'
-  Water Level: '2025-07-07 12:18:00'
-  Water Temperature: '2025-07-07 12:18:00'
-stationid: '8557380'
-stationname: Lewes, DE
+  Air Temperature: '2025-07-07 00:36:00'
+  Water Level: '2025-07-07 00:00:00'
+  Water Temperature: '2025-07-07 00:36:00'
+stationid: '8723214'
+stationname: Virginia Key, FL
 tz: lst
 unit_system: english
 units:
