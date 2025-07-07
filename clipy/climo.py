@@ -58,7 +58,7 @@ class Data:
         """
         
         self.name = stationname
-        self.dirname = self.camel(stationname)
+        self.dirname = '_'+self.camel(stationname)
         self.id = stationid
         self.unit_system = units.lower()
         self.tz = timezone.lower()
