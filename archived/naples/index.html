@@ -42,9 +42,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-977e9bffa687f82e7fd226674cc7a8f2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-6985a22b95a688562e15374f19d7c9a4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../site_libs/bootstrap/bootstrap-dark-20880306b7c4934980d91dda673aabfa.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-977e9bffa687f82e7fd226674cc7a8f2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-6985a22b95a688562e15374f19d7c9a4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-dashboard/quarto-dashboard.js"></script>
 <script src="../../site_libs/quarto-dashboard/stickythead.js"></script>
 
@@ -84,7 +84,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="quarto-dashboard nav-sidebar nav-fixed dashboard-fill dashboard-sidebar fullcontent quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
+<body class="quarto-dashboard nav-sidebar nav-fixed dashboard-fill dashboard-sidebar fullcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -226,8 +226,10 @@ ul.task-list li input[type="checkbox"] {
         changeGiscusTheme();
       }
     };
-    const authorPrefersDark = true;
+    const authorPrefersDark = false;
     const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
     let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
     // Dark / light mode switch
     window.quartoToggleColorScheme = () => {
@@ -288,16 +290,16 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">Woods Hole, MA</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../archived/baystlouis/index.html">
- <span class="dropdown-text">Bay St.&nbsp;Louis, MS (archived)</span></a>
+    <a class="dropdown-item" href="../../archived/lewes/index.html">
+ <span class="dropdown-text">Lewes, DE</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../archived/lewes/index.html">
- <span class="dropdown-text">Lewes, DE (archived)</span></a>
+    <a class="dropdown-item" href="../../archived/baystlouis/index.html">
+ <span class="dropdown-text">Bay St.&nbsp;Louis, MS (semi-active)</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../archived/naples/index.html">
- <span class="dropdown-text">Naples, FL (archived)</span></a>
+ <span class="dropdown-text">Naples, FL (coming soon)</span></a>
   </li>  
     </ul>
   </li>
