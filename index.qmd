@@ -56,7 +56,7 @@ tide observations at different locations along the U.S. East Coast
 :::{#active-sites}
 :::
 
-## Archived Sites (updated less frequently)
+## Quasi-active Sites (updated less frequently)
 
 :::{#archived-sites}
 :::
