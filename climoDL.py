@@ -18,6 +18,7 @@
 
 from clipy import climo, plot
 import argparse
+import logging
 import json
 import os
 
@@ -84,6 +85,10 @@ def parse_args():
 # MAIN PROGRAM
 
 def main():
+    
+    # Log errors
+    logging.basicConfig(level=logging.ERROR)
+
     # Parse command line arguments
     args = parse_args()
     
@@ -120,13 +125,13 @@ def main():
     try:
         data.update_data()
         data.update_stats()
-    except COOPSAPIError:
-        print('No new data available.')
 
-    # Water Level trend plot
-    if 'Water Level' in data.variables:
-        plot.trend(data=data, var='Water Level',
-                   fname=os.path.join(data.outdir, 'trend-waterlevel.html'))
+        # Water Level trend plot
+        if 'Water Level' in data.variables:
+            plot.trend(data=data, var='Water Level',
+                    fname=os.path.join(data.outdir, 'trend-waterlevel.html'))
+    except Exception:
+        logging.exception(f'An error occurred while updating {args.station}.')
 
 if __name__ == "__main__":
     """Main program"""
