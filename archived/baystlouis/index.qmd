@@ -1,10 +1,10 @@
 
 ---
 title: "Bay St. Louis, MS"
-image: ../../../images/logo.png
+image: ../../images/logo.png
 format:
   dashboard:
-    logo: ../../../images/logo.png
+    logo: ../../images/logo.png
     scrolling: false
 ---
 
@@ -36,7 +36,7 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 ```
 
 ::: {.card}
-![](../../../images/logo.png){scale="75%"}
+![](../../images/logo.png){scale="75%"}
 :::
 
 <br>
@@ -56,7 +56,7 @@ sys.path.append('/home/runner/work/climatology/climatology')
 from clipy import plot
 
 # DIRECTORY
-HOME = '../../../'
+HOME = '../../'
 dirName = os.path.join(HOME, dirName)
 
 # READ IN STATS
@@ -131,7 +131,7 @@ display(Markdown(':::'))
 ### Water Level Trend
 
 ```{=html}
-{{< include ../../../bayStLouisMs/trend-waterlevel.html >}}
+{{< include ../../bayStLouisMs/trend-waterlevel.html >}}
 ```
 
 # Data

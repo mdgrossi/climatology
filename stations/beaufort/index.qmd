@@ -1,10 +1,10 @@
 
 ---
 title: "Beaufort, NC"
-image: ../../../images/bftnc.JPG
+image: ../../images/bftnc.JPG
 format:
   dashboard:
-    logo: ../../../images/bftnc.JPG
+    logo: ../../images/bftnc.JPG
     scrolling: false
 ---
 
@@ -37,7 +37,7 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 ```
 
 ::: {.card}
-![](../../../images/bftnc.JPG){scale="75%"}
+![](../../images/bftnc.JPG){scale="75%"}
 :::
 
 <br>
@@ -57,7 +57,7 @@ sys.path.append('/home/runner/work/climatology/climatology')
 from clipy import plot
 
 # DIRECTORY
-HOME = '../../../'
+HOME = '../../'
 dirName = os.path.join(HOME, dirName)
 
 # READ IN STATS
@@ -132,7 +132,7 @@ display(Markdown(':::'))
 ### Water Level Trend
 
 ```{=html}
-{{< include ../../../beaufortNc/trend-waterlevel.html >}}
+{{< include ../../beaufortNc/trend-waterlevel.html >}}
 ```
 
 # Data

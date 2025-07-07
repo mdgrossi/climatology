@@ -1,9 +1,9 @@
 ---
 title: "Naples, FL"
-image: ../../../images/logo.png
+image: ../../images/logo.png
 format:
   dashboard:
-    logo: ../../../images/logo.png
+    logo: ../../images/logo.png
     scrolling: false
 ---
 
@@ -35,7 +35,7 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 ```
 
 ::: {.card}
-![](../../../images/logo.png){scale="75%"}
+![](../../images/logo.png){scale="75%"}
 :::
 
 <br>
@@ -47,10 +47,10 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 
 ## Dashboard (.tabset)
 
-![](../../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
+![](../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
 
 # Data
 
 ## Row {.tabset}
 
-![](../../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}
+![](../../images/coming-soon.png){fig-alt="Coming soon sign" width="50%" fig-align="center"}

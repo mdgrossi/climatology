@@ -1,10 +1,10 @@
 
 ---
 title: "Virginia Key, FL"
-image: ../../../images/vkfl.JPG
+image: ../../images/vkfl.JPG
 format:
   dashboard:
-    logo: ../../../images/vkfl.JPG
+    logo: ../../images/vkfl.JPG
     scrolling: false
 ---
 
@@ -36,7 +36,7 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 ```
 
 ::: {.card}
-![](../../../images/vkfl.JPG){scale="75%"}
+![](../../images/vkfl.JPG){scale="75%"}
 :::
 
 <br>
@@ -57,7 +57,7 @@ sys.path.append('/home/runner/work/climatology/climatology')
 from clipy import plot
 
 # DIRECTORY
-HOME = '../../../'
+HOME = '../../'
 dirName = os.path.join(HOME, dirName)
 
 # READ IN STATS
@@ -132,7 +132,7 @@ display(Markdown(':::'))
 ### Water Level Trend
 
 ```{=html}
-{{< include ../../../virginiaKeyFl/trend-waterlevel.html >}}
+{{< include ../../virginiaKeyFl/trend-waterlevel.html >}}
 ```
 
 # Data
