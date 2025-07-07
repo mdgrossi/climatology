@@ -22,7 +22,7 @@ jobs:
       
       - name: Update data
         run: |
-          python climoDL.py -s "Lewes, DE"
+          python climoDL.py -s "Bay St. Louis, MS"
                         
       - name: Commit changes
         uses: devops-infra/action-commit-push@master
