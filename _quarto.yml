@@ -17,8 +17,8 @@ project:
     - "!NOAA-CO-OPS-Climatology.ipynb"
 
 theme:
-  light: sandstone
-  dark: sandstone
+  light: default
+  dark: default
 
 website:
   title: "Climatology"
