@@ -9,13 +9,13 @@ about:
 
 listing:
   - id: active-sites
-    contents: content/stations
+    contents: stations
     type: grid
     fields: [image, title]
     grid-item-border: false
     grid-item-align: center
   - id: archived-sites
-    contents: content/archived
+    contents: archived
     type: grid
     fields: [image, title]
     grid-item-border: false
