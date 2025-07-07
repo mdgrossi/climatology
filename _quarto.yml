@@ -8,12 +8,12 @@ project:
     - "methods.qmd"
     - "acknowledgements.qmd"
     - "demos/*"
-    - "content/stations/beaufort/*.qmd"
-    - "content/stations/virginiakey/*.qmd"
-    - "content/stations/woodshole/*.qmd"
-    - "content/archived/baystlouis/*.qmd"
-    - "content/archived/lewes/*.qmd"
-    - "content/archived/naples/index.qmd"
+    - "stations/beaufort/*.qmd"
+    - "stations/virginiakey/*.qmd"
+    - "stations/woodshole/*.qmd"
+    - "archived/baystlouis/*.qmd"
+    - "archived/lewes/*.qmd"
+    - "archived/naples/index.qmd"
     - "!NOAA-CO-OPS-Climatology.ipynb"
 
 theme:
@@ -35,17 +35,17 @@ website:
       - text: Stations
         menu:
           - text: Beaufort, NC
-            href: content/stations/beaufort/index.qmd
+            href: stations/beaufort/index.qmd
           - text: Virginia Key, FL
-            href: content/stations/virginiakey/index.qmd
+            href: stations/virginiakey/index.qmd
           - text: Woods Hole, MA
-            href: content/stations/woodshole/index.qmd
+            href: stations/woodshole/index.qmd
           - text: Bay St. Louis, MS (archived)
-            href: content/archived/baystlouis/index.qmd
+            href: archived/baystlouis/index.qmd
           - text: Lewes, DE (archived)
-            href: content/archived/lewes/index.qmd
+            href: archived/lewes/index.qmd
           - text: Naples, FL (archived)
-            href: content/archived/naples/index.qmd
+            href: archived/naples/index.qmd
     # right:
     #   - text: "More"
     #     menu:
