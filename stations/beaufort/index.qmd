@@ -322,7 +322,7 @@ dict(
 #| title: "Lowest High"
 record = 'Lowest High'
 dict(
-  icon = 'hermometer-half',
+  icon = 'thermometer-half',
   color = plot.colors['cb'][record],
   value = plot.getval(daily_stats, var=var, record=record)
 )
