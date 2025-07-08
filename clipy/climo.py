@@ -123,7 +123,12 @@ class Data:
                 'day_threshold': self.day_threshold,
                 'variables': self.variables,
                 'units': self.units,
-                'last_obs': {i:self.data[i].last_valid_index().strftime('%Y-%m-%d %X') for i in self.variables}
+                'last_obs': {i:self.data[i].last_valid_index().strftime('%Y-%m-%d %X') for i in self.variables},
+                'yesterday': {
+                    'average': self.daily_avgs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
+                    'high': self.daily_highs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
+                    'low': self.daily_lows().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict()
+                    }
                 })
             with open(os.path.join(self.outdir, 'metadata.yml'), 'w') as fp:
                 yaml.dump(self.meta, fp) 
@@ -488,11 +493,18 @@ class Data:
             self.data.to_csv(statsOutFile, compression='infer')
             self.meta['last_obs'] = {i:self.data[i].last_valid_index().strftime('%Y-%m-%d %X') \
                         for i in self.variables}
-            with open(os.path.join(self.outdir, 'metadata.yml'), 'w') as fp:
-                yaml.dump(self.meta, fp)
             if self.verbose:
                 print(f"Updated observational data written to file '{statsOutFile}'.")
                 print("Done! Run Data.update_stats() to update statistics.")
+        
+        # Update yesterday's data
+        self.meta['yesterday'] = {
+            'average': self.daily_avgs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
+            'high': self.daily_highs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
+            'low': self.daily_lows().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict()
+            }
+        with open(os.path.join(self.outdir, 'metadata.yml'), 'w') as fp:
+            yaml.dump(self.meta, fp)
     
     def update_stats(self):    
         """Calculate new statistics and update if any changes"""
