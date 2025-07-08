@@ -12,7 +12,7 @@ format:
 #| include: False
 
 # SET THE DIRECTORY NAME
-dirName = 'virginiaKeyFl'
+dirName = '_virginiaKeyFl'
 
 # ENTER THE FLOOD THRESHOLDS FOR THIS SITE
 # https://water.noaa.gov/gauges/vakf1
@@ -132,7 +132,7 @@ display(Markdown(':::'))
 ### Water Level Trend
 
 ```{=html}
-{{< include ../../virginiaKeyFl/trend-waterlevel.html >}}
+{{< include ../../_virginiaKeyFl/trend-waterlevel.html >}}
 ```
 
 # Data

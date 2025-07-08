@@ -12,7 +12,7 @@ format:
 #| include: False
 
 # SET THE DIRECTORY NAME
-dirName = 'naplesFl'
+dirName = '_naplesFl'
 
 # ENTER THE FLOOD THRESHOLDS FOR THIS SITE
 # https://water.noaa.gov/gauges/nbnf1

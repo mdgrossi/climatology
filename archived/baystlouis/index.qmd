@@ -12,7 +12,7 @@ format:
 #| include: False
 
 # SET THE DIRECTORY NAME
-dirName = 'bayStLouisMs'
+dirName = '_bayStLouisMs'
 
 # ENTER THE FLOOD THRESHOLDS FOR THIS SITE
 # https://water.noaa.gov/gauges/wycm6 -- unavailable as of 2025-05-25
@@ -131,7 +131,7 @@ display(Markdown(':::'))
 ### Water Level Trend
 
 ```{=html}
-{{< include ../../bayStLouisMs/trend-waterlevel.html >}}
+{{< include ../../_bayStLouisMs/trend-waterlevel.html >}}
 ```
 
 # Data

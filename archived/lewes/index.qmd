@@ -11,7 +11,7 @@ format:
 #| include: False
 
 # SET THE DIRECTORY NAME
-dirName = 'lewesDe'
+dirName = '_lewesDe'
 
 # ENTER THE FLOOD THRESHOLDS FOR THIS SITE
 # https://water.noaa.gov/gauges/lwsd1
@@ -130,7 +130,7 @@ display(Markdown(':::'))
 ### Water Level Trend
 
 ```{=html}
-{{< include ../../lewesDe/trend-waterlevel.html >}}
+{{< include ../../_lewesDe/trend-waterlevel.html >}}
 ```
 
 # Data
