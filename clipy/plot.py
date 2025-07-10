@@ -238,7 +238,7 @@ def getval(stats, var, record, decimals=1):
         Record to be retrieved. Must be in `stats`.
     """
     est = pytz.timezone('US/Eastern')
-    today = dt.today(tz=est).strftime('%d-%b')
+    today = dt.now(tz=est).strftime('%d-%b')
     val = float(stats[record].sel(variable=var,
                                   Date=today).round(decimals))
     unit = stats.attrs[f'{var} units']
