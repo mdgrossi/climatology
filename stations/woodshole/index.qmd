@@ -44,15 +44,17 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 
 <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d23894.50825594117!2d-70.68927649357778!3d41.52997961202817!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1729821867768!5m2!1sen!2sus" align="right" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
-# Plots
+# Today's Stats
 
 ```{python}
+#| label: load data
 #| include: False
 import os
 import sys
 import xarray as xr
 from bokeh.io import output_notebook
 sys.path.append('/home/runner/work/climatology/climatology')
+sys.path.append('/workspaces/climatology')
 from clipy import plot
 
 # DIRECTORY
@@ -63,13 +65,297 @@ dirName = os.path.join(HOME, dirName)
 daily_stats = xr.load_dataset(os.path.join(dirName, 'statistics-daily.nc'))
 monthly_stats = xr.load_dataset(os.path.join(dirName, 'statistics-monthly.nc'))
 
+# READ IN METADATA
+with open(os.path.join(dirName, 'metadata.yml'), 'r') as file:
+    meta = yaml.safe_load(file)
 ```
+
+## Air Temperature {height=30%}
+
+###
+
+```{python}
+#| output: asis
+#| label: "air temp obs and records"
+#| title: "Air Temperature &rarr;"
+var = 'Air Temperature'
+print("<b>Yesterday's</b><br/>")
+print(f"<b>High:</b> {np.round(meta['yesterday']['high'][var], decimals=1)} {meta['units'][var]}<br/>")
+print(f"<b>Average:</b> {np.round(meta['yesterday']['average'][var], decimals=1)} {meta['units'][var]}<br/>")
+print(f"<b>Low:</b> {np.round(meta['yesterday']['low'][var], decimals=1)} {meta['units'][var]}")
+```
+
+### 
+
+```{python}
+#| content: valuebox
+#| title: "Today's Record Low"
+record = 'Record Low'
+dict(
+  icon = 'thermometer-snow',
+  color = plot.colors['cb'][record],
+  value = plot.getval(stats=daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average Low"
+record = 'Average Low'
+dict(
+  icon = 'thermometer-low',
+  color = plot.colors['cb'][record],
+  value = plot.getval(stats=daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Highest Low"
+record = 'Highest Low'
+dict(
+  icon = 'thermometer-half',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Lowest High"
+record = 'Lowest High'
+dict(
+  icon = 'thermometer-half',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average High"
+record = 'Average High'
+dict(
+  icon = 'thermometer-high',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Record High"
+record = 'Record High'
+dict(
+  icon = 'thermometer-sun',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+## Water Level {height=30%}
+
+###
+
+```{python}
+#| output: asis
+#| label: "water level obs and records"
+#| title: "Water Level &rarr;"
+var = 'Water Level'
+print("<b>Yesterday's</b><br/>")
+print(f"<b>High:</b> {np.round(meta['yesterday']['high'][var], decimals=2)} {meta['units'][var]}<br/>")
+print(f"<b>Average:</b> {np.round(meta['yesterday']['average'][var], decimals=2)} {meta['units'][var]}<br/>")
+print(f"<b>Low:</b> {np.round(meta['yesterday']['low'][var], decimals=2)} {meta['units'][var]}")
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Today's Record Low"
+record = 'Record Low'
+dict(
+  icon = 'droplet',
+  color = plot.colors['cb'][record],
+  value = plot.getval(stats=daily_stats, var=var, record=record, decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average Low"
+record = 'Average Low'
+dict(
+  icon = 'droplet-half',
+  color = plot.colors['cb'][record],
+  value = plot.getval(stats=daily_stats, var=var, record=record, decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Highest Low"
+record = 'Highest Low'
+dict(
+  icon = 'moisture',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record, decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Lowest High"
+record = 'Lowest High'
+dict(
+  icon = 'moisture',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record, decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average High"
+record = 'Average High'
+dict(
+  icon = 'droplet-half',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record, decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Record High"
+record = 'Record High'
+dict(
+  icon = 'droplet-fill',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record, decimals=2)
+)
+```
+
+## Water Temperature {height=30%}
+
+###
+
+```{python}
+#| output: asis
+#| label: "water temp obs and records"
+#| title: "Water Temperature &rarr;"
+var = 'Water Temperature'
+print("<b>Yesterday's</b><br/>")
+print(f"<b>High:</b> {np.round(meta['yesterday']['high'][var], decimals=1)} {meta['units'][var]}<br/>")
+print(f"<b>Average:</b> {np.round(meta['yesterday']['average'][var], decimals=1)} {meta['units'][var]}<br/>")
+print(f"<b>Low:</b> {np.round(meta['yesterday']['low'][var], decimals=1)} {meta['units'][var]}")
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Today's Record Low"
+record = 'Record Low'
+dict(
+  icon = 'thermometer-snow',
+  color = plot.colors['cb'][record],
+  value = plot.getval(stats=daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average Low"
+record = 'Average Low'
+dict(
+  icon = 'thermometer-low',
+  color = plot.colors['cb'][record],
+  value = plot.getval(stats=daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Highest Low"
+record = 'Highest Low'
+dict(
+  icon = 'thermometer-half',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Lowest High"
+record = 'Lowest High'
+dict(
+  icon = 'thermometer-half',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average High"
+record = 'Average High'
+dict(
+  icon = 'thermometer-high',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Record High"
+record = 'Record High'
+dict(
+  icon = 'thermometer-sun',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+# Plots
 
 ## Dashboard {.tabset}
 
 ```{python}
 #| output: asis
-#| title: Daily Stats
+#| title: "Daily Stats"
 output_notebook(hide_banner=True)
 display(Markdown('::: {.panel-tabset}'))
 
@@ -85,7 +371,8 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| title: Monthly Stats
+#| label: "monthly stats plots"
+#| title: "Monthly Stats"
 
 display(Markdown('::: {.panel-tabset}'))
 
@@ -100,7 +387,8 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| title: Daily Records Set By Year 
+#| label: "daily record by year"
+#| title: "Daily Records Set By Year"
 
 display(Markdown('::: {.panel-tabset}'))
 
@@ -115,7 +403,8 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| title: Monthly Records Set By Year 
+#| label: "monthly records by year"
+#| title: "Monthly Records Set By Year"
 
 display(Markdown('::: {.panel-tabset}'))
 
@@ -140,7 +429,8 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| title: Daily Stats
+#| label: "daily stats data"
+#| title: "Daily Stats"
 
 display(Markdown('::: {.panel-tabset}'))
 
@@ -155,7 +445,8 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| title: Monthly Stats
+#| label: "monthly stats data"
+#| title: "Monthly Stats"
 
 display(Markdown('::: {.panel-tabset}'))
 
