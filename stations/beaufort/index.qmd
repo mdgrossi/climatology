@@ -75,7 +75,7 @@ with open(os.path.join(dirName, 'metadata.yml'), 'r') as file:
     meta = yaml.safe_load(file)
 ```
 
-## AIR TEMPERATURE {height=30%}
+## Air Temperature {height=30%}
 
 ###
 
@@ -178,9 +178,9 @@ dict(
 #| title: "Water Level &rarr;"
 var = 'Water Level'
 print("<b>Yesterday's</b><br/>")
-print(f"<b>High:</b> {np.round(meta['yesterday']['high'][var], decimals=1)} {meta['units'][var]}<br/>")
-print(f"<b>Average:</b> {np.round(meta['yesterday']['average'][var], decimals=1)} {meta['units'][var]}<br/>")
-print(f"<b>Low:</b> {np.round(meta['yesterday']['low'][var], decimals=1)} {meta['units'][var]}")
+print(f"<b>High:</b> {np.round(meta['yesterday']['high'][var], decimals=2)} {meta['units'][var]}<br/>")
+print(f"<b>Average:</b> {np.round(meta['yesterday']['average'][var], decimals=2)} {meta['units'][var]}<br/>")
+print(f"<b>Low:</b> {np.round(meta['yesterday']['low'][var], decimals=2)} {meta['units'][var]}")
 ```
 
 ###
