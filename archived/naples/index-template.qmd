@@ -26,13 +26,21 @@ flood_thresholds = {
 # {.sidebar}
 
 ```{python}
+import os
+import sys
+import yaml
 import pytz
+import numpy as np
+import xarray as xr
 from datetime import datetime as dt
 from IPython.display import Markdown
+from bokeh.io import output_notebook
+sys.path.append('/home/runner/work/climatology/climatology')
+sys.path.append('/workspaces/climatology')
+from clipy import plot
 
 est = pytz.timezone('US/Eastern')
 display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
-
 ```
 
 ::: {.card}
@@ -48,12 +56,6 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 
 ```{python}
 #| include: False
-import os
-import sys
-import xarray as xr
-from bokeh.io import output_notebook
-sys.path.append('/home/runner/work/climatology/climatology')
-from clipy import plot
 
 # DIRECTORY
 HOME = '../../'
