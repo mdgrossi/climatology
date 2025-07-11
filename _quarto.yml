@@ -11,8 +11,8 @@ project:
     - "stations/beaufort/*.qmd"
     - "stations/virginiakey/*.qmd"
     - "stations/woodshole/*.qmd"
+    - "stations/lewes/*.qmd"
     - "archived/baystlouis/*.qmd"
-    - "archived/lewes/*.qmd"
     - "archived/naples/index.qmd"
     - "!NOAA-CO-OPS-Climatology.ipynb"
 
@@ -40,7 +40,7 @@ website:
           - text: Woods Hole, MA
             href: stations/woodshole/index.qmd
           - text: Lewes, DE
-            href: archived/lewes/index.qmd
+            href: stations/lewes/index.qmd
           - text: Bay St. Louis, MS (semi-active)
             href: archived/baystlouis/index.qmd
           - text: Naples, FL (coming soon)
