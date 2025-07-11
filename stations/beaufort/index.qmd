@@ -5,7 +5,7 @@ image: ../../images/bftnc.JPG
 format:
   dashboard:
     logo: ../../images/bftnc.JPG
-    scrolling: false
+    <!-- scrolling: false -->
 ---
 
 ```{python}
