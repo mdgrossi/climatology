@@ -1,0 +1,463 @@
+
+---
+title: "Newport, RI"
+image: ../../images/logo.png
+format:
+  dashboard:
+    logo: ../../images/logo.png
+---
+
+```{python}
+#| include: False
+#| label: setup
+
+# SET THE DIRECTORY NAME
+dirName = '_newportRi'
+
+# SET FLOOD THRESHOLDS
+# https://water.noaa.gov/gauges/nwpr1
+flood_thresholds = {
+    'major': 9.0,
+    'moderate': 7.5,
+    'minor': 6.0
+}
+
+```
+
+# {.sidebar}
+
+```{python}
+#| label: sidebar
+import os
+import sys
+import yaml
+import pytz
+import numpy as np
+import xarray as xr
+from datetime import datetime as dt
+from IPython.display import Markdown
+from bokeh.io import output_notebook
+sys.path.append('/home/runner/work/climatology/climatology')
+sys.path.append('/workspaces/climatology')
+from clipy import plot
+
+est = pytz.timezone('US/Eastern')
+display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
+```
+
+::: {.card}
+![](../../images/logo.png){scale="75%"}
+:::
+
+<br>
+[**Newport, RI**](https://en.wikipedia.org/wiki/Newport%2C_Rhode_Island){target="_blank"} is a coastal city on the western side of Aquidneck Island in Rhode Island with a **humid continental climate** characterized by cooler summers and more moderate winters than other regional coastal cities. It is located in Narragansett Bay, at the southern end of the bay, with the Atlantic Ocean to the south. A [NOAA](https://www.noaa.gov){target="_blank"} [tide guage](https://tidesandcurrents.noaa.gov/stationhome.html?id=8452660){target="_blank"} has been installed at the U.S. Naval Station Newport since September 1930.
+
+<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d38009.402948076386!2d-76.67961167413992!3d34.72877006773139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1729819005833!5m2!1sen!2sus" align="right" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+# Today's Stats
+
+```{python}
+#| label: load data
+#| include: False
+
+# DIRECTORY
+HOME = '../../'
+dirName = os.path.join(HOME, dirName)
+
+# READ IN STATS
+daily_stats = xr.load_dataset(os.path.join(dirName, 'statistics-daily.nc'))
+monthly_stats = xr.load_dataset(os.path.join(dirName, 'statistics-monthly.nc'))
+
+# READ IN METADATA
+with open(os.path.join(dirName, 'metadata.yml'), 'r') as file:
+    meta = yaml.safe_load(file)
+```
+
+## Air Temperature {height=30%}
+
+###
+
+```{python}
+#| output: asis
+#| label: "air temp obs and records"
+#| title: "Air Temperature &rarr;"
+var = 'Air Temperature'
+print("<b>Yesterday's</b><br/>")
+print(f"<b>High:</b> {np.round(meta['yesterday']['high'][var], decimals=1)} {meta['units'][var]}<br/>")
+print(f"<b>Average:</b> {np.round(meta['yesterday']['average'][var], decimals=1)} {meta['units'][var]}<br/>")
+print(f"<b>Low:</b> {np.round(meta['yesterday']['low'][var], decimals=1)} {meta['units'][var]}")
+```
+
+### 
+
+```{python}
+#| content: valuebox
+#| title: "Today's Record Low"
+record = 'Record Low'
+dict(
+  icon = 'thermometer-snow',
+  color = plot.colors['cb'][record],
+  value = plot.getval(stats=daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average Low"
+record = 'Average Low'
+dict(
+  icon = 'thermometer-low',
+  color = plot.colors['cb'][record],
+  value = plot.getval(stats=daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Highest Low"
+record = 'Highest Low'
+dict(
+  icon = 'thermometer-half',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Lowest High"
+record = 'Lowest High'
+dict(
+  icon = 'thermometer-half',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average High"
+record = 'Average High'
+dict(
+  icon = 'thermometer-high',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Record High"
+record = 'Record High'
+dict(
+  icon = 'thermometer-sun',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+## Water Level {height=30%}
+
+###
+
+```{python}
+#| output: asis
+#| label: "water level obs and records"
+#| title: "Water Level &rarr;"
+var = 'Water Level'
+print("<b>Yesterday's</b><br/>")
+print(f"<b>High:</b> {np.round(meta['yesterday']['high'][var], decimals=2)} {meta['units'][var]}<br/>")
+print(f"<b>Average:</b> {np.round(meta['yesterday']['average'][var], decimals=2)} {meta['units'][var]}<br/>")
+print(f"<b>Low:</b> {np.round(meta['yesterday']['low'][var], decimals=2)} {meta['units'][var]}")
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Today's Record Low"
+record = 'Record Low'
+dict(
+  icon = 'droplet',
+  color = plot.colors['cb'][record],
+  value = plot.getval(stats=daily_stats, var=var, record=record, decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average Low"
+record = 'Average Low'
+dict(
+  icon = 'droplet-half',
+  color = plot.colors['cb'][record],
+  value = plot.getval(stats=daily_stats, var=var, record=record, decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Highest Low"
+record = 'Highest Low'
+dict(
+  icon = 'moisture',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record, decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Lowest High"
+record = 'Lowest High'
+dict(
+  icon = 'moisture',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record, decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average High"
+record = 'Average High'
+dict(
+  icon = 'droplet-half',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record, decimals=2)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Record High"
+record = 'Record High'
+dict(
+  icon = 'droplet-fill',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record, decimals=2)
+)
+```
+
+## Water Temperature {height=30%}
+
+###
+
+```{python}
+#| output: asis
+#| label: "water temp obs and records"
+#| title: "Water Temperature &rarr;"
+var = 'Water Temperature'
+print("<b>Yesterday's</b><br/>")
+print(f"<b>High:</b> {np.round(meta['yesterday']['high'][var], decimals=1)} {meta['units'][var]}<br/>")
+print(f"<b>Average:</b> {np.round(meta['yesterday']['average'][var], decimals=1)} {meta['units'][var]}<br/>")
+print(f"<b>Low:</b> {np.round(meta['yesterday']['low'][var], decimals=1)} {meta['units'][var]}")
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Today's Record Low"
+record = 'Record Low'
+dict(
+  icon = 'thermometer-snow',
+  color = plot.colors['cb'][record],
+  value = plot.getval(stats=daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average Low"
+record = 'Average Low'
+dict(
+  icon = 'thermometer-low',
+  color = plot.colors['cb'][record],
+  value = plot.getval(stats=daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Highest Low"
+record = 'Highest Low'
+dict(
+  icon = 'thermometer-half',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Lowest High"
+record = 'Lowest High'
+dict(
+  icon = 'thermometer-half',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Average High"
+record = 'Average High'
+dict(
+  icon = 'thermometer-high',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+###
+
+```{python}
+#| content: valuebox
+#| title: "Record High"
+record = 'Record High'
+dict(
+  icon = 'thermometer-sun',
+  color = plot.colors['cb'][record],
+  value = plot.getval(daily_stats, var=var, record=record)
+)
+```
+
+# Plots
+
+## Dashboard {.tabset}
+
+```{python}
+#| output: asis
+#| title: "Daily Stats"
+output_notebook(hide_banner=True)
+display(Markdown('::: {.panel-tabset}'))
+
+for var in daily_stats.variable.values:
+    display(Markdown(f'\n## {var} ({daily_stats.attrs[f"{var} units"]})\n\n'))
+    plot.daily_climo(data=daily_stats, var=var, scheme='mg',
+                    flood_thresholds=flood_thresholds)
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
+
+```{python}
+#| output: asis
+#| label: "monthly stats plots"
+#| title: "Monthly Stats"
+
+display(Markdown('::: {.panel-tabset}'))
+
+for var in monthly_stats.variable.values:
+    display(Markdown(f'\n## {var} ({monthly_stats.attrs[f"{var} units"]})\n\n'))
+    plot.monthly_climo(data=monthly_stats, var=var, scheme='mg')
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
+
+```{python}
+#| output: asis
+#| label: "daily record by year"
+#| title: "Daily Records Set By Year"
+
+display(Markdown('::: {.panel-tabset}'))
+
+for var in daily_stats.variable.values:
+    display(Markdown(f'\n## {var} ({daily_stats.attrs[f"{var} units"]})\n\n'))
+    plot.histograms(stats=daily_stats, var=var, scheme='mg')
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
+
+```{python}
+#| output: asis
+#| label: "monthly records by year"
+#| title: "Monthly Records Set By Year"
+
+display(Markdown('::: {.panel-tabset}'))
+
+for var in monthly_stats.variable.values:
+    display(Markdown(f'\n## {var} ({monthly_stats.attrs[f"{var} units"]})\n\n'))
+    plot.histograms(stats=monthly_stats, var=var, scheme='mg')
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
+
+### Water Level Trend
+
+```{=html}
+{{< include ../../_newportRi/trend-waterlevel.html >}}
+```
+
+# Data
+
+## Row {.tabset}
+
+```{python}
+#| output: asis
+#| label: "daily stats data"
+#| title: "Daily Stats"
+
+display(Markdown('::: {.panel-tabset}'))
+
+for var in daily_stats.variable.values:
+    display(Markdown(f'\n### {var} ({daily_stats.attrs[f"{var} units"]})\n\n'))
+    plot.gtable(daily_stats, var)
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
+
+```{python}
+#| output: asis
+#| label: "monthly stats data"
+#| title: "Monthly Stats"
+
+display(Markdown('::: {.panel-tabset}'))
+
+for var in monthly_stats.variable.values:
+    display(Markdown(f'\n### {var} ({monthly_stats.attrs[f"{var} units"]})\n\n'))
+    plot.gtable(monthly_stats, var)
+    display(Markdown(' '))
+
+display(Markdown(':::'))
+
+```
