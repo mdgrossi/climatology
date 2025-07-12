@@ -26,6 +26,7 @@ jobs:
           python climoDL.py -s "Virginia Key, FL"
           python climoDL.py -s "Woods Hole, MA"
           python climoDL.py -s "Lewes, DE"
+          python climoDL.py -s "Newport, RI"
         
       - name: Commit changes
         uses: devops-infra/action-commit-push@master

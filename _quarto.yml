@@ -12,6 +12,7 @@ project:
     - "stations/virginiakey/*.qmd"
     - "stations/woodshole/*.qmd"
     - "stations/lewes/*.qmd"
+    - "stations/newport/*.qmd"
     - "archived/baystlouis/*.qmd"
     - "archived/naples/index.qmd"
     - "!NOAA-CO-OPS-Climatology.ipynb"
@@ -35,12 +36,14 @@ website:
         menu:
           - text: Beaufort, NC
             href: stations/beaufort/index.qmd
-          - text: Virginia Key, FL
-            href: stations/virginiakey/index.qmd
-          - text: Woods Hole, MA
-            href: stations/woodshole/index.qmd
           - text: Lewes, DE
             href: stations/lewes/index.qmd
+          - text: Newport, RI
+            href: stations/newport/index.qmd
+          - text: Woods Hole, MA
+            href: stations/woodshole/index.qmd
+          - text: Virginia Key, FL
+            href: stations/virginiakey/index.qmd
           - text: Bay St. Louis, MS (semi-active)
             href: archived/baystlouis/index.qmd
           - text: Naples, FL (coming soon)
