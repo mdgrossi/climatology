@@ -123,12 +123,7 @@ class Data:
                 'day_threshold': self.day_threshold,
                 'variables': self.variables,
                 'units': self.units,
-                'last_obs': {i:self.data[i].last_valid_index().strftime('%Y-%m-%d %X') for i in self.variables},
-                'yesterday': {
-                    'average': self.daily_avgs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
-                    'high': self.daily_highs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
-                    'low': self.daily_lows().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict()
-                    }
+                'last_obs': {i:self.data[i].last_valid_index().strftime('%Y-%m-%d %X') for i in self.variables}
                 })
             with open(os.path.join(self.outdir, 'metadata.yml'), 'w') as fp:
                 yaml.dump(self.meta, fp) 
@@ -159,6 +154,12 @@ class Data:
             self.monthly_records.to_netcdf(statsOutFile, mode='w')
             if self.verbose:
                 print(f"Observational monthly statistics written to '{statsOutFile}'")
+            # Add yesterday's observations
+            self.meta['yesterday'] = {
+                    'average': self.daily_avgs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
+                    'high': self.daily_highs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
+                    'low': self.daily_lows().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict()
+                    }
 
         # =====================================================================
         # If historical data for this station already exists:
