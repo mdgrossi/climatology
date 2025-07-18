@@ -3,9 +3,9 @@ day_threshold: 2
 dirname: _beaufortNc
 hr_threshold: 4
 last_obs:
-  Air Temperature: '2025-07-17 00:36:00'
-  Water Level: '2025-07-16 23:00:00'
-  Water Temperature: '2025-07-17 00:36:00'
+  Air Temperature: '2025-07-18 00:36:00'
+  Water Level: '2025-07-17 23:06:00'
+  Water Temperature: '2025-07-18 00:36:00'
 stationid: '8656483'
 stationname: Beaufort, NC
 tz: lst
@@ -20,14 +20,14 @@ variables:
 - Water Level
 yesterday:
   average:
-    Air Temperature: 84.44999999999999
-    Water Level: -1.545
-    Water Temperature: 85.6
+    Air Temperature: 84.65
+    Water Level: -1.614
+    Water Temperature: 85.5
   high:
-    Air Temperature: 87.8
-    Water Level: 0.043
-    Water Temperature: 86.5
+    Air Temperature: 87.6
+    Water Level: 0.138
+    Water Temperature: 86.4
   low:
-    Air Temperature: 81.1
-    Water Level: -3.133
-    Water Temperature: 84.7
+    Air Temperature: 81.7
+    Water Level: -3.366
+    Water Temperature: 84.6
