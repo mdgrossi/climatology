@@ -87,6 +87,13 @@ website:
   back-to-top-navigation: true
   # repo-actions: [source, issue]
   repo-branch: main
+  announcement:
+    icon: https://cdn.oceanservice.noaa.gov/oceanserviceprod/facts/noaa-emblem-rgb-2022.png
+    dismissable: true
+    Content: "The products on this page rely on data from the [National Oceanic and Atmospheric Administration](https://www.noaa.gov) (NOAA). NOAA is a critical tax-funded federal agency whose data collection, modeling and science capabilities, and personnel expertise keep the country safer and more prosperous---all at a cost of 6&cent; per day per taxpayer. If you are visiting this page and reading this, you have an interest in NOAA's science, service, and stewardship to the nation. **Contact your representatives in Congress today** to demand that NOAA employees are restored, facilities and resources are maintained, and budget is preserved."
+    type: primary
+    position: below-navbar
+
 
 format:
   html:
