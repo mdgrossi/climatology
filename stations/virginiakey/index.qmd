@@ -27,6 +27,7 @@ flood_thresholds = {
 # {.sidebar}
 
 ```{python}
+#| label: Load packages
 import os
 import sys
 import yaml
