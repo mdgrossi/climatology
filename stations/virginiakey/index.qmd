@@ -80,7 +80,7 @@ with open(os.path.join(dirName, 'metadata.yml'), 'r') as file:
 
 ```{python}
 #| output: asis
-#| label: Yesterday's air temperature
+#| label: Yesterday air temperature
 #| title: "Air Temperature &rarr;"
 var = 'Air Temperature'
 print("<b>Yesterday's</b><br/>")
@@ -173,7 +173,7 @@ dict(
 
 ```{python}
 #| output: asis
-#| label: Yesterday's water level
+#| label: Yesterday water level
 #| title: "Water Level &rarr;"
 var = 'Water Level'
 print("<b>Yesterday's</b><br/>")
@@ -266,7 +266,7 @@ dict(
 
 ```{python}
 #| output: asis
-#| label: Yesterday's water temperature
+#| label: Yesterday water temperature
 #| title: "Water Temperature &rarr;"
 var = 'Water Temperature'
 print("<b>Yesterday's</b><br/>")
