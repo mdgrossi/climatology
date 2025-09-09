@@ -27,7 +27,6 @@ flood_thresholds = {
 # {.sidebar}
 
 ```{python}
-#| label: Load packages
 import os
 import sys
 import yaml
@@ -58,7 +57,7 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 # Today's Stats
 
 ```{python}
-#| label: load data
+#| label: Load data
 #| include: False
 
 # DIRECTORY
