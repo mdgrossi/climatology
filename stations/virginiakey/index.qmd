@@ -26,7 +26,6 @@ flood_thresholds = {
 # {.sidebar}
 
 ```{python}
-#| label: Load packages
 import os
 import sys
 import yaml
@@ -57,6 +56,7 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 # Today's Stats
 
 ```{python}
+#| label: load data
 #| include: False
 
 # DIRECTORY
@@ -78,7 +78,7 @@ with open(os.path.join(dirName, 'metadata.yml'), 'r') as file:
 
 ```{python}
 #| output: asis
-#| label: Yesterday air temperature
+#| label: "air temp obs and records"
 #| title: "Air Temperature &rarr;"
 var = 'Air Temperature'
 print("<b>Yesterday's</b><br/>")
@@ -171,7 +171,7 @@ dict(
 
 ```{python}
 #| output: asis
-#| label: Yesterday water level
+#| label: "water level obs and records"
 #| title: "Water Level &rarr;"
 var = 'Water Level'
 print("<b>Yesterday's</b><br/>")
@@ -264,7 +264,7 @@ dict(
 
 ```{python}
 #| output: asis
-#| label: Yesterday water temperature
+#| label: "water temp obs and records"
 #| title: "Water Temperature &rarr;"
 var = 'Water Temperature'
 print("<b>Yesterday's</b><br/>")
@@ -357,7 +357,6 @@ dict(
 
 ```{python}
 #| output: asis
-#| label: Daily stats plots
 #| title: "Daily Stats"
 output_notebook(hide_banner=True)
 display(Markdown('::: {.panel-tabset}'))
@@ -374,7 +373,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: Monthly stats plots
+#| label: "monthly stats plots"
 #| title: "Monthly Stats"
 
 display(Markdown('::: {.panel-tabset}'))
@@ -390,7 +389,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: Daily record by year
+#| label: "daily record by year"
 #| title: "Daily Records Set By Year"
 
 display(Markdown('::: {.panel-tabset}'))
@@ -406,7 +405,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: Monthly records by year
+#| label: "monthly records by year"
 #| title: "Monthly Records Set By Year"
 
 display(Markdown('::: {.panel-tabset}'))
@@ -432,7 +431,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: Daily stats data
+#| label: "daily stats data"
 #| title: "Daily Stats"
 
 display(Markdown('::: {.panel-tabset}'))
@@ -448,7 +447,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: Monthly stats data
+#| label: "monthly stats data"
 #| title: "Monthly Stats"
 
 display(Markdown('::: {.panel-tabset}'))
