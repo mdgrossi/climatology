@@ -10,7 +10,6 @@ format:
 
 ```{python}
 #| include: False
-#| label: Setup
 
 # SET THE DIRECTORY NAME
 dirName = '_virginiaKeyFl'
@@ -58,7 +57,6 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 # Today's Stats
 
 ```{python}
-#| label: Load data
 #| include: False
 
 # DIRECTORY
