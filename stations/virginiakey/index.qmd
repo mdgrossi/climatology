@@ -80,7 +80,7 @@ with open(os.path.join(dirName, 'metadata.yml'), 'r') as file:
 
 ```{python}
 #| output: asis
-#| label: "Yesterday's air temperature"
+#| label: Yesterday's air temperature
 #| title: "Air Temperature &rarr;"
 var = 'Air Temperature'
 print("<b>Yesterday's</b><br/>")
@@ -173,7 +173,7 @@ dict(
 
 ```{python}
 #| output: asis
-#| label: "Yesterday's water level"
+#| label: Yesterday's water level
 #| title: "Water Level &rarr;"
 var = 'Water Level'
 print("<b>Yesterday's</b><br/>")
@@ -266,7 +266,7 @@ dict(
 
 ```{python}
 #| output: asis
-#| label: "Yesterday's water temperature"
+#| label: Yesterday's water temperature
 #| title: "Water Temperature &rarr;"
 var = 'Water Temperature'
 print("<b>Yesterday's</b><br/>")
@@ -359,7 +359,7 @@ dict(
 
 ```{python}
 #| output: asis
-#| label: "Daily stats plots"
+#| label: Daily stats plots
 #| title: "Daily Stats"
 output_notebook(hide_banner=True)
 display(Markdown('::: {.panel-tabset}'))
@@ -376,7 +376,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: "Monthly stats plots"
+#| label: Monthly stats plots
 #| title: "Monthly Stats"
 
 display(Markdown('::: {.panel-tabset}'))
@@ -392,7 +392,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: "Daily record by year"
+#| label: Daily record by year
 #| title: "Daily Records Set By Year"
 
 display(Markdown('::: {.panel-tabset}'))
@@ -408,7 +408,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: "Monthly records by year"
+#| label: Monthly records by year
 #| title: "Monthly Records Set By Year"
 
 display(Markdown('::: {.panel-tabset}'))
@@ -434,7 +434,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: "Daily stats data"
+#| label: Daily stats data
 #| title: "Daily Stats"
 
 display(Markdown('::: {.panel-tabset}'))
@@ -450,7 +450,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: "Monthly stats data"
+#| label: Monthly stats data
 #| title: "Monthly Stats"
 
 display(Markdown('::: {.panel-tabset}'))
