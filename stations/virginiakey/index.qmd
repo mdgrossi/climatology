@@ -92,6 +92,7 @@ print(f"<b>Low:</b> {np.round(meta['yesterday']['low'][var], decimals=1)} {meta[
 
 ```{python}
 #| content: valuebox
+#| label: Today's record low
 #| title: "Today's Record Low"
 record = 'Record Low'
 dict(
