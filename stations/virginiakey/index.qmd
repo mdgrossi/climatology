@@ -79,7 +79,7 @@ with open(os.path.join(dirName, 'metadata.yml'), 'r') as file:
 
 ```{python}
 #| output: asis
-#| label: "Yesterday's air temperature"
+#| label: "Air temperature obs and records"
 #| title: "Air Temperature &rarr;"
 var = 'Air Temperature'
 print("<b>Yesterday's</b><br/>")
@@ -92,7 +92,6 @@ print(f"<b>Low:</b> {np.round(meta['yesterday']['low'][var], decimals=1)} {meta[
 
 ```{python}
 #| content: valuebox
-#| label: "Today's record low"
 #| title: "Today's Record Low"
 record = 'Record Low'
 dict(
@@ -173,7 +172,7 @@ dict(
 
 ```{python}
 #| output: asis
-#| label: "water level obs and records"
+#| label: "Water level obs and records"
 #| title: "Water Level &rarr;"
 var = 'Water Level'
 print("<b>Yesterday's</b><br/>")
@@ -266,7 +265,7 @@ dict(
 
 ```{python}
 #| output: asis
-#| label: "water temp obs and records"
+#| label: "Water temperature obs and records"
 #| title: "Water Temperature &rarr;"
 var = 'Water Temperature'
 print("<b>Yesterday's</b><br/>")
@@ -359,6 +358,7 @@ dict(
 
 ```{python}
 #| output: asis
+#| label: "Daily stats"
 #| title: "Daily Stats"
 output_notebook(hide_banner=True)
 display(Markdown('::: {.panel-tabset}'))
