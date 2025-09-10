@@ -375,7 +375,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: "monthly stats plots"
+#| label: "Monthly stats plots"
 #| title: "Monthly Stats"
 
 display(Markdown('::: {.panel-tabset}'))
@@ -391,7 +391,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: "daily record by year"
+#| label: "Daily record by year"
 #| title: "Daily Records Set By Year"
 
 display(Markdown('::: {.panel-tabset}'))
@@ -407,7 +407,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: "monthly records by year"
+#| label: "Monthly records by year"
 #| title: "Monthly Records Set By Year"
 
 display(Markdown('::: {.panel-tabset}'))
@@ -433,7 +433,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: "daily stats data"
+#| label: "Daily stats data"
 #| title: "Daily Stats"
 
 display(Markdown('::: {.panel-tabset}'))
@@ -449,7 +449,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
-#| label: "monthly stats data"
+#| label: "Monthly stats data"
 #| title: "Monthly Stats"
 
 display(Markdown('::: {.panel-tabset}'))

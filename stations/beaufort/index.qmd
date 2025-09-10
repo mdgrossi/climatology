@@ -28,7 +28,6 @@ flood_thresholds = {
 # {.sidebar}
 
 ```{python}
-#| label: Load packages
 import os
 import sys
 import yaml
@@ -80,7 +79,7 @@ with open(os.path.join(dirName, 'metadata.yml'), 'r') as file:
 
 ```{python}
 #| output: asis
-#| label: "Yesterday's air temperature"
+#| label: "Air temperature obs and records"
 #| title: "Air Temperature &rarr;"
 var = 'Air Temperature'
 print("<b>Yesterday's</b><br/>")
@@ -93,7 +92,6 @@ print(f"<b>Low:</b> {np.round(meta['yesterday']['low'][var], decimals=1)} {meta[
 
 ```{python}
 #| content: valuebox
-#| label: "Today's record low air temp"
 #| title: "Today's Record Low"
 record = 'Record Low'
 dict(
@@ -107,7 +105,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's average low air temp"
 #| title: "Average Low"
 record = 'Average Low'
 dict(
@@ -121,7 +118,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's highest low air temp"
 #| title: "Highest Low"
 record = 'Highest Low'
 dict(
@@ -135,7 +131,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's lowest high air temp"
 #| title: "Lowest High"
 record = 'Lowest High'
 dict(
@@ -149,7 +144,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's average high air temp"
 #| title: "Average High"
 record = 'Average High'
 dict(
@@ -163,7 +157,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's record high air temp"
 #| title: "Record High"
 record = 'Record High'
 dict(
@@ -179,7 +172,7 @@ dict(
 
 ```{python}
 #| output: asis
-#| label: "Yesterday's water level"
+#| label: "Water level obs and records"
 #| title: "Water Level &rarr;"
 var = 'Water Level'
 print("<b>Yesterday's</b><br/>")
@@ -192,7 +185,6 @@ print(f"<b>Low:</b> {np.round(meta['yesterday']['low'][var], decimals=2)} {meta[
 
 ```{python}
 #| content: valuebox
-#| label: "Today's record low water level"
 #| title: "Today's Record Low"
 record = 'Record Low'
 dict(
@@ -206,7 +198,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's average low water level"
 #| title: "Average Low"
 record = 'Average Low'
 dict(
@@ -220,7 +211,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's highest low water level"
 #| title: "Highest Low"
 record = 'Highest Low'
 dict(
@@ -234,7 +224,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's lowest high water level"
 #| title: "Lowest High"
 record = 'Lowest High'
 dict(
@@ -248,7 +237,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's average high water level"
 #| title: "Average High"
 record = 'Average High'
 dict(
@@ -262,7 +250,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's record high water level"
 #| title: "Record High"
 record = 'Record High'
 dict(
@@ -278,7 +265,7 @@ dict(
 
 ```{python}
 #| output: asis
-#| label: "Yesterday's water temperature"
+#| label: "Water temperature obs and records"
 #| title: "Water Temperature &rarr;"
 var = 'Water Temperature'
 print("<b>Yesterday's</b><br/>")
@@ -291,7 +278,6 @@ print(f"<b>Low:</b> {np.round(meta['yesterday']['low'][var], decimals=1)} {meta[
 
 ```{python}
 #| content: valuebox
-#| label: "Today's record low water temp"
 #| title: "Today's Record Low"
 record = 'Record Low'
 dict(
@@ -305,7 +291,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's average low water temp"
 #| title: "Average Low"
 record = 'Average Low'
 dict(
@@ -319,7 +304,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's highest low water temp"
 #| title: "Highest Low"
 record = 'Highest Low'
 dict(
@@ -333,7 +317,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's lowest high water temp"
 #| title: "Lowest High"
 record = 'Lowest High'
 dict(
@@ -347,7 +330,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's average high water temp"
 #| title: "Average High"
 record = 'Average High'
 dict(
@@ -361,7 +343,6 @@ dict(
 
 ```{python}
 #| content: valuebox
-#| label: "Today's record high water temp"
 #| title: "Record High"
 record = 'Record High'
 dict(
@@ -377,7 +358,7 @@ dict(
 
 ```{python}
 #| output: asis
-#| label: "Daily stats plots"
+#| label: "Daily stats"
 #| title: "Daily Stats"
 output_notebook(hide_banner=True)
 display(Markdown('::: {.panel-tabset}'))
