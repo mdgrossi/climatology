@@ -357,7 +357,7 @@ dict(
 
 ```{python}
 #| output: asis
-#| label: "Daily stats"
+#| label: "Daily stats plots"
 #| title: "Daily Stats"
 output_notebook(hide_banner=True)
 display(Markdown('::: {.panel-tabset}'))

@@ -10,6 +10,7 @@ format:
 
 ```{python}
 #| include: False
+#| label: Setup
 
 # SET THE DIRECTORY NAME
 dirName = '_bayStLouisMs'
@@ -26,6 +27,7 @@ flood_thresholds = {
 # {.sidebar}
 
 ```{python}
+#| label: Sidebar
 import os
 import sys
 import yaml
@@ -56,6 +58,7 @@ display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
 
 ```{python}
 #| include: False
+#| label: Load data
 
 # DIRECTORY
 HOME = '../../'
@@ -71,6 +74,7 @@ monthly_stats = xr.load_dataset(os.path.join(dirName, 'statistics-monthly.nc'))
 
 ```{python}
 #| output: asis
+#| label: Daily stats plots
 #| title: Daily Stats
 output_notebook(hide_banner=True)
 display(Markdown('::: {.panel-tabset}'))
@@ -87,6 +91,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
+#| label: Monthly stats plots
 #| title: Monthly Stats
 
 display(Markdown('::: {.panel-tabset}'))
@@ -102,6 +107,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
+#| label: Daily records by year
 #| title: Daily Records Set By Year 
 
 display(Markdown('::: {.panel-tabset}'))
@@ -117,6 +123,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
+#| label: Monthly records by year
 #| title: Monthly Records Set By Year 
 
 display(Markdown('::: {.panel-tabset}'))
@@ -142,6 +149,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
+#| label: Daily stats data
 #| title: Daily Stats
 
 display(Markdown('::: {.panel-tabset}'))
@@ -157,6 +165,7 @@ display(Markdown(':::'))
 
 ```{python}
 #| output: asis
+#| label: Monthly stats data
 #| title: Monthly Stats
 
 display(Markdown('::: {.panel-tabset}'))
