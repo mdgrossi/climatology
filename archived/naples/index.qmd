@@ -9,6 +9,7 @@ format:
 
 ```{python}
 #| include: False
+#| label: Setup
 
 # SET THE DIRECTORY NAME
 dirName = '_naplesFl'
@@ -25,6 +26,7 @@ flood_thresholds = {
 # {.sidebar}
 
 ```{python}
+#| label: Sidebar
 import pytz
 from datetime import datetime as dt
 from IPython.display import Markdown
