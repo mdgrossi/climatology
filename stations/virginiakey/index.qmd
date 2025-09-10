@@ -79,7 +79,7 @@ with open(os.path.join(dirName, 'metadata.yml'), 'r') as file:
 
 ```{python}
 #| output: asis
-#| label: "air temp obs and records"
+#| label: "Yesterday's air temperature"
 #| title: "Air Temperature &rarr;"
 var = 'Air Temperature'
 print("<b>Yesterday's</b><br/>")
