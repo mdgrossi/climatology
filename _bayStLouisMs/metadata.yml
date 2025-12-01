@@ -3,9 +3,9 @@ day_threshold: 2
 dirname: _bayStLouisMs
 hr_threshold: 4
 last_obs:
-  Air Temperature: '2025-08-25 16:00:00'
-  Water Level: '2025-11-01 00:30:00'
-  Water Temperature: '2025-11-01 00:36:00'
+  Air Temperature: '2025-12-01 00:36:00'
+  Water Level: '2025-12-01 00:36:00'
+  Water Temperature: '2025-12-01 00:36:00'
 stationid: '8747437'
 stationname: Bay St. Louis, MS
 tz: lst
@@ -20,14 +20,14 @@ variables:
 - Water Level
 yesterday:
   average:
-    Air Temperature: .nan
-    Water Level: -0.6775000000000001
-    Water Temperature: 66.65
+    Air Temperature: 59.1
+    Water Level: -0.3345
+    Water Temperature: 59.349999999999994
   high:
-    Air Temperature: .nan
-    Water Level: 0.007
-    Water Temperature: 68.7
+    Air Temperature: 65.5
+    Water Level: -0.069
+    Water Temperature: 60.4
   low:
-    Air Temperature: .nan
-    Water Level: -1.362
-    Water Temperature: 64.6
+    Air Temperature: 52.7
+    Water Level: -0.6
+    Water Temperature: 58.3
