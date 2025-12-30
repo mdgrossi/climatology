@@ -3,9 +3,9 @@ day_threshold: 2
 dirname: _virginiaKeyFl
 hr_threshold: 4
 last_obs:
-  Air Temperature: '2025-12-29 00:42:00'
-  Water Level: '2025-12-28 23:30:00'
-  Water Temperature: '2025-12-29 00:42:00'
+  Air Temperature: '2025-12-30 00:36:00'
+  Water Level: '2025-12-30 00:36:00'
+  Water Temperature: '2025-12-30 00:36:00'
 stationid: '8723214'
 stationname: Virginia Key, FL
 tz: lst
@@ -21,13 +21,13 @@ variables:
 yesterday:
   average:
     Air Temperature: 73.35
-    Water Level: -0.8069999999999999
-    Water Temperature: 75.95
+    Water Level: .nan
+    Water Temperature: 76.2
   high:
-    Air Temperature: 78.3
-    Water Level: 0.118
+    Air Temperature: 77.4
+    Water Level: .nan
     Water Temperature: 77.2
   low:
-    Air Temperature: 68.4
-    Water Level: -1.732
-    Water Temperature: 74.7
+    Air Temperature: 69.3
+    Water Level: .nan
+    Water Temperature: 75.2
