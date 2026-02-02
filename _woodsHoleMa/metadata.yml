@@ -3,9 +3,9 @@ day_threshold: 2
 dirname: _woodsHoleMa
 hr_threshold: 4
 last_obs:
-  Air Temperature: '2026-02-01 01:12:00'
-  Water Level: '2026-02-01 01:18:00'
-  Water Temperature: '2026-02-01 01:12:00'
+  Air Temperature: '2026-02-02 01:18:00'
+  Water Level: '2026-02-02 01:18:00'
+  Water Temperature: '2026-02-02 01:18:00'
 stationid: '8447930'
 stationname: Woods Hole, MA
 tz: lst
@@ -20,14 +20,14 @@ variables:
 - Water Level
 yesterday:
   average:
-    Air Temperature: 16.1
-    Water Level: -0.7969999999999999
-    Water Temperature: 29.85
+    Air Temperature: 21.95
+    Water Level: -0.277
+    Water Temperature: 29.65
   high:
-    Air Temperature: 20.5
-    Water Level: 0.632
+    Air Temperature: 27.0
+    Water Level: 1.367
     Water Temperature: 30.2
   low:
-    Air Temperature: 11.7
-    Water Level: -2.226
-    Water Temperature: 29.5
+    Air Temperature: 16.9
+    Water Level: -1.921
+    Water Temperature: 29.1
