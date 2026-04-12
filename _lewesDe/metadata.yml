@@ -3,9 +3,9 @@ day_threshold: 2
 dirname: _lewesDe
 hr_threshold: 4
 last_obs:
-  Air Temperature: '2026-04-10 02:18:00'
-  Water Level: '2026-04-10 02:12:00'
-  Water Temperature: '2026-04-10 02:18:00'
+  Air Temperature: '2026-04-12 02:06:00'
+  Water Level: '2026-04-12 02:06:00'
+  Water Temperature: '2026-04-12 02:06:00'
 stationid: '8557380'
 stationname: Lewes, DE
 tz: lst
@@ -20,14 +20,14 @@ variables:
 - Water Level
 yesterday:
   average:
-    Air Temperature: 44.2
-    Water Level: -1.8285
-    Water Temperature: 51.95
+    Air Temperature: 54.9
+    Water Level: .nan
+    Water Temperature: 52.45
   high:
-    Air Temperature: 47.8
-    Water Level: -0.185
-    Water Temperature: 54.3
+    Air Temperature: 60.3
+    Water Level: .nan
+    Water Temperature: 55.8
   low:
-    Air Temperature: 40.6
-    Water Level: -3.472
-    Water Temperature: 49.6
+    Air Temperature: 49.5
+    Water Level: .nan
+    Water Temperature: 49.1
