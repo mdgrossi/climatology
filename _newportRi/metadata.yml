@@ -3,9 +3,9 @@ day_threshold: 2
 dirname: _newportRi
 hr_threshold: 4
 last_obs:
-  Air Temperature: '2026-05-24 03:18:00'
-  Water Level: '2026-05-24 03:24:00'
-  Water Temperature: '2026-05-24 03:18:00'
+  Air Temperature: '2026-05-25 04:24:00'
+  Water Level: '2026-05-25 04:30:00'
+  Water Temperature: '2026-05-25 04:24:00'
 stationid: '8452660'
 stationname: Newport, RI
 tz: lst
@@ -20,14 +20,14 @@ variables:
 - Water Level
 yesterday:
   average:
-    Air Temperature: 56.5
-    Water Level: -1.6765
-    Water Temperature: 56.3
+    Air Temperature: 53.4
+    Water Level: -1.429
+    Water Temperature: 55.75
   high:
-    Air Temperature: 61.0
-    Water Level: -0.075
-    Water Temperature: 56.7
+    Air Temperature: 56.3
+    Water Level: 0.223
+    Water Temperature: 56.3
   low:
-    Air Temperature: 52.0
-    Water Level: -3.278
-    Water Temperature: 55.9
+    Air Temperature: 50.5
+    Water Level: -3.081
+    Water Temperature: 55.2
