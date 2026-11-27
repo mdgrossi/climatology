@@ -6,20 +6,28 @@ on:
 jobs:
   quarto-render-and-deploy:
     runs-on: ubuntu-latest
+    container: python:3.9-bookworm
     defaults:
       run:
         shell: bash -l {0}
     steps:
+    - name: Install sudo
+      run: apt-get update && apt-get install -y sudo
+
     - uses: actions/checkout@v3
-    
+
     - name: Set current date as env variable
       run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
-        
-    - uses: actions/setup-python@v4
+
+    - name: Cache pip downloads
+      uses: actions/cache@v4
       with:
-        python-version: '3.9'
-        cache: 'pip' # caching pip dependencies
-    - run: |
+        path: ~/.cache/pip
+        key: pip-py3.9-${{ hashFiles('requirements.txt') }}
+        restore-keys: pip-py3.9-
+
+    - name: Install dependencies
+      run: |
         pip install --upgrade pip setuptools wheel
         pip install -r requirements.txt
         pip install clipy/dist/clipy-2025.0.1-py3-none-any.whl
