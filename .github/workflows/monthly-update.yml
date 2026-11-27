@@ -1,4 +1,4 @@
-name: Daily-update
+name: Monthly-update
 on:
   schedule:
     - cron: "15 6 1 * *" # runs at 06:15 UTC (01:15 EDT / 02:15 EDT) on the first of every month
