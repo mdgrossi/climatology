@@ -38,7 +38,7 @@ import xarray as xr
 from datetime import datetime as dt
 from IPython.display import Markdown
 from bokeh.io import output_notebook
-sys.path.append(os.environ.get('GITHUB_WORKSPACE', '/workspaces/climatology'))
+sys.path.append(os.environ.get('GITHUB_WORKSPACE', os.path.abspath('../..')))
 from clipy import plot
 
 est = pytz.timezone('US/Eastern')
