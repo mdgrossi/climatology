@@ -68,6 +68,12 @@ def parse_args():
         default=2,
         help='Max number of days of data that can be missing.')
     parser.add_argument(
+        '-b', '--backfill',
+        metavar='days', type=int,
+        default=None,
+        help='Re-request the last N days of data for every variable and '+
+             'fill any blank values. Existing values are never overwritten.')
+    parser.add_argument(
         '-r', '--redownload',
         action='store_true',
         help='Force redownload of historical data.')
@@ -123,7 +129,7 @@ def main():
         verbose=args.verbose
         )
     try:
-        data.update_data()
+        data.update_data(backfill_days=args.backfill)
         data.update_stats()
 
         # Water Level trend plot

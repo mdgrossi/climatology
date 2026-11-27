@@ -343,13 +343,24 @@ class Data:
         self.data.index.name = f'time_{self.tz}'
         self.data.columns = [i for i in self.variables+['Water Level QC']]
 
-    def update_data(self, start_date=None, end_date=None):
-        """Download data from NOAA CO-OPS"""
+    def update_data(self, start_date=None, end_date=None, backfill_days=None):
+        """Download data from NOAA CO-OPS and merge it into the saved record.
+
+        Each variable is re-requested starting from its last valid reading (or
+        from 'backfill_days' days ago, whichever is earlier, if 'backfill_days'
+        is given). Downloaded values are merged so that newer non-blank values
+        replace existing ones, blank cells are filled where NOAA now has data,
+        a blank in the download never erases an existing value, and new
+        timestamps are appended.
+        """
         if self.verbose:
             print('Downloading latest data')
 
         # NOAA CO-OPS API
         self.station = Station(id=self.id)
+
+        # Collapse any repeated timestamps in the saved record up front
+        self.data = self._resolve_duplicates(self.data)
 
         # List of data variables to combine at the end
         datasets = []
@@ -370,10 +381,7 @@ class Data:
         # Air temperature
         if 'Air Temperature' in self.variables:
             # If no 'start_date' is passed, pick up from the last non-NA observation time
-            if start_date is None:
-                start = self._format_date(self.data['Air Temperature'].last_valid_index())
-            else:
-                start = self._format_date(start_date)
+            start = self._update_start('Air Temperature', start_date, backfill_days)
             # Download data
             self._load_atemp(start_date=start, end_date=end)
             self.air_temp['atemp_flag'] = self.air_temp['atemp_flag'].str\
@@ -386,10 +394,7 @@ class Data:
         # Water temperature
         if 'Water Temperature' in self.variables:
             # If no 'start_date' is passed, pick up from the last non-NA observation time
-            if start_date is None:
-                start = self._format_date(self.data['Water Temperature'].last_valid_index())
-            else:
-                start = self._format_date(start_date)
+            start = self._update_start('Water Temperature', start_date, backfill_days)
             # Download data
             self._load_water_temp(start_date=start, end_date=end)
             self.water_temp['wtemp_flag'] = self.water_temp['wtemp_flag'].str\
@@ -417,10 +422,7 @@ class Data:
             data.update(self.water_levels)
             self.data = data
             # If no 'start_date' is passed, pick up from the last non-NA observation time
-            if start_date is None:
-                start = self._format_date(self.data['Water Level'].last_valid_index())
-            else:
-                start = self._format_date(start_date)
+            start = self._update_start('Water Level', start_date, backfill_days)
             # Get latest data
             self._load_water_level(start_date=start, end_date=end)
             self.water_levels['wlevel_flag'] = self._wl_reject(
@@ -431,10 +433,7 @@ class Data:
         # Barometric pressure
         if 'Barometric Pressure' in self.variables:
             # If no 'start_date' is passed, pick up from the last non-NA observation time
-            if start_date is None:
-                start = self._format_date(self.data['Barometric Pressure'].last_valid_index())
-            else:
-                start = self._format_date(start_date)
+            start = self._update_start('Barometric Pressure', start_date, backfill_days)
             # Download data
             self._load_atm_pres(start_date=start, end_date=end)
             self.pressure['apres_flag'] = self.pressure['apres_flag'].str\
@@ -446,10 +445,7 @@ class Data:
         # Wind
         if 'Wind Speed' in self.variables:
             # If no 'start_date' is passed, pick up from the last non-NA observation time
-            if start_date is None:
-                start = self._format_date(self.data['Wind Speed'].last_valid_index())
-            else:
-                start = self._format_date(start_date)
+            start = self._update_start('Wind Speed', start_date, backfill_days)
             # Download data
             self._load_wind(start_date=start, end_date=end)
             self.wind['windflag'] = self.wind['wind_flag'].str\
@@ -460,37 +456,42 @@ class Data:
 
         # Merge into single dataframe
         data = pd.concat(datasets, axis=1)
-        if sum(~data.index.isin(self.data.index)) == 0:
+        data.index.name = f'time_{self.tz}'
+        data.columns = [i for i in self.data.columns]
+        data = self._resolve_duplicates(data)
+        old = self._resolve_duplicates(self.data)
+        merged, n_new, n_filled, n_replaced = self._merge_record(old, data)
+        if n_new == 0 and n_filled == 0 and n_replaced == 0:
             print('No new data available.')
         else:
-            data.index.name = f'time_{self.tz}'
-            data.columns = [i for i in self.data.columns]
-            data = pd.concat([self.data,
-                              data[data.index.isin(self.data.index) == False]],
-                             axis=0)
-            self.data = data
-            self.filtered_hours = \
-                pd.concat([self._filter_hours(
-                                self.data[var],
-                                hr_threshold=self.meta['hr_threshold'])
-                           for var in self.variables], axis=1)
-            self.filtered_hours = self._DOY(self.filtered_hours)
-            self.filtered_days = \
-                pd.concat([self._filter_days(
-                                self.data[var],
-                                hr_threshold=self.meta['hr_threshold'],
-                                day_threshold=self.meta['day_threshold'])
-                           for var in self.variables], axis=1)
-            self.filtered_days = self._DOY(self.filtered_days)
-            statsOutFile = os.path.join(self.outdir,
-                                        'observational_data_record.csv.gz')
-            self.data.to_csv(statsOutFile, compression='infer')
-            self.meta['last_obs'] = {i:self.data[i].last_valid_index().strftime('%Y-%m-%d %X') \
-                        for i in self.variables}
-            if self.verbose:
-                print(f"Updated observational data written to file '{statsOutFile}'.")
-                print("Done! Run Data.update_stats() to update statistics.")
-        
+            print(f'Added {n_new} new rows, filled {n_filled} previously blank values, '
+                  f'and replaced {n_replaced} existing values with newer ones.')
+        self.data = merged
+        # Recompute filtered series and save. This always runs because the
+        # water level refresh above may have changed existing rows even when
+        # nothing was added here.
+        self.filtered_hours = \
+            pd.concat([self._filter_hours(
+                            self.data[var],
+                            hr_threshold=self.meta['hr_threshold'])
+                       for var in self.variables], axis=1)
+        self.filtered_hours = self._DOY(self.filtered_hours)
+        self.filtered_days = \
+            pd.concat([self._filter_days(
+                            self.data[var],
+                            hr_threshold=self.meta['hr_threshold'],
+                            day_threshold=self.meta['day_threshold'])
+                       for var in self.variables], axis=1)
+        self.filtered_days = self._DOY(self.filtered_days)
+        statsOutFile = os.path.join(self.outdir,
+                                    'observational_data_record.csv.gz')
+        self.data.to_csv(statsOutFile, compression='infer')
+        self.meta['last_obs'] = {i:self.data[i].last_valid_index().strftime('%Y-%m-%d %X') \
+                    for i in self.variables}
+        if self.verbose:
+            print(f"Updated observational data written to file '{statsOutFile}'.")
+            print("Done! Run Data.update_stats() to update statistics.")
+
         # Update yesterday's data
         self.meta['yesterday'] = self._yesterday()
         with open(os.path.join(self.outdir, 'metadata.yml'), 'w') as fp:
@@ -543,6 +544,73 @@ class Data:
             self.monthly_records.to_netcdf(statsOutFile, mode='w')
             if self.verbose:
                 print(f"Updated monthly observational statistics written to '{statsOutFile}'")
+
+    def _merge_record(self, old, new):
+        """Merge a new download into the saved record, both with unique
+        timestamps and identical columns. Newer non-blank values replace
+        existing ones (the newest download is assumed to be the more accurate,
+        e.g. quality controlled). A blank in the download never erases an
+        existing value, blanks in the record are filled, and timestamps not yet
+        in the record are appended. The water level quality tag ('p'/'v')
+        follows the water level value it describes, and a verified water level
+        is never replaced by a preliminary one. Returns the merged record
+        and the number of rows added, blanks filled, and values replaced."""
+        merged = new.combine_first(old)[old.columns]
+        if 'Water Level QC' in old.columns:
+            new_qc = new['Water Level QC'].reindex(merged.index)
+            old_qc = old['Water Level QC'].reindex(merged.index)
+            new_has_value = new['Water Level'].reindex(merged.index).notna()
+            qc = new_qc.where(new_has_value, old_qc)
+            qc = qc.where(qc.notna(), new_qc)
+            # Verified data is never replaced by preliminary data
+            keep_verified = ((old_qc == 'v') & (new_qc == 'p')
+                             & old['Water Level'].reindex(merged.index).notna())
+            merged['Water Level'] = merged['Water Level'].where(
+                ~keep_verified, old['Water Level'].reindex(merged.index))
+            merged['Water Level QC'] = qc.where(~keep_verified, old_qc)
+        value_cols = [c for c in old.columns if c != 'Water Level QC']
+        merged_old = merged.reindex(old.index)[value_cols].to_numpy()
+        old_vals = old[value_cols].to_numpy()
+        n_new = int((~new.index.isin(old.index)).sum())
+        n_filled = int((np.isnan(old_vals) & ~np.isnan(merged_old)).sum())
+        n_replaced = int((~np.isnan(old_vals) & ~np.isnan(merged_old)
+                          & ~np.isclose(old_vals, merged_old, rtol=0, atol=1e-9)).sum())
+        return merged, n_new, n_filled, n_replaced
+
+    def _resolve_duplicates(self, df):
+        """Collapse repeated timestamps into one row per timestamp, keeping the
+        most recent observation (the row that appears last in the record),
+        which is assumed to be the more accurate (e.g., quality controlled)
+        one. If the most recent row is blank for a variable, the latest
+        non-blank value for that variable is kept so that no gap is created.
+        A water level keeps the quality-control tag ('p'/'v') from the same
+        row as the value it describes. Returns 'df' unchanged if there are no
+        repeated timestamps.
+        """
+        if not df.index.has_duplicates:
+            return df
+        n = int(df.index.duplicated().sum())
+        resolved = df.groupby(level=0).last()
+        if 'Water Level' in df.columns and 'Water Level QC' in df.columns:
+            has_value = df['Water Level'].notna()
+            qc = df.loc[has_value, 'Water Level QC'].groupby(level=0).last()
+            qc = qc.reindex(resolved.index)
+            resolved['Water Level QC'] = qc.where(qc.notna(), resolved['Water Level QC'])
+        resolved.index.name = df.index.name
+        print(f'Resolved {n} repeated timestamps, keeping the most recent value for each variable.')
+        return resolved[df.columns]
+
+    def _update_start(self, var, start_date=None, backfill_days=None):
+        """First date to request when updating 'var': an explicit 'start_date'
+        if given; otherwise the variable's last valid reading, moved back to
+        'backfill_days' days ago if that is earlier."""
+        if start_date is not None:
+            return self._format_date(start_date)
+        start = self.data[var].last_valid_index()
+        if backfill_days:
+            floor = pd.to_datetime('today').normalize() - pd.Timedelta(days=int(backfill_days))
+            start = min(start, floor)
+        return self._format_date(start)
 
     def _wl_reject(self, flags, qc):
         """Return 1 where a water level reading should be discarded, else 0.
