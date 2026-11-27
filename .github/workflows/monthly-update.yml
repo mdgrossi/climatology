@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     container: python:3.9-bookworm   # Python 3.9 on Debian 12
     steps:
-      - name: Install sudo (the container runs as root and doesn't include it)
-        run: apt-get update && apt-get install -y sudo
+      - name: Install sudo and jq
+        run: apt-get update && apt-get install -y sudo jq
 
       - name: Checkout repo content
         uses: actions/checkout@v3
