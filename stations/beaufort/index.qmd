@@ -38,7 +38,8 @@ import xarray as xr
 from datetime import datetime as dt
 from IPython.display import Markdown
 from bokeh.io import output_notebook
-sys.path.append(os.environ.get('GITHUB_WORKSPACE', '/workspaces/climatology'))from clipy import plot
+sys.path.append(os.environ.get('GITHUB_WORKSPACE', '/workspaces/climatology')
+from clipy import plot
 
 est = pytz.timezone('US/Eastern')
 display(Markdown(f"**{dt.now(tz=est).date().strftime('%A, %B %d, %Y')}**<br>"))
