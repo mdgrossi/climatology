@@ -155,11 +155,7 @@ class Data:
             if self.verbose:
                 print(f"Observational monthly statistics written to '{statsOutFile}'")
             # Add yesterday's observations
-            self.meta['yesterday'] = {
-                    'average': self.daily_avgs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
-                    'high': self.daily_highs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
-                    'low': self.daily_lows().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict()
-                    }
+            self.meta['yesterday'] = self._yesterday()
 
         # =====================================================================
         # If historical data for this station already exists:
@@ -287,9 +283,8 @@ class Data:
             else:
                 start = self._format_date(start_date)
             self._load_water_level(start_date=start, end_date=end)
-            self.water_levels['wlevel_flag'] = \
-                self.water_levels['wlevel_flag'].str.split(',', expand=True)\
-                                                .astype(int).sum(axis=1)
+            self.water_levels['wlevel_flag'] = self._wl_reject(
+                self.water_levels['wlevel_flag'], self.water_levels['wlevel_qc'])
             self.water_levels.loc[self.water_levels['wlevel_flag'] > 0, 'wlevel'] = np.nan
 
             # Hourly water heights (historical product)
@@ -415,9 +410,8 @@ class Data:
                                    end_date=self._format_date(p_end))
             self.water_levels.index.name = self.data.index.name
             self.water_levels.columns = ['Water Level', 's', 'wlevel_flag', 'Water Level QC']
-            self.water_levels['wlevel_flag'] = \
-                self.water_levels['wlevel_flag'].str.split(',', expand=True)\
-                                                .astype(int).sum(axis=1)
+            self.water_levels['wlevel_flag'] = self._wl_reject(
+                self.water_levels['wlevel_flag'], self.water_levels['Water Level QC'])
             self.water_levels.loc[self.water_levels['wlevel_flag'] > 0, 'Water Level'] = np.nan
             data = self.data.copy()
             data.update(self.water_levels)
@@ -429,9 +423,8 @@ class Data:
                 start = self._format_date(start_date)
             # Get latest data
             self._load_water_level(start_date=start, end_date=end)
-            self.water_levels['wlevel_flag'] = \
-                self.water_levels['wlevel_flag'].str.split(',', expand=True)\
-                                                .astype(int).sum(axis=1)
+            self.water_levels['wlevel_flag'] = self._wl_reject(
+                self.water_levels['wlevel_flag'], self.water_levels['wlevel_qc'])
             self.water_levels.loc[self.water_levels['wlevel_flag'] > 0, 'wlevel'] = np.nan
             datasets.append(self.water_levels[['wlevel', 'wlevel_qc']])
 
@@ -499,11 +492,7 @@ class Data:
                 print("Done! Run Data.update_stats() to update statistics.")
         
         # Update yesterday's data
-        self.meta['yesterday'] = {
-            'average': self.daily_avgs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
-            'high': self.daily_highs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
-            'low': self.daily_lows().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict()
-            }
+        self.meta['yesterday'] = self._yesterday()
         with open(os.path.join(self.outdir, 'metadata.yml'), 'w') as fp:
             yaml.dump(self.meta, fp)
     
@@ -554,6 +543,34 @@ class Data:
             self.monthly_records.to_netcdf(statsOutFile, mode='w')
             if self.verbose:
                 print(f"Updated monthly observational statistics written to '{statsOutFile}'")
+
+    def _wl_reject(self, flags, qc):
+        """Return 1 where a water level reading should be discarded, else 0.
+
+        NOAA's water level flags arrive as a string such as '1,0,0,0'. For
+        preliminary ('p') data the first value, O, is a COUNT of outlier
+        samples within the 6-minute average and is routinely non-zero for
+        otherwise good readings, so it is ignored. The remaining flags (F, R,
+        L) are true quality flags. For verified ('v') data the first value is
+        the 'inferred' flag, which is still honored (previous behavior).
+        """
+        f = flags.str.split(',', expand=True).astype(int)
+        first = f.iloc[:, 0].where(qc == 'v', 0)
+        return ((first + f.iloc[:, 1:].sum(axis=1)) > 0).astype(int)
+
+    def _yesterday(self):
+        """Yesterday's high, low, and average from ALL available observations,
+        plus the number of hours with data. Unlike the record calculations,
+        this deliberately does not apply the missing-hours filter."""
+        day = (dt.today() - pd.Timedelta(days=1)).strftime('%Y-%m-%d')
+        obs = self.data.loc[day:day, self.variables].replace(31.8, np.nan)
+        high, low = obs.max(), obs.min()
+        return {
+            'average': ((high + low) / 2).to_dict(),
+            'high': high.to_dict(),
+            'low': low.to_dict(),
+            'hours': obs.resample('1h').mean().notna().sum().astype(int).to_dict()
+            }
 
     def _format_date(self, datestr):
         """Format date strings into YYYMMDD format"""
