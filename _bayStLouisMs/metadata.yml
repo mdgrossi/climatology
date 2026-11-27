@@ -1,0 +1,33 @@
+datum: MHHW
+day_threshold: 2
+dirname: _bayStLouisMs
+hr_threshold: 4
+last_obs:
+  Air Temperature: '2026-06-01 06:00:00'
+  Water Level: '2026-06-01 06:06:00'
+  Water Temperature: '2026-06-01 06:00:00'
+stationid: '8747437'
+stationname: Bay St. Louis, MS
+tz: lst
+unit_system: english
+units:
+  Air Temperature: "\xB0F"
+  Water Level: ft
+  Water Temperature: "\xB0F"
+variables:
+- Air Temperature
+- Water Temperature
+- Water Level
+yesterday:
+  average:
+    Air Temperature: 82.65
+    Water Level: -0.6579999999999999
+    Water Temperature: 82.05000000000001
+  high:
+    Air Temperature: 87.4
+    Water Level: 0.525
+    Water Temperature: 83.7
+  low:
+    Air Temperature: 77.9
+    Water Level: -1.841
+    Water Temperature: 80.4

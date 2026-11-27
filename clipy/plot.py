@@ -8,6 +8,7 @@ import bokeh.models as bm
 import xarray as xr
 import pandas as pd
 import numpy as np
+import pytz
 import os
 
 # Colors for plotting:
@@ -236,8 +237,10 @@ def getval(stats, var, record, decimals=1):
     record : str
         Record to be retrieved. Must be in `stats`.
     """
+    est = pytz.timezone('US/Eastern')
+    today = dt.now(tz=est).strftime('%d-%b')
     val = float(stats[record].sel(variable=var,
-                                  Date=dt.today().strftime('%d-%b')).round(decimals))
+                                  Date=today).round(decimals))
     unit = stats.attrs[f'{var} units']
     return str(val)+f' {unit}'
 

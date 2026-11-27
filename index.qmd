@@ -9,13 +9,13 @@ about:
 
 listing:
   - id: active-sites
-    contents: content/stations
+    contents: stations
     type: grid
     fields: [image, title]
     grid-item-border: false
     grid-item-align: center
   - id: archived-sites
-    contents: content/archived
+    contents: archived
     type: grid
     fields: [image, title]
     grid-item-border: false
@@ -25,25 +25,6 @@ format:
   html:
     include-after-body: footer.html
 ---
-
-::: {.callout-important title='SAVE NOAA!'}
-
-:::: {.columns}
-:::: {.column width="20%"}
-
-<br>
-![](https://cdn.oceanservice.noaa.gov/oceanserviceprod/facts/noaa-emblem-rgb-2022.png){fig-alt="NOAA meatball"}
-
-::::
-:::: {.column width="80%"}
-
-<br>
-The products on this page rely on data from the [National Oceanic and Atmospheric Administration](https://www.noaa.gov) (NOAA). NOAA is a critical tax-funded federal agency whose data collection, modeling and science capabilities, and personnel expertise keep the country safer and more prosperous---all at a cost of 6&cent; per day per taxpayer. If you are visiting this page and reading this, you have an interest in NOAA's science, service, and stewardship to the nation. **Contact your representatives in Congress today** to demand that NOAA employees are restored, facilities and resources are maintained, and budget is preserved.
-
-::::
-::::
-
-:::
 
 ::: {#hero-heading style="text-align: center"}
 Daily and monthly averages and records of NOAA CO-OPS weather and \
@@ -56,7 +37,7 @@ tide observations at different locations along the U.S. East Coast
 :::{#active-sites}
 :::
 
-## Archived Sites (updated less frequently)
+## Quasi-active Sites (updated less frequently)
 
 :::{#archived-sites}
 :::

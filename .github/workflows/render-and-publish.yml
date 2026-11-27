@@ -6,30 +6,41 @@ on:
 jobs:
   quarto-render-and-deploy:
     runs-on: ubuntu-latest
+    container: python:3.9-bookworm
     defaults:
       run:
         shell: bash -l {0}
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set current date as env variable
-      run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
-        
-    - uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-        cache: 'pip' # caching pip dependencies
-    - run: |
-        pip install --upgrade pip setuptools wheel
-        pip install -r requirements.txt
-        pip install clipy/dist/clipy-2025.0.1-py3-none-any.whl
-    
-    - name: Set up Quarto
-      uses: quarto-dev/quarto-actions/setup@v2
+      - name: Install sudo and jq
+        run: apt-get update && apt-get install -y sudo jq
+
+      - uses: actions/checkout@v3
+
+      - name: Mark workspace as safe for git
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Set current date as env variable
+        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+
+      - name: Cache pip downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-py3.9-${{ hashFiles('requirements.txt') }}
+          restore-keys: pip-py3.9-
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+          pip install clipy/dist/clipy-2025.0.1-py3-none-any.whl
       
-    - name: Publish to GitHub Pages (and render)
-      uses: quarto-dev/quarto-actions/publish@v2
-      with:
-        target: gh-pages
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # this secret is always available for github actions
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        
+      - name: Publish to GitHub Pages (and render)
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # this secret is always available for github actions

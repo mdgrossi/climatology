@@ -4,20 +4,21 @@ project:
     port: 4000
   render:
     - "index.qmd"
-    # - "data.qmd"
-    # - "methods.qmd"
-    # - "acknowledgements.qmd"
-    # - "demos/*"
-    - "content/stations/beaufort/*.qmd"
-    # - "content/stations/virginiakey/*.qmd"
-    # - "content/stations/woodshole/*.qmd"
-    # - "content/archived/baystlouis/*.qmd"
-    # - "content/archived/lewes/*.qmd"
-    # - "content/archived/naples/index.qmd"
+    - "data.qmd"
+    - "methods.qmd"
+    - "acknowledgements.qmd"
+    - "demos/*"
+    - "stations/beaufort/*.qmd"
+    - "stations/virginiakey/*.qmd"
+    - "stations/woodshole/*.qmd"
+    - "stations/lewes/*.qmd"
+    - "stations/newport/*.qmd"
+    - "archived/baystlouis/*.qmd"
+    - "archived/naples/index.qmd"
+    - "!NOAA-CO-OPS-Climatology.ipynb"
 
 theme:
-  # dark: sandstone
-  # light: sandstone
+  light: default
   dark: darkly
 
 website:
@@ -34,17 +35,19 @@ website:
       - text: Stations
         menu:
           - text: Beaufort, NC
-            href: content/stations/beaufort/index.qmd
-          - text: Virginia Key, FL
-            href: content/stations/virginiakey/index.qmd
+            href: stations/beaufort/index.qmd
+          - text: Lewes, DE
+            href: stations/lewes/index.qmd
+          - text: Newport, RI
+            href: stations/newport/index.qmd
           - text: Woods Hole, MA
-            href: content/stations/woodshole/index.qmd
-          - text: Bay St. Louis, MS (archived)
-            href: content/archived/baystlouis/index.qmd
-          - text: Lewes, DE (archived)
-            href: content/archived/lewes/index.qmd
-          - text: Naples, FL (archived)
-            href: content/archived/naples/index.qmd
+            href: stations/woodshole/index.qmd
+          - text: Virginia Key, FL
+            href: stations/virginiakey/index.qmd
+          - text: Bay St. Louis, MS (semi-active)
+            href: archived/baystlouis/index.qmd
+          - text: Naples, FL (coming soon)
+            href: archived/naples/index.qmd
     # right:
     #   - text: "More"
     #     menu:
@@ -84,6 +87,29 @@ website:
   back-to-top-navigation: true
   # repo-actions: [source, issue]
   repo-branch: main
+  announcement:
+    icon: exclamation-circle-fill
+    dismissable: true
+    content: |
+      :::: {.columns}
+      ::: {.column width="10%"}
+      
+      <br>
+      ![](https://cdn.oceanservice.noaa.gov/oceanserviceprod/facts/noaa-emblem-rgb-2022.png){fig-alt="NOAA meatball"}
+
+      :::
+      ::: {.column width="90%"}
+      
+      <br>
+      **SAVE NOAA!**  
+
+      The products on this page rely on data from the [National Oceanic and Atmospheric Administration](https://www.noaa.gov) (NOAA). NOAA is a critical tax-funded federal agency whose data collection, modeling and science capabilities, and personnel expertise keep the country safer and more prosperous---all at a cost of 6&cent; per day per taxpayer. If you are visiting this page and reading this, you have an interest in NOAA's science, service, and stewardship to the nation. **Contact your representatives in Congress today** to demand that NOAA employees are restored, facilities and resources are maintained, and budget is preserved.
+      
+      :::
+      ::::
+    type: danger
+    position: below-navbar
+
 
 format:
   html:

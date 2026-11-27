@@ -58,7 +58,7 @@ class Data:
         """
         
         self.name = stationname
-        self.dirname = self.camel(stationname)
+        self.dirname = '_'+self.camel(stationname)
         self.id = stationid
         self.unit_system = units.lower()
         self.tz = timezone.lower()
@@ -154,6 +154,12 @@ class Data:
             self.monthly_records.to_netcdf(statsOutFile, mode='w')
             if self.verbose:
                 print(f"Observational monthly statistics written to '{statsOutFile}'")
+            # Add yesterday's observations
+            self.meta['yesterday'] = {
+                    'average': self.daily_avgs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
+                    'high': self.daily_highs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
+                    'low': self.daily_lows().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict()
+                    }
 
         # =====================================================================
         # If historical data for this station already exists:
@@ -368,6 +374,12 @@ class Data:
         
         # Air temperature
         if 'Air Temperature' in self.variables:
+            # If no 'start_date' is passed, pick up from the last non-NA observation time
+            if start_date is None:
+                start = self._format_date(self.data['Air Temperature'].last_valid_index())
+            else:
+                start = self._format_date(start_date)
+            # Download data
             self._load_atemp(start_date=start, end_date=end)
             self.air_temp['atemp_flag'] = self.air_temp['atemp_flag'].str\
                                               .split(',', expand=True)\
@@ -378,6 +390,12 @@ class Data:
 
         # Water temperature
         if 'Water Temperature' in self.variables:
+            # If no 'start_date' is passed, pick up from the last non-NA observation time
+            if start_date is None:
+                start = self._format_date(self.data['Water Temperature'].last_valid_index())
+            else:
+                start = self._format_date(start_date)
+            # Download data
             self._load_water_temp(start_date=start, end_date=end)
             self.water_temp['wtemp_flag'] = self.water_temp['wtemp_flag'].str\
                                                 .split(',', expand=True)\
@@ -404,6 +422,11 @@ class Data:
             data = self.data.copy()
             data.update(self.water_levels)
             self.data = data
+            # If no 'start_date' is passed, pick up from the last non-NA observation time
+            if start_date is None:
+                start = self._format_date(self.data['Water Level'].last_valid_index())
+            else:
+                start = self._format_date(start_date)
             # Get latest data
             self._load_water_level(start_date=start, end_date=end)
             self.water_levels['wlevel_flag'] = \
@@ -414,6 +437,12 @@ class Data:
 
         # Barometric pressure
         if 'Barometric Pressure' in self.variables:
+            # If no 'start_date' is passed, pick up from the last non-NA observation time
+            if start_date is None:
+                start = self._format_date(self.data['Barometric Pressure'].last_valid_index())
+            else:
+                start = self._format_date(start_date)
+            # Download data
             self._load_atm_pres(start_date=start, end_date=end)
             self.pressure['apres_flag'] = self.pressure['apres_flag'].str\
                                               .split(',', expand=True)\
@@ -423,6 +452,12 @@ class Data:
 
         # Wind
         if 'Wind Speed' in self.variables:
+            # If no 'start_date' is passed, pick up from the last non-NA observation time
+            if start_date is None:
+                start = self._format_date(self.data['Wind Speed'].last_valid_index())
+            else:
+                start = self._format_date(start_date)
+            # Download data
             self._load_wind(start_date=start, end_date=end)
             self.wind['windflag'] = self.wind['wind_flag'].str\
                                         .split(',', expand=True).astype(int)\
@@ -459,11 +494,18 @@ class Data:
             self.data.to_csv(statsOutFile, compression='infer')
             self.meta['last_obs'] = {i:self.data[i].last_valid_index().strftime('%Y-%m-%d %X') \
                         for i in self.variables}
-            with open(os.path.join(self.outdir, 'metadata.yml'), 'w') as fp:
-                yaml.dump(self.meta, fp)
             if self.verbose:
                 print(f"Updated observational data written to file '{statsOutFile}'.")
                 print("Done! Run Data.update_stats() to update statistics.")
+        
+        # Update yesterday's data
+        self.meta['yesterday'] = {
+            'average': self.daily_avgs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
+            'high': self.daily_highs().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict(),
+            'low': self.daily_lows().loc[(dt.today()-pd.Timedelta(days=1)).strftime('%Y-%m-%d')].drop('YearDay').to_dict()
+            }
+        with open(os.path.join(self.outdir, 'metadata.yml'), 'w') as fp:
+            yaml.dump(self.meta, fp)
     
     def update_stats(self):    
         """Calculate new statistics and update if any changes"""
@@ -1178,7 +1220,7 @@ class Data:
              'Record Low': self.record_daily_low(),
              'Years': self.number_of_years_byday()},
             attrs = {k:v for k, v in self.meta.items() \
-                     if k not in ['outdir', 'variables', 'units', 'last_obs']})
+                     if k not in ['outdir', 'variables', 'units', 'last_obs', 'yesterday']})
         
         # Add data units for each variable to the array as metadata attributes
         for k, v in self.meta['units'].items():
@@ -1242,7 +1284,7 @@ class Data:
              'Record Low': self.record_monthly_low(),
              'Years': self.number_of_years_bymonth()},
             attrs = {k:v for k, v in self.meta.items() \
-                     if k not in ['outdir', 'variables', 'units', 'last_obs']})
+                     if k not in ['outdir', 'variables', 'units', 'last_obs', 'yesterday']})
 
         # Add data units for each variable to the array as metadata attributes
         for k, v in self.meta['units'].items():
