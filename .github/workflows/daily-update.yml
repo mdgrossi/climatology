@@ -1,8 +1,30 @@
 name: Daily-update
 on:
   workflow_dispatch:
+    inputs:
+      station:
+        description: "Station to update (All = every station)"
+        type: choice
+        default: "All"
+        options:
+          - "All"
+          - "Beaufort, NC"
+          - "Virginia Key, FL"
+          - "Woods Hole, MA"
+          - "Lewes, DE"
+          - "Newport, RI"
+      backfill_days:
+        description: "Backfill: re-request this many days of data for every variable and fill any gaps. Leave blank for a normal update."
+        type: string
+        required: false
+        default: ""
   schedule:
     - cron: "15 5 * * *" # runs at 05:15 UTC (00:15 EST / 01:15 EDT) every day
+
+# Never run two data updates at once (they write the same files)
+concurrency:
+  group: data-update
+  cancel-in-progress: false
 
 jobs:
   update-data:
@@ -32,19 +54,51 @@ jobs:
           pip install clipy/dist/clipy-2025.0.1-py3-none-any.whl
 
       - name: Update data
+        shell: bash
+        env:
+          STATION: ${{ github.event.inputs.station }}
+          BACKFILL_DAYS: ${{ github.event.inputs.backfill_days }}
         run: |
-          python climoDL.py -s "Beaufort, NC"
-          python climoDL.py -s "Virginia Key, FL"
-          python climoDL.py -s "Woods Hole, MA"
-          python climoDL.py -s "Lewes, DE"
-          python climoDL.py -s "Newport, RI"
-        
+          set -o pipefail
+          LOG="$RUNNER_TEMP/update.log"   # outside the workspace so it is never committed
+          : > "$LOG"
+
+          # Optional backfill: re-request the last N days for every variable
+          ARGS=""
+          if [ -n "$BACKFILL_DAYS" ]; then
+            case "$BACKFILL_DAYS" in
+              *[!0-9]*) echo "::error::backfill_days must be a whole number (got '$BACKFILL_DAYS')"; exit 1 ;;
+            esac
+            ARGS="--backfill $BACKFILL_DAYS"
+          fi
+
+          # Scheduled runs (and manual runs left on "All") update every station
+          STATIONS=("Beaufort, NC" "Virginia Key, FL" "Woods Hole, MA" "Lewes, DE" "Newport, RI")
+          for s in "${STATIONS[@]}"; do
+            if [ -n "$STATION" ] && [ "$STATION" != "All" ] && [ "$STATION" != "$s" ]; then continue; fi
+            echo "=== $s" | tee -a "$LOG"
+            python climoDL.py -s "$s" $ARGS 2>&1 | tee -a "$LOG"
+          done
+
+          # Per-station results on the run's Summary page
+          {
+            echo "### Data update ${BACKFILL_DAYS:+(backfill of $BACKFILL_DAYS days)}"
+            echo '```'
+            grep -E '^===|Added|No new data|Resolved|rror' "$LOG" || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          # climoDL.py catches its own errors, so surface them as a visible warning
+          if grep -q "An error occurred while updating" "$LOG"; then
+            echo "::warning::At least one station reported an error during the update. Check the log."
+          fi
+
       - name: Commit changes
         uses: devops-infra/action-commit-push@master
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
           commit_prefix: "[AUTO] "
-          commit_message: "Daily update"
+          commit_message: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.backfill_days != '') && format('Backfill {0} days ({1})', github.event.inputs.backfill_days, github.event.inputs.station) || 'Daily update' }}
           force: false
 
       - name: Set current date as env variable
